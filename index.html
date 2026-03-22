@@ -154,7 +154,7 @@ h1 { margin-bottom:10px; max-width:18ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
 }
   </style>
 </head>
-<body data-build="2026-03-19-v23-business-style">
+<body data-build="2026-03-19-v24-send-fix">
   <main>
     <div class="container narrow">
       <header class="topbar">
@@ -420,13 +420,13 @@ h1 { margin-bottom:10px; max-width:18ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
   </footer>
 
   <script>
-const BUILD_VERSION = "2026-03-19-v23-business-style";
+const BUILD_VERSION = "2026-03-19-v24-send-fix";
 
 const CONFIG = {
   functionUrl: "https://lqzvkezgxfknfjnjoqur.supabase.co/functions/v1/business-diagnostic-agent",
   requestTimeoutMs: 300000,
   freeFollowupLimit: 3,
-  sessionStorageKey: "oc_live_diagnostic_session_v12",
+  sessionStorageKey: "oc_live_diagnostic_session_v13",
   leadStorageKey: "oc_leads_local_v1",
   assessmentHistoryKey: "oc_assessment_history_v1",
   assessmentArchiveKey: "oc_assessment_archive_v1",
@@ -650,8 +650,7 @@ function addVisualMessage(role, content) {
 }
 
 function normalizeAssistantText(content) {
-  let text = String(content || "").replace(/
-/g, "").trim();
+  let text = String(content || "").replace(/\r/g, "").trim();
   const labels = [
     "Quick read:",
     "What this likely means:",
@@ -673,32 +672,22 @@ function normalizeAssistantText(content) {
 
   labels.forEach((label) => {
     if (text.includes(label)) {
-      text = text.replaceAll(label, `
-
-${label}`);
+      text = text.replaceAll(label, `\n\n${label}`);
     }
   });
 
-  if (text.startsWith("
-
-")) {
+  if (text.startsWith("\n\n")) {
     text = text.slice(2);
   }
 
-  text = text.replace(/:\s*-\s+/g, ":
-- ");
-  text = text.replace(/\s+-\s+(?=[A-Z])/g, "
-- ");
-  text = text.replace(/
-{3,}/g, "
-
-");
+  text = text.replace(/:\s*-\s+/g, ":\n- ");
+  text = text.replace(/\s+-\s+(?=[A-Z])/g, "\n- ");
+  text = text.replace(/\n{3,}/g, "\n\n");
   return text.trim();
 }
 
 function renderAssistantMessage(container, content) {
-  const lines = String(content || "").split("
-");
+  const lines = String(content || "").split("\n");
   let list = null;
 
   lines.forEach((rawLine) => {
