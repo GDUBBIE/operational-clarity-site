@@ -143,25 +143,25 @@ h1 { margin-bottom:10px; max-width:18ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
 }
   </style>
 </head>
-<body data-build="2026-03-19-v19-assessment-summary">
+<body data-build="2026-03-19-v20-free-review-anonymous-save">
   <main>
     <div class="container narrow">
       <header class="topbar">
         <span class="brand">Operational Clarity</span>
-        <span class="topbar-note">For owners who want clearer decisions</span>
+        <span class="topbar-note">Free business review</span>
       </header>
     </div>
 
     <section class="hero">
       <div class="container narrow">
-        <p class="kicker">Know what is helping, hurting, and worth fixing first</p>
-        <h1>Get relief, clarity, control, and confidence in how the business is running.</h1>
-        <p class="hero-copy">This review is for owners who feel busy but not fully clear. A short conversation helps surface where margin is leaking, where waste is building, and where too much still depends on the owner so better decisions can be made with more certainty.</p>
+        <p class="kicker">Free business review</p>
+        <h1>Diagnose your business.</h1>
+        <p class="hero-copy">A free review for owners who want a clearer read on how the business is running, what deserves attention first, and what to do next.</p>
         <div class="hero-chips">
-          <span class="hero-chip">Better decisions</span>
-          <span class="hero-chip">Higher margins</span>
-          <span class="hero-chip">Less waste</span>
-          <span class="hero-chip">More certainty</span>
+          <span class="hero-chip">Free to start</span>
+          <span class="hero-chip">Short review</span>
+          <span class="hero-chip">Clear findings</span>
+          <span class="hero-chip">Next steps if wanted</span>
         </div>
       </div>
     </section>
@@ -173,7 +173,7 @@ h1 { margin-bottom:10px; max-width:18ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
             <div>
               <p class="kicker">Quick conversation</p>
               <h2>Conversation</h2>
-              <p class="header-copy">Use this to find what is helping, what is hurting, and what should be fixed first.</p>
+              <p class="header-copy">Start with a few useful details. The review builds findings from what you share.</p>
             </div>
             <div class="chat-badges">
               <span id="stage-badge" class="badge">discover</span>
@@ -193,9 +193,9 @@ h1 { margin-bottom:10px; max-width:18ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
           <form id="chat-form" class="chat-form">
             <label class="sr-only" for="chat-input">Describe your business</label>
             <div class="input-shell">
-              <textarea id="chat-input" rows="4" placeholder="We stay busy, but the business still feels heavier than it should, and too much still depends on me."></textarea>
+              <textarea id="chat-input" rows="4" placeholder="Suggested to share: what feels heaviest in the business right now, where work gets messy, or where too much still depends on you."></textarea>
               <div class="chat-actions">
-                <p id="chat-note" class="small-text">Each reply sharpens the dashboard below.</p>
+                <p id="chat-note" class="small-text">Share what is happening. The review turns it into feedback.</p>
                 <button id="send-button" type="submit" class="btn btn-primary">Send</button>
               </div>
             </div>
@@ -209,7 +209,7 @@ h1 { margin-bottom:10px; max-width:18ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
             <div>
               <p class="kicker">Business dashboard</p>
               <h2>Dashboard</h2>
-              <p class="header-copy">A cleaner read on what is going on underneath the day-to-day noise.</p>
+              <p class="header-copy">This updates as the review gets clearer.</p>
             </div>
             <button id="reset-session" type="button" class="text-button">Reset review</button>
           </div>
@@ -437,15 +437,16 @@ h1 { margin-bottom:10px; max-width:18ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
   </footer>
 
   <script>
-const BUILD_VERSION = "2026-03-19-v19-assessment-summary";
+const BUILD_VERSION = "2026-03-19-v20-free-review-anonymous-save";
 
 const CONFIG = {
   functionUrl: "https://lqzvkezgxfknfjnjoqur.supabase.co/functions/v1/business-diagnostic-agent",
   requestTimeoutMs: 300000,
   freeFollowupLimit: 3,
-  sessionStorageKey: "oc_live_diagnostic_session_v9",
+  sessionStorageKey: "oc_live_diagnostic_session_v10",
   leadStorageKey: "oc_leads_local_v1",
   assessmentHistoryKey: "oc_assessment_history_v1",
+  assessmentArchiveKey: "oc_assessment_archive_v1",
   leadEndpoint: ""
 };
 
@@ -467,7 +468,9 @@ const state = {
   started: false,
   contextScore: 0,
   contactOpen: false,
-  assessmentLogged: false
+  assessmentLogged: false,
+  anonymousAssessmentSaved: false,
+  sessionId: createSessionId()
 };
 
 const el = {};
@@ -534,6 +537,7 @@ function renderInitialState() {
 
   state.contextScore = Math.max(state.contextScore || 0, deriveContextScore());
   renderStatus();
+  updateSuggestedPlaceholder();
   renderDashboardSummary();
   renderFindings();
   renderContact();
@@ -614,6 +618,10 @@ function applyAgentResponse(data) {
       saveAssessmentHistory();
       state.assessmentLogged = true;
     }
+    if (!state.anonymousAssessmentSaved) {
+      saveAnonymousAssessmentRecord();
+      state.anonymousAssessmentSaved = true;
+    }
     el.findingsTitle.textContent = deriveFindingsTitle(state.findings);
     el.findingsSummary.textContent = deriveFindingsSummary(state.findings);
     if (!el.leadMessage.value) {
@@ -622,6 +630,7 @@ function applyAgentResponse(data) {
   }
 
   renderStatus();
+  updateSuggestedPlaceholder();
   renderDashboardSummary();
   renderFindings();
   renderContact();
@@ -681,8 +690,59 @@ function renderStatus() {
   } else if (score >= 45) {
     el.chatNote.textContent = "The view is forming. Keep answers specific.";
   } else {
-    el.chatNote.textContent = "Each reply makes the picture clearer.";
+    el.chatNote.textContent = "Suggested to share: what is breaking down, where things slow down, or where too much still depends on you.";
   }
+}
+
+
+function updateSuggestedPlaceholder() {
+  if (!el.chatInput) return;
+
+  const userTurns = state.conversation.filter((m) => m.role === "user").length;
+  const extracted = state.extracted || {};
+  const signalText = [
+    extracted.main_problem,
+    ...(Array.isArray(extracted.pain_points) ? extracted.pain_points : []),
+    ...(Array.isArray(extracted.symptoms) ? extracted.symptoms : []),
+    getLastAssistantText()
+  ].filter(isMeaningfulValue).join(" ").toLowerCase();
+
+  const suggestions = [];
+
+  if (userTurns === 0) {
+    suggestions.push("Suggested to share: what feels heaviest in the business right now, where work gets messy, or where too much still depends on you.");
+  }
+  if (/(owner|depends on me|bottleneck|through me|hero)/.test(signalText)) {
+    suggestions.push("Suggested to share: where the business bottlenecks through you most often and what other people still need from you to keep moving.");
+  }
+  if (/(margin|profit|pricing|underprice|quote|estimate)/.test(signalText)) {
+    suggestions.push("Suggested to share: where pricing feels weakest, where jobs get misjudged, or where profit seems to disappear.");
+  }
+  if (/(workflow|handoff|delay|reactive|queue|triage|schedule|backlog)/.test(signalText)) {
+    suggestions.push("Suggested to share: where work gets delayed, clarified twice, reprioritized, or handed off poorly.");
+  }
+  if (/(visibility|tracking|unclear|manual|metrics|numbers)/.test(signalText)) {
+    suggestions.push("Suggested to share: which numbers you do not trust yet and where visibility is weakest in the day-to-day operation.");
+  }
+  if (/(team|people|role|staff|capacity)/.test(signalText)) {
+    suggestions.push("Suggested to share: where roles blur together, where capacity gets tight, or where the wrong people end up solving the same problems.");
+  }
+
+  suggestions.push("Suggested to share: what feels inconsistent, what gets missed, and what you would fix first if you had clearer direction.");
+
+  const nextPlaceholder = suggestions.find(Boolean);
+  if (nextPlaceholder) el.chatInput.placeholder = nextPlaceholder;
+}
+
+function getLastAssistantText() {
+  for (let i = state.conversation.length - 1; i >= 0; i -= 1) {
+    if (state.conversation[i].role === "assistant") return String(state.conversation[i].content || "");
+  }
+  return "";
+}
+
+function createSessionId() {
+  return `session_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
 function renderDashboardSummary() {
@@ -821,6 +881,37 @@ function saveAssessmentHistory() {
   localStorage.setItem(CONFIG.assessmentHistoryKey, JSON.stringify(history.slice(-100)));
 }
 
+
+function saveAnonymousAssessmentRecord() {
+  try {
+    const archiveRaw = localStorage.getItem(CONFIG.assessmentArchiveKey);
+    const archive = archiveRaw ? JSON.parse(archiveRaw) : [];
+    const summary = deriveDashboardSummary();
+    const record = {
+      session_id: state.sessionId,
+      saved_at: new Date().toISOString(),
+      business_type: summary.businessType,
+      assessment_score: summary.assessmentScore,
+      comparison: summary.comparison,
+      pain_signals: summary.painSignals,
+      strength_signals: summary.strengthSignals,
+      confidence: summary.confidence,
+      main_issue: summary.mainIssue,
+      first_focus: summary.firstFocus,
+      context_score: state.contextScore,
+      stage: state.stage,
+      conversation: state.conversation.filter((m) => m.role !== "system"),
+      extracted: state.extracted,
+      findings: state.findings,
+      contact_submitted: false
+    };
+    archive.push(record);
+    localStorage.setItem(CONFIG.assessmentArchiveKey, JSON.stringify(archive.slice(-250)));
+  } catch (error) {
+    console.warn("Unable to save anonymous assessment record.", error);
+  }
+}
+
 function renderFindings() {
   const findings = state.findings;
   if (!findings) {
@@ -917,11 +1008,24 @@ async function handleContactSubmit(event) {
       localStorage.setItem(CONFIG.leadStorageKey, JSON.stringify(saved));
     }
 
+    markAnonymousAssessmentAsContacted();
     showNotice(el.contactMessage, "Request saved locally.", "success");
     el.contactForm.reset();
     el.leadMessage.value = deriveLeadPrompt(state.findings);
   } catch (error) {
     showNotice(el.contactMessage, error instanceof Error ? error.message : "Lead capture failed.", "warning");
+  }
+}
+
+
+function markAnonymousAssessmentAsContacted() {
+  try {
+    const archiveRaw = localStorage.getItem(CONFIG.assessmentArchiveKey);
+    const archive = archiveRaw ? JSON.parse(archiveRaw) : [];
+    const updated = archive.map((item) => item.session_id === state.sessionId ? { ...item, contact_submitted: true } : item);
+    localStorage.setItem(CONFIG.assessmentArchiveKey, JSON.stringify(updated));
+  } catch (error) {
+    console.warn("Unable to update anonymous assessment record.", error);
   }
 }
 
@@ -1130,7 +1234,9 @@ function persistSession() {
     started: state.started,
     contextScore: state.contextScore,
     contactOpen: state.contactOpen,
-    assessmentLogged: state.assessmentLogged
+    assessmentLogged: state.assessmentLogged,
+    anonymousAssessmentSaved: state.anonymousAssessmentSaved,
+    sessionId: state.sessionId
   };
   localStorage.setItem(CONFIG.sessionStorageKey, JSON.stringify(snapshot));
 }
@@ -1151,6 +1257,8 @@ function restoreSession() {
     state.contextScore = Number(saved.contextScore || 0);
     state.contactOpen = Boolean(saved.contactOpen);
     state.assessmentLogged = Boolean(saved.assessmentLogged);
+    state.anonymousAssessmentSaved = Boolean(saved.anonymousAssessmentSaved);
+    state.sessionId = saved.sessionId || createSessionId();
   } catch (error) {
     console.warn("Unable to restore review session.", error);
   }
@@ -1169,6 +1277,9 @@ function resetSession() {
   state.started = false;
   state.contextScore = 0;
   state.contactOpen = false;
+  state.assessmentLogged = false;
+  state.anonymousAssessmentSaved = false;
+  state.sessionId = createSessionId();
   el.messageList.innerHTML = "";
   el.chatInput.value = "";
   clearNotice(el.chatError);
