@@ -10,23 +10,23 @@
   <meta name="description" content="Operational Clarity helps owners find where time, margin, control, and follow-through are slipping so they can make better decisions with more confidence." />
   <style>
 :root {
-  --bg: #0b1220;
-  --panel: #101a2b;
-  --panel-2: #132033;
-  --panel-3: #0f1827;
-  --ink: #edf3fb;
-  --text: #d5dfef;
-  --muted: #9bb0ca;
-  --line: rgba(171, 189, 214, 0.14);
-  --line-strong: rgba(171, 189, 214, 0.22);
-  --accent: #6f8fb8;
-  --accent-2: #4e6b91;
-  --success: #7ed3bb;
-  --warning: #f5cb76;
-  --shadow: 0 14px 32px rgba(0, 0, 0, 0.18);
-  --radius: 24px;
-  --radius-md: 18px;
-  --radius-sm: 14px;
+  --bg: #f4f6f8;
+  --panel: #ffffff;
+  --panel-2: #f8fafc;
+  --panel-3: #eef2f6;
+  --ink: #17212b;
+  --text: #334155;
+  --muted: #66758a;
+  --line: rgba(15, 23, 42, 0.10);
+  --line-strong: rgba(15, 23, 42, 0.16);
+  --accent: #355d8c;
+  --accent-2: #28476c;
+  --success: #2f7d57;
+  --warning: #b7791f;
+  --shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+  --radius: 18px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
   --container: 1100px;
   --narrow: 980px;
   --font: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -37,7 +37,7 @@ body, input, textarea, button, select { font-family: var(--font); }
 body {
   margin: 0;
   color: var(--ink);
-  background: linear-gradient(180deg, #121926 0%, #0f1722 100%);
+  background: #f4f6f8;
   min-height: 100vh;
 }
 a { color: inherit; text-decoration: none; }
@@ -47,8 +47,8 @@ h1, h2, h3, p { margin-top: 0; }
 .narrow { width: min(calc(100% - 2rem), var(--narrow)); margin: 0 auto; }
 .topbar { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:24px 0 14px; }
 .brand { display:inline-flex; align-items:center; gap:10px; font-size:0.95rem; font-weight:700; }
-.brand::before { content:""; width:10px; height:10px; border-radius:999px; background:var(--accent); box-shadow:0 0 0 6px rgba(115,181,255,0.08); }
-.topbar-note, .badge, .hero-chip { display:inline-flex; align-items:center; min-height:34px; padding:0 12px; border-radius:999px; border:1px solid var(--line); background:rgba(16,26,43,0.82); color:var(--muted); font-size:0.84rem; }
+.brand::before { content:""; width:10px; height:10px; border-radius:999px; background:var(--accent); }
+.topbar-note, .badge, .hero-chip { display:inline-flex; align-items:center; min-height:34px; padding:0 12px; border-radius:999px; border:1px solid var(--line); background:#ffffff; color:var(--muted); font-size:0.84rem; }
 .hero { padding: 8px 0 18px; }
 .kicker { margin:0 0 10px; font-size:0.82rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); font-weight:700; }
 h1 { margin-bottom:10px; max-width:18ch; font-size:clamp(2rem, 4vw, 3.2rem); line-height:1.02; letter-spacing:-0.04em; font-weight:800; }
@@ -58,7 +58,7 @@ h1 { margin-bottom:10px; max-width:18ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
 .hero-actions { display:flex; align-items:center; gap:12px; margin-top:18px; flex-wrap:wrap; }
 .hero-chips { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 0; }
 .section { padding: 8px 0 26px; }
-.card { border:1px solid var(--line); border-radius:var(--radius); background:linear-gradient(180deg, rgba(18,28,44,0.98), rgba(12,18,29,0.98)); box-shadow:var(--shadow); }
+.card { border:1px solid var(--line); border-radius:var(--radius); background:#ffffff; box-shadow:var(--shadow); }
 .review-shell { display:grid; gap:14px; }
 .chat-card, .dashboard-card, .finding-card, .contact-card { padding:20px; }
 .chat-header, .dashboard-header, .footer-row { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
@@ -71,9 +71,9 @@ h1 { margin-bottom:10px; max-width:18ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
 .message-list { display:grid; gap:12px; min-height:220px; max-height:520px; overflow:auto; padding:0 0 6px; margin-bottom:12px; }
 .message-list::-webkit-scrollbar { width:10px; }
 .message-list::-webkit-scrollbar-thumb { background: rgba(171,189,214,0.18); border-radius:999px; }
-.message { max-width:82%; padding:14px 16px; border-radius:18px; border:1px solid var(--line); background:#132033; font-size:0.97rem; }
-.message.user { margin-left:auto; background:#173253; border-color: rgba(115,181,255,0.18); color:#f4f8ff; }
-.message.assistant { color:var(--ink); max-width:100%; width:100%; border-radius:20px; }
+.message { max-width:82%; padding:14px 16px; border-radius:14px; border:1px solid var(--line); background:#f8fafc; font-size:0.97rem; }
+.message.user { margin-left:auto; background:#e8f0f8; border-color: rgba(53,93,140,0.18); color:#17212b; }
+.message.assistant { color:var(--ink); max-width:100%; width:100%; border-radius:14px; }
 .message.assistant { white-space: normal; }
 .message.assistant .assistant-label { margin: 0 0 6px; color: var(--ink); font-weight: 700; }
 .message.assistant .assistant-paragraph { margin: 0 0 10px; color: var(--text); }
@@ -85,30 +85,30 @@ h1 { margin-bottom:10px; max-width:18ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
 .typing-dot { width:8px; height:8px; border-radius:999px; background:var(--accent); animation:pulse 1.1s infinite ease-in-out; }
 .typing-dot:nth-child(2){animation-delay:.15s;} .typing-dot:nth-child(3){animation-delay:.3s;}
 @keyframes pulse { 0%,100%{opacity:.25; transform:translateY(0);} 50%{opacity:1; transform:translateY(-3px);} }
-.input-shell { border:1px solid var(--line-strong); border-radius:20px; background:rgba(10,16,27,0.95); padding:14px; }
+.input-shell { border:1px solid var(--line-strong); border-radius:14px; background:#fbfcfd; padding:14px; }
 .chat-form textarea, .field input, .field textarea { width:100%; border:0; background:transparent; color:var(--ink); padding:0; resize:vertical; min-height:86px; font-size:0.98rem; line-height:1.55; }
-.chat-form textarea::placeholder, .field input::placeholder, .field textarea::placeholder { color: rgba(215,224,238,0.52); }
+.chat-form textarea::placeholder, .field input::placeholder, .field textarea::placeholder { color: #7b8794; }
 .chat-form textarea:focus, .field input:focus, .field textarea:focus { outline:none; }
 .chat-actions { display:flex; align-items:flex-end; justify-content:space-between; gap:14px; margin-top:12px; }
 .small-text { font-size:0.92rem; color:var(--muted); }
 .btn { display:inline-flex; align-items:center; justify-content:center; min-height:46px; padding:0 18px; border-radius:999px; font-weight:700; border:1px solid transparent; transition:transform .18s ease, border-color .18s ease, background .18s ease; }
-.btn:hover { transform: translateY(-1px); }
-.btn-primary { background: linear-gradient(180deg, #82c2ff, #63abef); color:#0b1320; }
+.btn:hover { transform: none; }
+.btn-primary { background: #1f4f82; color:#ffffff; }
 .text-button { padding:0; border:0; background:none; color:var(--accent); font-weight:700; }
-.notice { margin-top:14px; padding:12px 14px; border-radius:16px; border:1px solid var(--line); background:rgba(16,28,47,0.88); }
-.notice.success { color:var(--success); border-color:rgba(126,211,187,0.26); background:rgba(126,211,187,0.08); }
-.notice.warning { color:var(--warning); border-color:rgba(245,203,118,0.24); background:rgba(245,203,118,0.08); }
+.notice { margin-top:14px; padding:12px 14px; border-radius:12px; border:1px solid var(--line); background:#f8fafc; }
+.notice.success { color:var(--success); border-color:rgba(47,125,87,0.18); background:#edf7f1; }
+.notice.warning { color:var(--warning); border-color:rgba(183,121,31,0.18); background:#fdf6e8; }
 .dashboard-grid { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:14px; }
 .panel-wide { grid-column: span 2; }
-.panel { border:1px solid var(--line); border-radius:var(--radius-md); background:rgba(16,25,40,0.88); padding:15px; }
+.panel { border:1px solid var(--line); border-radius:var(--radius-md); background:#ffffff; padding:15px; }
 .panel h3 { margin-bottom:8px; font-size:1rem; }
 .panel-value { color: var(--ink); font-size: 1rem; line-height: 1.45; }
 .panel-copy { margin:0; color:var(--muted); font-size:0.93rem; }
 .benchmark-note { margin-top:8px; color:var(--muted); font-size:0.82rem; line-height:1.45; }
 .summary-mini-grid { display:grid; gap:10px; }
 .meter-head, .status-line { display:flex; align-items:center; justify-content:space-between; gap:12px; }
-.meter-track { width:100%; height:12px; border-radius:999px; border:1px solid rgba(171,189,214,0.16); background:rgba(255,255,255,0.06); overflow:hidden; margin:12px 0 10px; }
-.meter-fill { width:0%; height:100%; border-radius:inherit; background:linear-gradient(90deg, #4b8cd1, #7dc0ff); transition:width .28s ease; }
+.meter-track { width:100%; height:12px; border-radius:999px; border:1px solid rgba(15,23,42,0.10); background:#eef2f6; overflow:hidden; margin:12px 0 10px; }
+.meter-fill { width:0%; height:100%; border-radius:inherit; background:#355d8c; transition:width .28s ease; }
 .metric-value { font-size:1rem; }
 .signal-label { color:var(--muted); font-size:0.86rem; }
 .status-stack { display:grid; gap:10px; }
@@ -119,23 +119,23 @@ h1 { margin-bottom:10px; max-width:18ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
 .finding-card h3 { font-size:1.1rem; margin-bottom:10px; }
 .finding-card ul { margin:0; padding-left:1.15rem; color:var(--text); }
 .finding-card li + li { margin-top:8px; }
-.contact-card { background:linear-gradient(180deg, rgba(16,25,40,0.84), rgba(12,18,29,0.9)); }
+.contact-card { background:#ffffff; }
 .contact-shell { display:grid; gap:14px; }
 .field-grid { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:14px; }
 .field + .field { margin-top:14px; }
 .field label { display:inline-block; margin-bottom:8px; color:var(--muted); font-size:0.86rem; }
-.field input, .field textarea { border:1px solid var(--line-strong); border-radius:16px; background:rgba(10,16,27,0.95); padding:14px 16px; }
+.field input, .field textarea { border:1px solid var(--line-strong); border-radius:12px; background:#fbfcfd; padding:14px 16px; }
 .offer-shell { display:grid; gap:16px; }
 .offer-intro { display:grid; gap:10px; }
 .offer-grid { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:14px; }
-.offer-card { border:1px solid var(--line); border-radius:var(--radius-md); background:rgba(16,25,40,0.92); padding:18px; display:grid; gap:10px; }
-.offer-card.featured { border-color: rgba(115,181,255,0.35); box-shadow: inset 0 0 0 1px rgba(115,181,255,0.18); }
+.offer-card { border:1px solid var(--line); border-radius:var(--radius-md); background:#ffffff; padding:18px; display:grid; gap:10px; }
+.offer-card.featured { border-color: rgba(53,93,140,0.28); box-shadow: inset 0 0 0 1px rgba(53,93,140,0.08); }
 .offer-top { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
 .offer-price { font-size:1.35rem; font-weight:800; color:var(--ink); }
 .offer-note { color:var(--muted); font-size:0.88rem; }
 .offer-list { margin:0; padding-left:1.1rem; color:var(--text); }
 .offer-list li + li { margin-top:7px; }
-.steps-card { border:1px solid var(--line); border-radius:var(--radius-md); background:rgba(16,25,40,0.72); padding:18px; }
+.steps-card { border:1px solid var(--line); border-radius:var(--radius-md); background:#f8fafc; padding:18px; }
 .steps-list { margin:0; padding-left:1.1rem; color:var(--text); }
 .steps-list li + li { margin-top:7px; }
 .muted-label { color:var(--muted); font-size:0.86rem; text-transform:uppercase; letter-spacing:0.05em; }
@@ -154,7 +154,7 @@ h1 { margin-bottom:10px; max-width:18ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
 }
   </style>
 </head>
-<body data-build="2026-03-19-v22-chat-clarity">
+<body data-build="2026-03-19-v23-business-style">
   <main>
     <div class="container narrow">
       <header class="topbar">
@@ -180,7 +180,7 @@ h1 { margin-bottom:10px; max-width:18ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
         <div class="card chat-card">
           <div class="chat-header">
             <div>
-              <p class="kicker">Quick conversation</p>
+              <p class="kicker">Free review</p>
               <h2>Start the review</h2>
               <p class="header-copy">Share what feels off. You do not need perfect numbers to begin.</p>
             </div>
@@ -216,7 +216,7 @@ h1 { margin-bottom:10px; max-width:18ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
         <div class="card dashboard-card">
           <div class="dashboard-header">
             <div>
-              <p class="kicker">Business dashboard</p>
+              <p class="kicker">Business review</p>
               <h2>Dashboard</h2>
               <p class="header-copy">A clearer read on the business as the review takes shape.</p>
             </div>
@@ -415,18 +415,18 @@ h1 { margin-bottom:10px; max-width:18ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
         <p>Operational Clarity</p>
         <p class="small-text">Completed reviews are saved anonymously by business type unless you choose to submit contact details.</p>
       </div>
-      <p class="small-text">Build 2026-03-19-v22-chat-clarity</p>
+      <p class="small-text">Build 2026-03-19-v23-business-style</p>
     </div>
   </footer>
 
   <script>
-const BUILD_VERSION = "2026-03-19-v22-chat-clarity";
+const BUILD_VERSION = "2026-03-19-v23-business-style";
 
 const CONFIG = {
   functionUrl: "https://lqzvkezgxfknfjnjoqur.supabase.co/functions/v1/business-diagnostic-agent",
   requestTimeoutMs: 300000,
   freeFollowupLimit: 3,
-  sessionStorageKey: "oc_live_diagnostic_session_v11",
+  sessionStorageKey: "oc_live_diagnostic_session_v12",
   leadStorageKey: "oc_leads_local_v1",
   assessmentHistoryKey: "oc_assessment_history_v1",
   assessmentArchiveKey: "oc_assessment_archive_v1",
@@ -650,7 +650,8 @@ function addVisualMessage(role, content) {
 }
 
 function normalizeAssistantText(content) {
-  let text = String(content || "").replace(//g, "").trim();
+  let text = String(content || "").replace(/
+/g, "").trim();
   const labels = [
     "Quick read:",
     "What this likely means:",
