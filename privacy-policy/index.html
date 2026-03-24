@@ -123,7 +123,7 @@ li + li {
       <div class="card">
         <p class="eyebrow">Legal</p>
         <h1>Privacy Policy</h1>
-        <p class="hero-copy">This page describes the data flows currently implemented in the live build of Operational Clarity as of March 24, 2026. Review and replace this placeholder policy with your final legal text before public launch.</p>
+        <p class="hero-copy">This page summarizes the data flow currently implemented in Operational Clarity as of March 24, 2026. Users can complete the diagnostic review anonymously unless they choose to submit contact details for next-step help.</p>
       </div>
 
       <div class="card section">
@@ -132,7 +132,16 @@ li + li {
           <li>Messages entered into the diagnostic review.</li>
           <li>Assistant replies, extracted fields, findings, normalized business-type tags, recommendation IDs, and confidence fields.</li>
           <li>Session metadata such as timestamps, stage progression, page URL, source/channel fields when available, and whether contact details were submitted.</li>
-          <li>If you choose to submit contact details, the current build captures name, email, company, package interest, phone if provided, and message text.</li>
+          <li>If you choose to request next-step help, the current build captures name, email, company, package interest, phone if provided, message text, and your follow-up contact consent.</li>
+        </ul>
+      </div>
+
+      <div class="card section">
+        <h2>How consent works in the product</h2>
+        <ul>
+          <li>Before the first review message is sent, the user must agree to the Terms of Use, acknowledge the Privacy Policy, and accept that the review provides diagnostic guidance only.</li>
+          <li>Contact consent for follow-up is separate and is requested only if the user chooses to move into next-step help.</li>
+          <li>The current build does not bundle service follow-up consent with optional marketing consent.</li>
         </ul>
       </div>
 
@@ -161,6 +170,11 @@ li + li {
       </div>
 
       <div class="card section">
+        <h2>Human review for next-step help</h2>
+        <p>Operational Clarity provides AI-assisted diagnostic guidance. If a user requests next-step help, the review may also be assessed by a human advisor from EHI Group / EHI Studio as part of follow-up and advisory work.</p>
+      </div>
+
+      <div class="card section">
         <h2>Cookies and analytics</h2>
         <p>The current build does not include third-party web analytics scripts, advertising pixels, or cookie consent tooling. The implemented persistence mechanism in the browser is localStorage, not tracking cookies.</p>
       </div>
@@ -178,7 +192,7 @@ li + li {
 
       <div class="card section">
         <h2>Diagnostic guidance only</h2>
-        <p>Operational Clarity provides diagnostic guidance only. It does not provide legal, tax, accounting, or financial advice.</p>
+        <p>Operational Clarity provides business diagnostic guidance only. It is not legal, tax, accounting, or financial advice.</p>
       </div>
     </section>
 

@@ -60,8 +60,6 @@ h1 { margin-bottom:10px; max-width:22ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
 .hero-meta { margin-top: 12px; color: var(--muted); font-size: 0.9rem; }
 .hero-actions { display:flex; align-items:center; gap:12px; margin-top:18px; flex-wrap:wrap; }
 .hero-chips { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 0; }
-.trust-strip { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; padding:14px 16px; border:1px solid var(--line); border-radius:var(--radius-md); background:#ffffff; color:var(--text); margin-bottom:18px; }
-.trust-strip strong { color:var(--ink); }
 .section { padding: 8px 0 26px; }
 .card { border:1px solid var(--line); border-radius:var(--radius); background:#ffffff; box-shadow:var(--shadow); }
 .review-shell { display:grid; gap:14px; }
@@ -94,6 +92,10 @@ h1 { margin-bottom:10px; max-width:22ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
 .chat-form-head { display:grid; gap:6px; margin-bottom:12px; }
 .input-label { font-size:1rem; font-weight:700; color:var(--ink); }
 .input-helper { margin:0; color:var(--muted); font-size:0.92rem; }
+.trust-card { display:grid; gap:12px; padding:16px 18px; border:1px solid var(--line); border-radius:var(--radius-md); background:var(--panel-2); margin-bottom:16px; }
+.trust-card h3 { margin:0; font-size:1rem; }
+.trust-copy { display:grid; gap:8px; }
+.trust-copy p { margin:0; font-size:0.93rem; color:var(--text); }
 .input-shell { border:1px solid var(--line-strong); border-radius:14px; background:#fbfcfd; padding:14px; }
 .input-shell:focus-within { border-color: rgba(31, 79, 130, 0.38); box-shadow: 0 0 0 4px rgba(31, 79, 130, 0.10); }
 .chat-form textarea, .field input, .field textarea { width:100%; border:0; background:transparent; color:var(--ink); padding:0; resize:vertical; min-height:86px; font-size:0.98rem; line-height:1.55; }
@@ -103,10 +105,18 @@ h1 { margin-bottom:10px; max-width:22ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
 .input-footer { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-top:12px; }
 .prompt-chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
 .prompt-chip { min-height:36px; padding:0 12px; border-radius:999px; border:1px solid var(--line); background:#ffffff; color:var(--ink); font-size:0.9rem; }
+.consent-row { display:flex; align-items:flex-start; gap:12px; }
+.consent-row input[type="checkbox"] { flex:0 0 auto; width:18px; height:18px; margin-top:3px; accent-color: var(--accent); }
+.consent-copy { display:grid; gap:6px; }
+.consent-label { color:var(--text); font-size:0.93rem; line-height:1.55; }
+.consent-label a { color:var(--accent); text-decoration:underline; text-underline-offset:2px; }
+.consent-helper { margin:0; color:var(--muted); font-size:0.85rem; }
+.consent-block { margin-top:14px; padding-top:14px; border-top:1px solid var(--line); }
 .small-text { font-size:0.92rem; color:var(--muted); }
 .btn { display:inline-flex; align-items:center; justify-content:center; min-height:46px; padding:0 18px; border-radius:999px; font-weight:700; border:1px solid transparent; transition:transform .18s ease, border-color .18s ease, background .18s ease; }
 .btn:hover { transform: none; }
 .btn-primary { background: #1f4f82; color:#ffffff; }
+.btn:disabled { background:#b8c5d4; border-color:#b8c5d4; color:#f7f9fb; cursor:not-allowed; }
 .text-button { padding:0; border:0; background:none; color:var(--accent); font-weight:700; }
 a:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visible, select:focus-visible, .text-button:focus-visible {
   outline: 3px solid rgba(22, 58, 96, 0.22);
@@ -172,12 +182,12 @@ a:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visib
 }
 @media (max-width: 720px) {
   h1 { max-width: 14ch; }
-  .chat-header, .dashboard-header, .chat-actions, .footer-row, .footer-disclaimer, .input-footer, .topbar, .trust-strip { flex-direction:column; align-items:flex-start; }
+  .chat-header, .dashboard-header, .chat-actions, .footer-row, .footer-disclaimer, .input-footer, .topbar { flex-direction:column; align-items:flex-start; }
   .message { max-width:100%; }
 }
   </style>
 </head>
-<body data-build="2026-03-24-v27-launch-polish">
+<body data-build="2026-03-24-v28-trust-consent">
   <main>
     <div class="container narrow">
       <header class="topbar">
@@ -200,13 +210,6 @@ a:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visib
         <p class="hero-meta">Powered by Human-Enhanced AI.</p>
       </div>
     </section>
-
-    <div class="container narrow">
-      <div class="trust-strip" role="note" aria-label="Privacy note">
-        <strong>Private by default</strong>
-        <span>Reviews are saved anonymously unless you choose to submit contact details.</span>
-      </div>
-    </div>
 
     <section id="diagnostic" class="section">
       <div class="container narrow review-shell">
@@ -232,11 +235,27 @@ a:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visib
             <span>Working…</span>
           </div>
 
-          <form id="chat-form" class="chat-form" aria-labelledby="chat-input-label" aria-describedby="chat-note">
+          <form id="chat-form" class="chat-form" aria-labelledby="chat-input-label" aria-describedby="chat-note sensitive-info-note review-consent-helper">
+            <div class="trust-card" aria-labelledby="trust-use-title">
+              <p class="muted-label">Trust and use</p>
+              <div class="trust-copy">
+                <h3 id="trust-use-title">Before you start</h3>
+                <p>Your review can be completed anonymously unless you choose to submit contact details.</p>
+                <p>Operational Clarity provides AI-assisted diagnostic guidance. If you request next-step help, your review may also be assessed by a human advisor from EHI Group / EHI Studio.</p>
+                <p>Operational Clarity provides business diagnostic guidance only. It is not legal, tax, accounting, or financial advice.</p>
+              </div>
+              <div class="consent-row">
+                <input id="review-consent-checkbox" name="review_consent" type="checkbox" />
+                <div class="consent-copy">
+                  <label class="consent-label" for="review-consent-checkbox">I agree to the <a href="terms-of-use/">Terms of Use</a>, acknowledge the <a href="privacy-policy/">Privacy Policy</a>, and understand this review provides diagnostic guidance only.</label>
+                  <p id="review-consent-helper" class="consent-helper">Required before sending the first message.</p>
+                </div>
+              </div>
+            </div>
             <div class="chat-form-head">
               <label id="chat-input-label" class="input-label" for="chat-input">Describe what feels heaviest in the business right now</label>
               <p id="chat-note" class="input-helper">Start with a bottleneck, messy handoff, margin issue, or where too much still depends on you.</p>
-              <p class="small-text">Do not submit passwords, bank details, employee personal data, or other highly sensitive confidential information.</p>
+              <p id="sensitive-info-note" class="small-text">Do not submit passwords, bank details, employee personal data, or other highly sensitive confidential information.</p>
             </div>
             <div class="input-shell">
               <textarea id="chat-input" rows="4" placeholder="Example: We stay busy, but jobs still bottleneck through me and margins are inconsistent."></textarea>
@@ -415,6 +434,7 @@ a:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visib
                 <p class="kicker">Continue</p>
                 <h3>Ready to move forward?</h3>
                 <p class="section-copy">Open the form below and tell us which option looks closest to the help you want.</p>
+                <p class="small-text">Operational Clarity provides AI-assisted diagnostic guidance. If you request next-step help, your review may also be assessed by a human advisor from EHI Group / EHI Studio.</p>
               </div>
 
               <div>
@@ -447,8 +467,18 @@ a:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visib
                   <textarea id="lead-message" name="message" rows="4" placeholder="Tell us the main issue you want to work on first." required></textarea>
                 </div>
 
+                <div class="consent-block">
+                  <div class="consent-row">
+                    <input id="follow-up-consent-checkbox" name="follow_up_consent" type="checkbox" />
+                    <div class="consent-copy">
+                      <label class="consent-label" for="follow-up-consent-checkbox">I agree to be contacted by EHI Group / EHI Studio about this review and understand follow-up may include human advisory support in addition to AI-generated guidance.</label>
+                      <p id="follow-up-consent-helper" class="consent-helper">Required before sending a contact request.</p>
+                    </div>
+                  </div>
+                </div>
+
                 <div class="chat-actions">
-                  <button type="submit" class="btn btn-primary">Send request</button>
+                  <button id="contact-submit-button" type="submit" class="btn btn-primary">Send request</button>
                 </div>
               </form>
 
@@ -465,7 +495,6 @@ a:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visib
       <div class="footer-meta">
         <p>Operational Clarity</p>
         <p class="small-text">A product from EHI Studio, by EHI Group, powered by Human-Enhanced AI.</p>
-        <p class="small-text">Private by default. Completed reviews are saved anonymously unless you choose to submit contact details.</p>
       </div>
       <nav class="footer-links" aria-label="Legal and contact">
         <a href="privacy-policy/">Privacy Policy</a>
@@ -474,14 +503,13 @@ a:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visib
       </nav>
     </div>
     <div class="container narrow footer-disclaimer">
-      <p class="small-text">Operational Clarity provides diagnostic guidance only and does not provide legal, financial, tax, or accounting advice.</p>
-      <p class="small-text">Build 2026-03-24-v27-launch-polish</p>
+      <p class="small-text">Build 2026-03-24-v28-trust-consent</p>
     </div>
   </footer>
 
   <script src="operational-intelligence.js"></script>
   <script>
-const BUILD_VERSION = "2026-03-24-v27-launch-polish";
+const BUILD_VERSION = "2026-03-24-v28-trust-consent";
 
 const CONFIG = {
   functionUrl: "https://lqzvkezgxfknfjnjoqur.supabase.co/functions/v1/business-diagnostic-agent",
@@ -515,9 +543,11 @@ const state = {
   freeFollowupsUsed: 0,
   awaiting: false,
   started: false,
+  reviewConsentAccepted: false,
   contextScore: 0,
   contactOpen: false,
   contactSubmitted: false,
+  followUpConsentAccepted: false,
   assessmentLogged: false,
   anonymousAssessmentSaved: false,
   sessionId: createSessionId(),
@@ -568,6 +598,8 @@ function captureDom() {
   el.limitBadge = document.getElementById("limit-badge");
   el.resetSession = document.getElementById("reset-session");
   el.sendButton = document.getElementById("send-button");
+  el.reviewConsentCheckbox = document.getElementById("review-consent-checkbox");
+  el.reviewConsentHelper = document.getElementById("review-consent-helper");
   el.contextMeterFill = document.getElementById("context-meter-fill");
   el.contextScoreLabel = document.getElementById("context-score-label");
   el.contextMeterCopy = document.getElementById("context-meter-copy");
@@ -579,6 +611,9 @@ function captureDom() {
   el.contactToggle = document.getElementById("contact-toggle");
   el.contactForm = document.getElementById("contact-form");
   el.contactMessage = document.getElementById("contact-message");
+  el.contactSubmitButton = document.getElementById("contact-submit-button");
+  el.followUpConsentCheckbox = document.getElementById("follow-up-consent-checkbox");
+  el.followUpConsentHelper = document.getElementById("follow-up-consent-helper");
   el.leadMessage = document.getElementById("lead-message");
   el.mainIssueValue = document.getElementById("main-issue-value");
   el.firstFocusValue = document.getElementById("first-focus-value");
@@ -604,6 +639,8 @@ function bindEvents() {
   el.contactForm?.addEventListener("submit", handleContactSubmit);
   document.getElementById("start-review-btn")?.addEventListener("click", focusReviewInput);
   el.promptChips?.forEach((chip) => chip.addEventListener("click", handlePromptChipClick));
+  el.reviewConsentCheckbox?.addEventListener("change", handleReviewConsentChange);
+  el.followUpConsentCheckbox?.addEventListener("change", handleFollowUpConsentChange);
 }
 
 function focusReviewInput(event) {
@@ -630,6 +667,48 @@ function updateMessageListVisibility() {
   el.messageList.classList.toggle("is-empty", visibleMessages.length === 0);
 }
 
+function renderReviewConsentState() {
+  const consentAccepted = Boolean(state.reviewConsentAccepted || state.started);
+  if (el.reviewConsentCheckbox) {
+    el.reviewConsentCheckbox.checked = consentAccepted;
+    el.reviewConsentCheckbox.disabled = Boolean(state.started);
+  }
+  if (el.reviewConsentHelper) {
+    el.reviewConsentHelper.textContent = state.started
+      ? "Accepted for this review."
+      : "Required before sending the first message.";
+  }
+  if (el.sendButton) {
+    el.sendButton.disabled = Boolean(state.awaiting || (!state.started && !consentAccepted));
+  }
+}
+
+function renderFollowUpConsentState() {
+  if (el.followUpConsentCheckbox) {
+    el.followUpConsentCheckbox.checked = Boolean(state.followUpConsentAccepted);
+  }
+  if (el.followUpConsentHelper) {
+    el.followUpConsentHelper.textContent = state.followUpConsentAccepted
+      ? "Contact consent recorded for this request."
+      : "Required before sending a contact request.";
+  }
+  if (el.contactSubmitButton) {
+    el.contactSubmitButton.disabled = !state.followUpConsentAccepted;
+  }
+}
+
+function handleReviewConsentChange(event) {
+  state.reviewConsentAccepted = Boolean(event?.currentTarget?.checked);
+  renderReviewConsentState();
+  persistSession();
+}
+
+function handleFollowUpConsentChange(event) {
+  state.followUpConsentAccepted = Boolean(event?.currentTarget?.checked);
+  renderFollowUpConsentState();
+  persistSession();
+}
+
 function renderInitialState() {
   if (state.conversation.length === 0) {
     el.messageList.innerHTML = "";
@@ -640,6 +719,8 @@ function renderInitialState() {
   updateMessageListVisibility();
   state.contextScore = Math.max(state.contextScore || 0, deriveContextScore());
   refreshStructuredSessionIntelligence({ sync: false });
+  renderReviewConsentState();
+  renderFollowUpConsentState();
   renderStatus();
   updateSuggestedPlaceholder();
   renderDashboardSummary();
@@ -655,6 +736,13 @@ async function handleChatSubmit(event) {
   const text = (el.chatInput?.value || "").trim();
   if (!text) {
     showNotice(el.chatError, "Add a little context first.", "warning");
+    return;
+  }
+
+  if (!state.started && !state.reviewConsentAccepted) {
+    showNotice(el.chatError, "Agree to the Terms of Use and Privacy Policy before starting the review.", "warning");
+    el.reviewConsentCheckbox?.focus();
+    renderReviewConsentState();
     return;
   }
 
@@ -676,6 +764,7 @@ async function handleChatSubmit(event) {
   }
 
   state.started = true;
+  state.reviewConsentAccepted = true;
   if (isFollowup) state.freeFollowupsUsed += 1;
 
   const userMessage = { role: "user", content: text };
@@ -685,6 +774,7 @@ async function handleChatSubmit(event) {
 
   state.contextScore = Math.max(state.contextScore || 0, deriveContextScore());
   refreshStructuredSessionIntelligence({ sync: true });
+  renderReviewConsentState();
   renderStatus();
   persistSession();
 
@@ -752,13 +842,14 @@ function applyAgentResponse(data) {
   renderFindings();
   renderContact();
   renderInternalIntelligence();
+  renderReviewConsentState();
   persistSession();
 }
 
 function renderAwaiting(isAwaiting) {
   el.typingRow.classList.toggle("is-hidden", !isAwaiting);
   el.chatInput.disabled = isAwaiting;
-  if (el.sendButton) el.sendButton.disabled = isAwaiting;
+  renderReviewConsentState();
 }
 
 function renderConversation() {
@@ -1350,7 +1441,9 @@ function renderContact() {
   el.contactSection.classList.toggle("is-hidden", !shouldShow);
   if (!shouldShow) {
     state.contactOpen = false;
+    state.followUpConsentAccepted = false;
     el.contactForm?.classList.add("is-hidden");
+    renderFollowUpConsentState();
     return;
   }
   if (state.contactOpen) {
@@ -1358,11 +1451,13 @@ function renderContact() {
   } else {
     el.contactForm?.classList.add("is-hidden");
   }
+  renderFollowUpConsentState();
 }
 
 function openContactForm() {
   state.contactOpen = true;
   el.contactForm?.classList.remove("is-hidden");
+  renderFollowUpConsentState();
   refreshStructuredSessionIntelligence({ sync: false });
   persistSession();
 }
@@ -1382,11 +1477,19 @@ async function handleContactSubmit(event) {
     findings_title: el.findingsTitle.textContent,
     stage: state.stage,
     extracted: state.extracted,
+    review_consent_accepted: Boolean(state.reviewConsentAccepted || state.started),
+    follow_up_consent: Boolean(formData.get("follow_up_consent")),
     submitted_at: new Date().toISOString()
   };
 
   if (!payload.name || !payload.email || !payload.company || !payload.message) {
     showNotice(el.contactMessage, "Complete the required fields before submitting.", "warning");
+    return;
+  }
+
+  if (!payload.follow_up_consent) {
+    showNotice(el.contactMessage, "Agree to follow-up contact before sending this request.", "warning");
+    el.followUpConsentCheckbox?.focus();
     return;
   }
 
@@ -1409,8 +1512,10 @@ async function handleContactSubmit(event) {
     if (!state.completedAt && state.findings) state.completedAt = new Date().toISOString();
     refreshStructuredSessionIntelligence({ sync: true });
     showNotice(el.contactMessage, "Request saved locally.", "success");
+    state.followUpConsentAccepted = false;
     el.contactForm.reset();
     el.leadMessage.value = deriveLeadPrompt(state.findings);
+    renderFollowUpConsentState();
   } catch (error) {
     showNotice(el.contactMessage, error instanceof Error ? error.message : "Lead capture failed.", "warning");
   }
@@ -1682,9 +1787,11 @@ function persistSession() {
     ctaReady: state.ctaReady,
     freeFollowupsUsed: state.freeFollowupsUsed,
     started: state.started,
+    reviewConsentAccepted: state.reviewConsentAccepted,
     contextScore: state.contextScore,
     contactOpen: state.contactOpen,
     contactSubmitted: state.contactSubmitted,
+    followUpConsentAccepted: state.followUpConsentAccepted,
     assessmentLogged: state.assessmentLogged,
     anonymousAssessmentSaved: state.anonymousAssessmentSaved,
     sessionId: state.sessionId,
@@ -1713,9 +1820,11 @@ function restoreSession() {
     state.ctaReady = Boolean(saved.ctaReady);
     state.freeFollowupsUsed = Number(saved.freeFollowupsUsed || 0);
     state.started = Boolean(saved.started || state.conversation.length > 0);
+    state.reviewConsentAccepted = Boolean(saved.reviewConsentAccepted || state.started);
     state.contextScore = Number(saved.contextScore || 0);
     state.contactOpen = Boolean(saved.contactOpen);
     state.contactSubmitted = Boolean(saved.contactSubmitted);
+    state.followUpConsentAccepted = Boolean(saved.followUpConsentAccepted);
     state.assessmentLogged = Boolean(saved.assessmentLogged);
     state.anonymousAssessmentSaved = Boolean(saved.anonymousAssessmentSaved);
     state.sessionId = saved.sessionId || createSessionId();
@@ -1742,9 +1851,11 @@ function resetSession() {
   state.freeFollowupsUsed = 0;
   state.awaiting = false;
   state.started = false;
+  state.reviewConsentAccepted = false;
   state.contextScore = 0;
   state.contactOpen = false;
   state.contactSubmitted = false;
+  state.followUpConsentAccepted = false;
   state.assessmentLogged = false;
   state.anonymousAssessmentSaved = false;
   state.stageHistory = ["discover"];
