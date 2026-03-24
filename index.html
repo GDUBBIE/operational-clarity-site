@@ -104,6 +104,8 @@ h1 { margin-bottom:10px; max-width:18ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
 .panel h3 { margin-bottom:8px; font-size:1rem; }
 .panel-value { color: var(--ink); font-size: 1rem; line-height: 1.45; }
 .panel-copy { margin:0; color:var(--muted); font-size:0.93rem; }
+.internal-panel { grid-column: 1 / -1; background:#f8fafc; }
+.internal-json { margin:12px 0 0; white-space:pre-wrap; word-break:break-word; font-size:0.82rem; line-height:1.55; color:var(--ink); }
 .benchmark-note { margin-top:8px; color:var(--muted); font-size:0.82rem; line-height:1.45; }
 .summary-mini-grid { display:grid; gap:10px; }
 .meter-head, .status-line { display:flex; align-items:center; justify-content:space-between; gap:12px; }
@@ -154,7 +156,7 @@ h1 { margin-bottom:10px; max-width:18ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
 }
   </style>
 </head>
-<body data-build="2026-03-19-v25-send-and-session-fix">
+<body data-build="2026-03-24-v26-intelligence-foundation">
   <main>
     <div class="container narrow">
       <header class="topbar">
@@ -270,9 +272,18 @@ h1 { margin-bottom:10px; max-width:18ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
             <div class="panel">
               <h3>Comparison</h3>
               <p id="comparison-value" class="panel-value">Not enough saved assessments yet</p>
-              <p class="panel-copy">Reviews are saved anonymously by business type unless contact details are submitted.</p>
+              <p class="panel-copy">Reviews are saved anonymously and benchmarked by business type first unless contact details are submitted.</p>
             </div>
-          </div></div>
+
+            <div id="internal-intelligence-panel" class="panel panel-wide internal-panel is-hidden">
+              <div class="meter-head">
+                <span class="signal-label">Internal intelligence snapshot</span>
+                <strong id="internal-sync-status" class="metric-value">Local only</strong>
+              </div>
+              <p class="panel-copy">Visible only with <code>?internal=1</code>. This is the structured session record used for taxonomy, benchmarking, and learning.</p>
+              <pre id="internal-intelligence-json" class="internal-json"></pre>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -415,49 +426,64 @@ h1 { margin-bottom:10px; max-width:18ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
         <p>Operational Clarity</p>
         <p class="small-text">Completed reviews are saved anonymously by business type unless you choose to submit contact details.</p>
       </div>
-      <p class="small-text">Build 2026-03-19-v23-business-style</p>
+      <p class="small-text">Build 2026-03-24-v26-intelligence-foundation</p>
     </div>
   </footer>
 
+  <script src="operational-intelligence.js"></script>
   <script>
-const BUILD_VERSION = "2026-03-19-v25-send-and-session-fix";
+const BUILD_VERSION = "2026-03-24-v26-intelligence-foundation";
 
 const CONFIG = {
   functionUrl: "https://lqzvkezgxfknfjnjoqur.supabase.co/functions/v1/business-diagnostic-agent",
+  intelligenceIngestUrl: "https://lqzvkezgxfknfjnjoqur.supabase.co/functions/v1/session-intelligence-ingest",
   requestTimeoutMs: 300000,
   freeFollowupLimit: 3,
   sessionStorageKey: "oc_live_diagnostic_session_v14",
   leadStorageKey: "oc_leads_local_v1",
   assessmentHistoryKey: "oc_assessment_history_v1",
   assessmentArchiveKey: "oc_assessment_archive_v1",
+  intelligenceArchiveKey: "oc_intelligence_sessions_v1",
   leadEndpoint: ""
 };
 
 const SYSTEM_MESSAGE = {
   role: "system",
   content:
-    "You are Operational Clarity's business diagnostic advisor. Sound like a wise, experienced operator: calm, plainspoken, grounded, and useful. Ask one focused follow-up at a time. Before enough_context is true, reply in no more than two short paragraphs and under 70 words total. Do not stack multiple questions. Reflect one fresh observation, then ask the single next-best question. When enough_context becomes true, assistant_message must add insight, not just repeat what the user already said. Use short line breaks and this structure when giving a read: Quick read:, What this likely means:, What to do first:. Keep each section brief. Avoid consultant phrasing, dramatic metaphors, buzzwords, and enterprise jargon unless the user uses it first. Do not use phrases like hidden tax, unlocks, scale blocker, value gap, renewal-friendly, ad hoc, minimum viable, SLA, or WIP. Prefer plain business language. Keep extracted data brief and internal. Do not expose hidden reasoning or schema details in assistant_message."
+    "You are Operational Clarity's business diagnostic advisor. Sound like a wise, experienced operator: calm, plainspoken, grounded, and useful. Ask one focused follow-up at a time. Before enough_context is true, reply in no more than two short paragraphs and under 70 words total. Do not stack multiple questions. Reflect one fresh observation, then ask the single next-best question. When enough_context becomes true, assistant_message must add insight, not just repeat what the user already said. Use short line breaks and this structure when giving a read: Quick read:, What this likely means:, What to do first:. Keep each section brief. Avoid consultant phrasing, dramatic metaphors, buzzwords, and enterprise jargon unless the user uses it first. Do not use phrases like hidden tax, unlocks, scale blocker, value gap, renewal-friendly, ad hoc, minimum viable, SLA, or WIP. Prefer plain business language. Keep extracted data brief and internal. Classify every session by business type first. In extracted and findings JSON, prefer normalized fields when possible: primary_business_type, secondary_business_type, sub_industry, business_model, business_model_tags, symptom_tags, cause_tags, inferred_causes, operating_archetype, recommendation_ids, urgency_level, clarity_level, confidence, and buy_signal. Use short slug-like IDs for tags and recommendation_ids when practical, while keeping assistant_message human-readable. Do not expose hidden reasoning or schema details in assistant_message."
 };
 
 const state = {
   conversation: [],
   stage: "discover",
+  stageHistory: ["discover"],
   enoughContext: false,
   findings: null,
   extracted: null,
+  latestAgentResponse: null,
+  latestAgentNormalized: null,
   ctaReady: false,
   freeFollowupsUsed: 0,
   awaiting: false,
   started: false,
   contextScore: 0,
   contactOpen: false,
+  contactSubmitted: false,
   assessmentLogged: false,
   anonymousAssessmentSaved: false,
-  sessionId: createSessionId()
+  sessionId: createSessionId(),
+  sessionCreatedAt: new Date().toISOString(),
+  completedAt: null,
+  extractionConfidence: null,
+  intelligenceRecord: null,
+  intelligenceSyncStatus: "Local only",
+  lastIntelligenceSyncedAt: null
 };
 
 const el = {};
 const STORAGE_BUILD_KEY = "oc_build_version";
+const INTERNAL_VIEW_ENABLED = new URLSearchParams(window.location.search).get("internal") === "1";
+let intelligenceSyncChain = Promise.resolve();
 
 function clearStaleBuildState() {
   try {
@@ -511,6 +537,9 @@ function captureDom() {
   el.assessmentScoreValue = document.getElementById("assessment-score-value");
   el.comparisonValue = document.getElementById("comparison-value");
   el.confidenceValue = document.getElementById("confidence-value");
+  el.internalIntelligencePanel = document.getElementById("internal-intelligence-panel");
+  el.internalIntelligenceJson = document.getElementById("internal-intelligence-json");
+  el.internalSyncStatus = document.getElementById("internal-sync-status");
 }
 
 function bindEvents() {
@@ -538,11 +567,13 @@ function renderInitialState() {
   }
 
   state.contextScore = Math.max(state.contextScore || 0, deriveContextScore());
+  refreshStructuredSessionIntelligence({ sync: false });
   renderStatus();
   updateSuggestedPlaceholder();
   renderDashboardSummary();
   renderFindings();
   renderContact();
+  renderInternalIntelligence();
 }
 
 async function handleChatSubmit(event) {
@@ -581,6 +612,7 @@ async function handleChatSubmit(event) {
   el.chatInput.value = "";
 
   state.contextScore = Math.max(state.contextScore || 0, deriveContextScore());
+  refreshStructuredSessionIntelligence({ sync: true });
   renderStatus();
   persistSession();
 
@@ -593,6 +625,7 @@ async function handleChatSubmit(event) {
   } catch (error) {
     console.error(error);
     if (isFollowup) state.freeFollowupsUsed = Math.max(0, state.freeFollowupsUsed - 1);
+    refreshStructuredSessionIntelligence({ sync: false });
     showNotice(el.chatError, error instanceof Error ? error.message : "The review request failed.", "warning");
     renderStatus();
     persistSession();
@@ -605,17 +638,26 @@ async function handleChatSubmit(event) {
 function applyAgentResponse(data) {
   const assistantText = String(data?.assistant_message || "I received that, but I do not have a useful reply yet.").trim();
 
+  state.latestAgentResponse = data || null;
+  state.latestAgentNormalized = data?.normalized || null;
   state.stage = String(data?.stage || state.stage || "discover").toLowerCase();
+  state.stageHistory = Array.from(new Set([...(Array.isArray(state.stageHistory) ? state.stageHistory : []), state.stage]));
   state.enoughContext = Boolean(data?.enough_context);
   state.extracted = data?.extracted || state.extracted;
   state.findings = data?.findings ?? state.findings;
   state.ctaReady = Boolean(data?.cta_ready);
+  state.extractionConfidence = typeof data?.extraction_confidence === "number"
+    ? data.extraction_confidence
+    : typeof data?.confidence === "number"
+      ? data.confidence
+      : state.extractionConfidence;
   state.contextScore = Math.max(state.contextScore || 0, deriveContextScore(data));
 
   state.conversation.push({ role: "assistant", content: assistantText });
   addVisualMessage("assistant", assistantText);
 
   if (state.findings) {
+    if (!state.completedAt) state.completedAt = new Date().toISOString();
     if (!state.assessmentLogged) {
       saveAssessmentHistory();
       state.assessmentLogged = true;
@@ -631,11 +673,13 @@ function applyAgentResponse(data) {
     }
   }
 
+  refreshStructuredSessionIntelligence({ sync: true });
   renderStatus();
   updateSuggestedPlaceholder();
   renderDashboardSummary();
   renderFindings();
   renderContact();
+  renderInternalIntelligence();
   persistSession();
 }
 
@@ -838,6 +882,128 @@ function createSessionId() {
   return `session_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
+function hasStructuredSessionSignal() {
+  return state.started
+    || state.conversation.some((entry) => entry?.role === "user")
+    || Boolean(state.findings)
+    || Boolean(state.extracted);
+}
+
+function buildStructuredSessionRecord() {
+  if (!hasStructuredSessionSignal()) return null;
+  if (!window.OperationalClarityIntelligence?.buildSessionRecord) return null;
+  return window.OperationalClarityIntelligence.buildSessionRecord({
+    state,
+    assessmentScore: deriveAssessmentScore(state.extracted || {}, state.findings),
+    contextScore: state.contextScore,
+    confidenceLabel: deriveConfidenceLabel(),
+    buildVersion: BUILD_VERSION,
+    pageUrl: window.location.href
+  });
+}
+
+function getStructuredSessionArchive() {
+  try {
+    const raw = localStorage.getItem(CONFIG.intelligenceArchiveKey);
+    const items = raw ? JSON.parse(raw) : [];
+    return Array.isArray(items) ? items : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+function upsertStructuredSessionArchive(record) {
+  if (!record?.raw_session?.session_id) return;
+  const archive = getStructuredSessionArchive().filter((item) => item?.raw_session?.session_id !== record.raw_session.session_id);
+  archive.push(record);
+  archive.sort((a, b) => new Date(a?.captured_at || 0).getTime() - new Date(b?.captured_at || 0).getTime());
+  localStorage.setItem(CONFIG.intelligenceArchiveKey, JSON.stringify(archive.slice(-300)));
+}
+
+function refreshStructuredSessionIntelligence({ sync = false } = {}) {
+  const record = buildStructuredSessionRecord();
+  if (!record) {
+    state.intelligenceRecord = null;
+    renderInternalIntelligence();
+    return null;
+  }
+  state.intelligenceRecord = record;
+  upsertStructuredSessionArchive(record);
+  if (!sync) {
+    if (!state.lastIntelligenceSyncedAt) state.intelligenceSyncStatus = "Local only";
+    renderInternalIntelligence();
+    return record;
+  }
+  queueStructuredSessionSync(record);
+  renderInternalIntelligence();
+  return record;
+}
+
+function queueStructuredSessionSync(record) {
+  if (!CONFIG.intelligenceIngestUrl) {
+    state.intelligenceSyncStatus = "Local only";
+    renderInternalIntelligence();
+    return;
+  }
+
+  state.intelligenceSyncStatus = "Syncing";
+  renderInternalIntelligence();
+
+  intelligenceSyncChain = intelligenceSyncChain
+    .catch(() => null)
+    .then(() => syncStructuredSessionRecord(record));
+}
+
+async function syncStructuredSessionRecord(record) {
+  try {
+    const response = await fetch(CONFIG.intelligenceIngestUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(record)
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(text || `Intelligence sync failed with status ${response.status}.`);
+    }
+
+    state.lastIntelligenceSyncedAt = new Date().toISOString();
+    state.intelligenceSyncStatus = "Synced";
+  } catch (error) {
+    state.intelligenceSyncStatus = "Local backup";
+    if (INTERNAL_VIEW_ENABLED) {
+      console.warn("Structured intelligence sync failed.", error);
+    }
+  } finally {
+    renderInternalIntelligence();
+    persistSession();
+  }
+}
+
+function renderInternalIntelligence() {
+  if (!el.internalIntelligencePanel || !el.internalIntelligenceJson || !el.internalSyncStatus) return;
+  el.internalIntelligencePanel.classList.toggle("is-hidden", !INTERNAL_VIEW_ENABLED);
+  if (!INTERNAL_VIEW_ENABLED) return;
+
+  const record = state.intelligenceRecord || buildStructuredSessionRecord();
+  const debugSnapshot = (record || state.latestAgentResponse || state.latestAgentNormalized)
+    ? {
+        latest_agent_normalized: state.latestAgentNormalized || null,
+        latest_agent_response: state.latestAgentResponse || null,
+        intelligence_record: record || null
+      }
+    : null;
+  el.internalSyncStatus.textContent = state.lastIntelligenceSyncedAt
+    ? `${state.intelligenceSyncStatus} ${new Date(state.lastIntelligenceSyncedAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}`
+    : state.intelligenceSyncStatus;
+  el.internalIntelligenceJson.textContent = debugSnapshot
+    ? JSON.stringify(debugSnapshot, null, 2)
+    : "No structured session captured yet.";
+}
+
 function renderDashboardSummary() {
   const summary = deriveDashboardSummary();
   if (el.mainIssueValue) el.mainIssueValue.textContent = summary.mainIssue;
@@ -851,17 +1017,21 @@ function renderDashboardSummary() {
 function deriveDashboardSummary() {
   const findings = state.findings;
   const extracted = state.extracted || {};
+  const intelligence = state.intelligenceRecord || buildStructuredSessionRecord();
   const painSignals = countSignals(extracted.pain_points) + countSignals(extracted.symptoms) + (isMeaningfulValue(extracted.main_problem) ? 1 : 0);
   const strengthSignals = countSignals(extracted.strengths);
   const mainIssue = firstMeaningful([
+    intelligence?.display?.primary_problem,
     findings && typeof findings === "object" ? findings.main_issue : null,
     findings && typeof findings === "object" ? findings.priority : null,
     extracted.main_problem,
+    intelligence?.display?.symptom_labels?.[0],
     Array.isArray(extracted.pain_points) ? extracted.pain_points[0] : null,
     state.findings ? "Review findings" : state.contextScore >= 45 ? "Pattern forming" : "Still forming"
   ]);
 
   const firstFocus = firstMeaningful([
+    intelligence?.display?.recommendation_titles?.[0],
     findings && typeof findings === "object" ? findings.first_focus : null,
     findings && typeof findings === "object" ? findings.next_step : null,
     findings && typeof findings === "object" && Array.isArray(findings.first_moves) ? findings.first_moves[0] : null,
@@ -870,13 +1040,15 @@ function deriveDashboardSummary() {
   ]);
 
   const businessType = firstMeaningful([
+    intelligence?.display?.business_type,
+    intelligence?.display?.secondary_business_type,
     extracted.business_type,
     findings && typeof findings === "object" ? findings.business_type : null,
     state.contextScore >= 45 ? "General business pattern forming" : "Still identifying"
   ]);
 
   const assessmentScore = deriveAssessmentScore(extracted, findings);
-  const comparison = deriveBenchmarkComparison(assessmentScore);
+  const comparison = deriveBenchmarkComparison(assessmentScore, intelligence);
 
   return {
     businessType: cleanSummaryValue(businessType),
@@ -940,7 +1112,28 @@ function deriveConfidenceLabel() {
   return "Low";
 }
 
-function deriveBenchmarkComparison(score) {
+function deriveBenchmarkComparison(score, intelligence = null) {
+  const archive = getStructuredSessionArchive();
+  const primaryBusinessType = intelligence?.normalized_features?.primary_business_type;
+  const completed = archive.filter((item) => {
+    const status = item?.raw_session?.completion_status;
+    return status === "completed" || status === "contact_submitted";
+  });
+  const segmentPool = primaryBusinessType
+    ? completed.filter((item) => item?.normalized_features?.primary_business_type === primaryBusinessType)
+    : [];
+
+  const pool = segmentPool.length >= 5 ? segmentPool : completed;
+  if (pool.length >= 5) {
+    const lowerCount = pool.filter((item) => Number(item?.raw_session?.score || 0) < score).length;
+    const percentile = Math.round((lowerCount / pool.length) * 100);
+    if (segmentPool.length >= 5) {
+      const label = intelligence?.display?.business_type || window.OperationalClarityIntelligence?.prettyLabel(primaryBusinessType) || cleanSummaryValue(primaryBusinessType);
+      return `Above ${percentile}% of saved ${label} reviews`;
+    }
+    return `Above ${percentile}% of saved reviews`;
+  }
+
   const history = getAssessmentHistory();
   if (history.length < 5) return "Not enough saved assessments yet";
 
@@ -961,10 +1154,11 @@ function getAssessmentHistory() {
 
 function saveAssessmentHistory() {
   const summary = deriveDashboardSummary();
+  const intelligence = state.intelligenceRecord || buildStructuredSessionRecord();
   const history = getAssessmentHistory();
   history.push({
     saved_at: new Date().toISOString(),
-    business_type: summary.businessType,
+    business_type: intelligence?.normalized_features?.primary_business_type || summary.businessType,
     score: Number(String(summary.assessmentScore).split("/")[0]) || 0,
     main_issue: summary.mainIssue,
     first_focus: summary.firstFocus
@@ -978,6 +1172,7 @@ function saveAnonymousAssessmentRecord() {
     const archiveRaw = localStorage.getItem(CONFIG.assessmentArchiveKey);
     const archive = archiveRaw ? JSON.parse(archiveRaw) : [];
     const summary = deriveDashboardSummary();
+    const intelligence = state.intelligenceRecord || buildStructuredSessionRecord();
     const record = {
       session_id: state.sessionId,
       saved_at: new Date().toISOString(),
@@ -994,7 +1189,10 @@ function saveAnonymousAssessmentRecord() {
       conversation: state.conversation.filter((m) => m.role !== "system"),
       extracted: state.extracted,
       findings: state.findings,
-      contact_submitted: false
+      normalized_features: intelligence?.normalized_features || null,
+      recommendation_ids: intelligence?.normalized_features?.recommendation_ids || [],
+      operating_archetype: intelligence?.normalized_features?.operating_archetype || null,
+      contact_submitted: state.contactSubmitted
     };
     archive.push(record);
     localStorage.setItem(CONFIG.assessmentArchiveKey, JSON.stringify(archive.slice(-250)));
@@ -1059,6 +1257,7 @@ function renderContact() {
 function openContactForm() {
   state.contactOpen = true;
   el.contactForm?.classList.remove("is-hidden");
+  refreshStructuredSessionIntelligence({ sync: false });
   persistSession();
 }
 
@@ -1100,6 +1299,9 @@ async function handleContactSubmit(event) {
     }
 
     markAnonymousAssessmentAsContacted();
+    state.contactSubmitted = true;
+    if (!state.completedAt && state.findings) state.completedAt = new Date().toISOString();
+    refreshStructuredSessionIntelligence({ sync: true });
     showNotice(el.contactMessage, "Request saved locally.", "success");
     el.contactForm.reset();
     el.leadMessage.value = deriveLeadPrompt(state.findings);
@@ -1115,6 +1317,24 @@ function markAnonymousAssessmentAsContacted() {
     const archive = archiveRaw ? JSON.parse(archiveRaw) : [];
     const updated = archive.map((item) => item.session_id === state.sessionId ? { ...item, contact_submitted: true } : item);
     localStorage.setItem(CONFIG.assessmentArchiveKey, JSON.stringify(updated));
+
+    const structuredArchive = getStructuredSessionArchive();
+    const structuredUpdated = structuredArchive.map((item) => {
+      if (item?.raw_session?.session_id !== state.sessionId) return item;
+      return {
+        ...item,
+        raw_session: {
+          ...item.raw_session,
+          contact_submitted: true,
+          completion_status: "contact_submitted"
+        },
+        product_learning: {
+          ...item.product_learning,
+          completion_status: "contact_submitted"
+        }
+      };
+    });
+    localStorage.setItem(CONFIG.intelligenceArchiveKey, JSON.stringify(structuredUpdated));
   } catch (error) {
     console.warn("Unable to update anonymous assessment record.", error);
   }
@@ -1134,10 +1354,12 @@ function deriveContextScore(incoming = {}) {
   if (userTurns >= 4) score += 8;
   if (userTurns >= 5) score += 6;
 
-  if (isMeaningfulValue(extracted.business_type)) score += 16;
+  if (isMeaningfulValue(extracted.primary_business_type) || isMeaningfulValue(extracted.business_type)) score += 16;
   if (hasArrayContent(extracted.pain_points)) score += 16;
-  if (hasArrayContent(extracted.symptoms)) score += 14;
+  if (hasArrayContent(extracted.symptom_tags) || hasArrayContent(extracted.symptoms)) score += 14;
   if (hasArrayContent(extracted.strengths)) score += 8;
+  if (hasArrayContent(extracted.cause_tags) || hasArrayContent(extracted.inferred_causes)) score += 8;
+  if (isMeaningfulValue(extracted.business_model)) score += 6;
   if (isMeaningfulValue(extracted.main_problem)) score += 8;
   if (isMeaningfulValue(extracted.constraints)) score += 6;
 
@@ -1290,26 +1512,51 @@ function stringifyValue(value) {
 async function callDiagnosticAgent(conversation) {
   const controller = new AbortController();
   const timeoutId = window.setTimeout(() => controller.abort(), CONFIG.requestTimeoutMs);
+
   try {
     const response = await fetch(CONFIG.functionUrl, {
       method: "POST",
       cache: "no-store",
-      headers: { "Content-Type": "application/json", "Accept": "application/json" },
-      body: JSON.stringify({ conversation }),
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({
+        conversation,
+        session_id: state.sessionId,
+        page_url: window.location.href,
+        build_version: BUILD_VERSION,
+        intelligence_schema_version: window.OperationalClarityIntelligence?.SCHEMA_VERSION || null
+      }),
       signal: controller.signal
     });
+
     const contentType = response.headers.get("content-type") || "";
-    const data = contentType.includes("application/json") ? await response.json() : { error: await response.text() };
-    if (!response.ok) throw new Error(data?.error || data?.message || `Agent request failed with status ${response.status}.`);
+    const data = contentType.includes("application/json")
+      ? await response.json()
+      : { error: await response.text() };
+
+    if (!response.ok) {
+      throw new Error(data?.error || data?.message || `Agent request failed with status ${response.status}.`);
+    }
+
+    if (data?.session_id && !state.sessionId) {
+      state.sessionId = data.session_id;
+    }
+
     return data;
   } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") throw new Error("The live review is still working. Stay on the page a little longer, then retry if no reply appears.");
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw new Error("The live review is still working. Stay on the page a little longer, then retry if no reply appears.");
+    }
+
     if (error instanceof Error) {
       if (/failed to fetch/i.test(error.message || "")) {
         throw new Error(`Network request failed while contacting the live review. Check the POST to ${CONFIG.functionUrl}.`);
       }
       throw error;
     }
+
     throw new Error("The review request failed.");
   } finally {
     window.clearTimeout(timeoutId);
@@ -1320,17 +1567,26 @@ function persistSession() {
   const snapshot = {
     conversation: state.conversation,
     stage: state.stage,
+    stageHistory: state.stageHistory,
     enoughContext: state.enoughContext,
     findings: state.findings,
     extracted: state.extracted,
+    latestAgentResponse: state.latestAgentResponse,
+    latestAgentNormalized: state.latestAgentNormalized,
     ctaReady: state.ctaReady,
     freeFollowupsUsed: state.freeFollowupsUsed,
     started: state.started,
     contextScore: state.contextScore,
     contactOpen: state.contactOpen,
+    contactSubmitted: state.contactSubmitted,
     assessmentLogged: state.assessmentLogged,
     anonymousAssessmentSaved: state.anonymousAssessmentSaved,
-    sessionId: state.sessionId
+    sessionId: state.sessionId,
+    sessionCreatedAt: state.sessionCreatedAt,
+    completedAt: state.completedAt,
+    extractionConfidence: state.extractionConfidence,
+    intelligenceSyncStatus: state.intelligenceSyncStatus,
+    lastIntelligenceSyncedAt: state.lastIntelligenceSyncedAt
   };
   localStorage.setItem(CONFIG.sessionStorageKey, JSON.stringify(snapshot));
 }
@@ -1342,17 +1598,26 @@ function restoreSession() {
     const saved = JSON.parse(raw);
     state.conversation = Array.isArray(saved.conversation) ? saved.conversation : [];
     state.stage = saved.stage || "discover";
+    state.stageHistory = Array.isArray(saved.stageHistory) ? saved.stageHistory : [state.stage];
     state.enoughContext = Boolean(saved.enoughContext);
     state.findings = saved.findings ?? null;
     state.extracted = saved.extracted ?? null;
+    state.latestAgentResponse = saved.latestAgentResponse ?? null;
+    state.latestAgentNormalized = saved.latestAgentNormalized ?? null;
     state.ctaReady = Boolean(saved.ctaReady);
     state.freeFollowupsUsed = Number(saved.freeFollowupsUsed || 0);
     state.started = Boolean(saved.started || state.conversation.length > 0);
     state.contextScore = Number(saved.contextScore || 0);
     state.contactOpen = Boolean(saved.contactOpen);
+    state.contactSubmitted = Boolean(saved.contactSubmitted);
     state.assessmentLogged = Boolean(saved.assessmentLogged);
     state.anonymousAssessmentSaved = Boolean(saved.anonymousAssessmentSaved);
     state.sessionId = saved.sessionId || createSessionId();
+    state.sessionCreatedAt = saved.sessionCreatedAt || new Date().toISOString();
+    state.completedAt = saved.completedAt || null;
+    state.extractionConfidence = typeof saved.extractionConfidence === "number" ? saved.extractionConfidence : null;
+    state.intelligenceSyncStatus = saved.intelligenceSyncStatus || "Local only";
+    state.lastIntelligenceSyncedAt = saved.lastIntelligenceSyncedAt || null;
   } catch (error) {
     console.warn("Unable to restore review session.", error);
   }
@@ -1365,15 +1630,25 @@ function resetSession() {
   state.enoughContext = false;
   state.findings = null;
   state.extracted = null;
+  state.latestAgentResponse = null;
+  state.latestAgentNormalized = null;
   state.ctaReady = false;
   state.freeFollowupsUsed = 0;
   state.awaiting = false;
   state.started = false;
   state.contextScore = 0;
   state.contactOpen = false;
+  state.contactSubmitted = false;
   state.assessmentLogged = false;
   state.anonymousAssessmentSaved = false;
+  state.stageHistory = ["discover"];
   state.sessionId = createSessionId();
+  state.sessionCreatedAt = new Date().toISOString();
+  state.completedAt = null;
+  state.extractionConfidence = null;
+  state.intelligenceRecord = null;
+  state.intelligenceSyncStatus = "Local only";
+  state.lastIntelligenceSyncedAt = null;
   el.messageList.innerHTML = "";
   el.chatInput.value = "";
   clearNotice(el.chatError);

@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Operational Clarity Internal Analytics</title>
+  <style>
+:root {
+  --bg: #f4f6f8;
+  --panel: #ffffff;
+  --panel-2: #f8fafc;
+  --ink: #17212b;
+  --text: #334155;
+  --muted: #66758a;
+  --line: rgba(15, 23, 42, 0.10);
+  --line-strong: rgba(15, 23, 42, 0.16);
+  --accent: #355d8c;
+  --accent-2: #28476c;
+  --warning: #b7791f;
+  --shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+  --radius: 18px;
+  --radius-md: 14px;
+  --container: 1120px;
+  --font: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+}
+h1, h2, h3, p { margin-top: 0; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; }
+.container { width: min(calc(100% - 2rem), var(--container)); margin: 0 auto; }
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 0 16px;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+}
+.brand::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+.hero {
+  padding: 10px 0 20px;
+}
+.kicker {
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+h1 {
+  margin-bottom: 10px;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+.hero-copy, .muted, td, th, li {
+  color: var(--text);
+  line-height: 1.6;
+}
+.hero-copy {
+  max-width: 56ch;
+  color: var(--muted);
+}
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+.filter-card {
+  margin-top: 18px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+.filter-field {
+  display: grid;
+  gap: 8px;
+}
+.filter-label {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.filter-select {
+  min-height: 42px;
+  padding: 0 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+}
+.filter-summary {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-secondary {
+  background: #fff;
+  color: var(--accent);
+  border-color: var(--line-strong);
+}
+.notice {
+  margin: 18px 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  color: var(--muted);
+}
+.notice.warning {
+  color: var(--warning);
+  background: #fdf6e8;
+  border-color: rgba(183, 121, 31, 0.18);
+}
+.shell {
+  display: grid;
+  gap: 16px;
+  padding-bottom: 28px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+}
+.card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+.span-12 { grid-column: span 12; }
+.span-8 { grid-column: span 8; }
+.span-6 { grid-column: span 6; }
+.span-4 { grid-column: span 4; }
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.metric-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--panel-2);
+  padding: 16px;
+}
+.metric-label {
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+.metric-value {
+  margin-top: 8px;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+.trend-bars {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10px, 1fr));
+  align-items: end;
+  gap: 6px;
+  min-height: 120px;
+  margin-top: 14px;
+}
+.trend-bar {
+  min-height: 6px;
+  border-radius: 999px 999px 4px 4px;
+  background: var(--accent);
+}
+.trend-bar.is-zero {
+  background: #dbe4ee;
+}
+.trend-range {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+.table-wrap {
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 10px 0;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+th {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+td:last-child, th:last-child {
+  text-align: right;
+}
+.list {
+  display: grid;
+  gap: 10px;
+}
+.list-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.slug {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: var(--ink);
+  font-size: 0.92rem;
+  word-break: break-word;
+}
+.value {
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.table-note {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+.footer-note {
+  padding: 6px 0 32px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.is-hidden { display: none !important; }
+@media (max-width: 980px) {
+  .span-8, .span-6, .span-4 { grid-column: span 12; }
+  .metric-grid { grid-template-columns: 1fr; }
+  .filter-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .topbar, .actions { flex-direction: column; align-items: flex-start; }
+}
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header class="topbar">
+      <span class="brand">Operational Clarity</span>
+      <span class="pill">Internal analytics</span>
+    </header>
+
+    <section class="hero">
+      <p class="kicker">Benchmark Snapshot</p>
+      <h1>Internal analytics</h1>
+      <p class="hero-copy">Read-only benchmark and product-learning metrics from the existing Supabase views. This page does not affect the public diagnostic flow.</p>
+      <div class="actions">
+        <button id="refresh-button" type="button" class="btn">Refresh data</button>
+        <a href="/index.html?internal=1" class="btn btn-secondary">Open live debug panel</a>
+        <span id="last-updated" class="pill">Waiting for data</span>
+      </div>
+      <div class="filter-card">
+        <div class="filter-grid">
+          <label class="filter-field">
+            <span class="filter-label">Business type</span>
+            <select id="business-type-filter" class="filter-select">
+              <option value="all">All business types</option>
+            </select>
+          </label>
+          <label class="filter-field">
+            <span class="filter-label">Completion status</span>
+            <select id="completion-status-filter" class="filter-select">
+              <option value="all">All sessions</option>
+              <option value="reached_findings">Reached findings</option>
+              <option value="contact_submitted">Contact submitted</option>
+            </select>
+          </label>
+          <label class="filter-field">
+            <span class="filter-label">Time window</span>
+            <select id="time-window-filter" class="filter-select">
+              <option value="7d">Last 7 days</option>
+              <option value="30d">Last 30 days</option>
+              <option value="all">All time</option>
+            </select>
+          </label>
+          <label class="filter-field">
+            <span class="filter-label">Min sample</span>
+            <select id="min-sessions-filter" class="filter-select">
+              <option value="1">1+</option>
+              <option value="3" selected>3+</option>
+              <option value="5">5+</option>
+            </select>
+          </label>
+        </div>
+        <p id="filter-summary" class="filter-summary">Showing all business types, all sessions, last 7 days, 3+ sample rows.</p>
+      </div>
+    </section>
+
+    <div id="analytics-error" class="notice warning is-hidden"></div>
+    <div id="analytics-loading" class="notice">Loading analytics snapshot...</div>
+
+    <section id="analytics-shell" class="shell is-hidden">
+      <div class="metric-grid">
+        <div class="metric-card">
+          <div class="metric-label">Sessions</div>
+          <div id="metric-sessions" class="metric-value">0</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Reached findings</div>
+          <div id="metric-findings" class="metric-value">0</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Contact submitted</div>
+          <div id="metric-contact" class="metric-value">0</div>
+        </div>
+      </div>
+
+      <section class="card span-12">
+        <p class="kicker">Direction</p>
+        <h2>Session trend</h2>
+        <div id="session-trend-bars" class="trend-bars"></div>
+        <div id="session-trend-range" class="trend-range"></div>
+      </section>
+
+      <section class="card span-12">
+        <p class="kicker">Cohorts</p>
+        <h2>Business type and size cohorts</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Business type</th>
+                <th>Size band</th>
+                <th>Sessions</th>
+                <th>Findings</th>
+                <th>Contact</th>
+                <th>Conversion</th>
+              </tr>
+            </thead>
+            <tbody id="cohort-body"></tbody>
+          </table>
+        </div>
+        <p id="cohort-note" class="table-note is-hidden"></p>
+      </section>
+
+      <section class="card span-12">
+        <p class="kicker">Recommendations</p>
+        <h2>Recommendation effectiveness by cohort</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Recommendation</th>
+                <th>Business type</th>
+                <th>Size band</th>
+                <th>Sessions</th>
+                <th>Contact</th>
+                <th>Conversion</th>
+              </tr>
+            </thead>
+            <tbody id="recommendation-effectiveness-body"></tbody>
+          </table>
+        </div>
+        <p id="recommendation-effectiveness-note" class="table-note is-hidden"></p>
+      </section>
+
+      <section class="card span-12">
+        <p class="kicker">Quality</p>
+        <h2>Scorecard quality</h2>
+        <div class="metric-grid">
+          <div class="metric-card">
+            <div class="metric-label">Avg confidence</div>
+            <div id="quality-avg-confidence" class="metric-value">0%</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Low-confidence rate</div>
+            <div id="quality-low-confidence-rate" class="metric-value">0%</div>
+          </div>
+        </div>
+        <div class="metric-grid" style="margin-top: 14px;">
+          <div class="metric-card">
+            <div class="metric-label">Missing business type</div>
+            <div id="missing-business-type" class="metric-value">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Missing recommendations</div>
+            <div id="missing-recommendations" class="metric-value">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Missing causes</div>
+            <div id="missing-causes" class="metric-value">0</div>
+          </div>
+        </div>
+        <div class="metric-grid" style="margin-top: 14px;">
+          <div class="metric-card">
+            <div class="metric-label">Missing symptoms</div>
+            <div id="missing-symptoms" class="metric-value">0</div>
+          </div>
+        </div>
+        <div class="table-wrap" style="margin-top: 16px;">
+          <table>
+            <thead>
+              <tr>
+                <th>Business type</th>
+                <th>Sessions</th>
+                <th>Avg confidence</th>
+                <th>Low-confidence</th>
+              </tr>
+            </thead>
+            <tbody id="confidence-by-business-type-body"></tbody>
+          </table>
+        </div>
+        <p id="confidence-by-business-type-note" class="table-note is-hidden"></p>
+      </section>
+
+      <section class="card span-12">
+        <p class="kicker">Flow</p>
+        <h2>Stage drop-off quality</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Stage</th>
+                <th>Sessions</th>
+                <th>% of sessions</th>
+                <th>Avg confidence</th>
+                <th>Low-confidence</th>
+              </tr>
+            </thead>
+            <tbody id="stage-dropoff-summary-body"></tbody>
+          </table>
+        </div>
+        <div class="table-wrap" style="margin-top: 16px;">
+          <table>
+            <thead>
+              <tr>
+                <th>Business type</th>
+                <th>Stage</th>
+                <th>Sessions</th>
+                <th>% within type</th>
+                <th>Avg confidence</th>
+                <th>Low-confidence</th>
+              </tr>
+            </thead>
+            <tbody id="stage-dropoff-by-business-type-body"></tbody>
+          </table>
+        </div>
+        <p id="stage-dropoff-by-business-type-note" class="table-note is-hidden"></p>
+      </section>
+
+      <section class="card span-12">
+        <p class="kicker">Questions</p>
+        <h2>Question friction</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Question</th>
+                <th>Seen</th>
+                <th>Drop-off</th>
+                <th>Avg confidence</th>
+                <th>Missing symptoms</th>
+                <th>Missing causes</th>
+                <th>Missing recommendations</th>
+              </tr>
+            </thead>
+            <tbody id="question-friction-summary-body"></tbody>
+          </table>
+        </div>
+        <p id="question-friction-summary-note" class="table-note is-hidden"></p>
+
+        <div class="table-wrap" style="margin-top: 16px;">
+          <table>
+            <thead>
+              <tr>
+                <th>Question</th>
+                <th>Business type</th>
+                <th>Seen</th>
+                <th>Drop-off</th>
+                <th>Avg confidence</th>
+              </tr>
+            </thead>
+            <tbody id="question-friction-by-business-type-body"></tbody>
+          </table>
+        </div>
+        <p id="question-friction-by-business-type-note" class="table-note is-hidden"></p>
+      </section>
+
+      <div class="grid">
+        <section class="card span-8">
+          <p class="kicker">Distribution</p>
+          <h2>Business type distribution</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Business type</th>
+                  <th>Sessions</th>
+                  <th>Completed</th>
+                  <th>Completion</th>
+                </tr>
+              </thead>
+              <tbody id="business-type-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="card span-4">
+          <p class="kicker">Learning</p>
+          <h2>Product learning summary</h2>
+          <div id="product-learning-list" class="list"></div>
+        </section>
+
+        <section class="card span-4">
+          <p class="kicker">Frequency</p>
+          <h2>Top symptoms</h2>
+          <div id="symptom-list" class="list"></div>
+        </section>
+
+        <section class="card span-4">
+          <p class="kicker">Frequency</p>
+          <h2>Top causes</h2>
+          <div id="cause-list" class="list"></div>
+        </section>
+
+        <section class="card span-4">
+          <p class="kicker">Frequency</p>
+          <h2>Top recommendations</h2>
+          <div id="recommendation-list" class="list"></div>
+        </section>
+      </div>
+    </section>
+
+    <p class="footer-note">Data source: existing Supabase benchmark views via a read-only internal snapshot endpoint.</p>
+  </main>
+
+  <script>
+const ANALYTICS_URL = "https://lqzvkezgxfknfjnjoqur.supabase.co/functions/v1/internal-analytics-snapshot";
+const FILTER_DEFAULTS = {
+  businessType: "all",
+  completionStatus: "all",
+  timeWindow: "7d",
+  minSessions: "3"
+};
+
+const el = {
+  loading: document.getElementById("analytics-loading"),
+  error: document.getElementById("analytics-error"),
+  shell: document.getElementById("analytics-shell"),
+  lastUpdated: document.getElementById("last-updated"),
+  refreshButton: document.getElementById("refresh-button"),
+  sessions: document.getElementById("metric-sessions"),
+  findings: document.getElementById("metric-findings"),
+  contact: document.getElementById("metric-contact"),
+  sessionTrendBars: document.getElementById("session-trend-bars"),
+  sessionTrendRange: document.getElementById("session-trend-range"),
+  cohortBody: document.getElementById("cohort-body"),
+  cohortNote: document.getElementById("cohort-note"),
+  recommendationEffectivenessBody: document.getElementById("recommendation-effectiveness-body"),
+  recommendationEffectivenessNote: document.getElementById("recommendation-effectiveness-note"),
+  qualityAvgConfidence: document.getElementById("quality-avg-confidence"),
+  qualityLowConfidenceRate: document.getElementById("quality-low-confidence-rate"),
+  missingBusinessType: document.getElementById("missing-business-type"),
+  missingRecommendations: document.getElementById("missing-recommendations"),
+  missingCauses: document.getElementById("missing-causes"),
+  missingSymptoms: document.getElementById("missing-symptoms"),
+  confidenceByBusinessTypeBody: document.getElementById("confidence-by-business-type-body"),
+  confidenceByBusinessTypeNote: document.getElementById("confidence-by-business-type-note"),
+  stageDropoffSummaryBody: document.getElementById("stage-dropoff-summary-body"),
+  stageDropoffByBusinessTypeBody: document.getElementById("stage-dropoff-by-business-type-body"),
+  stageDropoffByBusinessTypeNote: document.getElementById("stage-dropoff-by-business-type-note"),
+  questionFrictionSummaryBody: document.getElementById("question-friction-summary-body"),
+  questionFrictionSummaryNote: document.getElementById("question-friction-summary-note"),
+  questionFrictionByBusinessTypeBody: document.getElementById("question-friction-by-business-type-body"),
+  questionFrictionByBusinessTypeNote: document.getElementById("question-friction-by-business-type-note"),
+  businessTypeFilter: document.getElementById("business-type-filter"),
+  completionStatusFilter: document.getElementById("completion-status-filter"),
+  timeWindowFilter: document.getElementById("time-window-filter"),
+  minSessionsFilter: document.getElementById("min-sessions-filter"),
+  filterSummary: document.getElementById("filter-summary"),
+  businessTypeBody: document.getElementById("business-type-body"),
+  symptomList: document.getElementById("symptom-list"),
+  causeList: document.getElementById("cause-list"),
+  recommendationList: document.getElementById("recommendation-list"),
+  productLearningList: document.getElementById("product-learning-list")
+};
+
+const analyticsState = {
+  filters: readFiltersFromLocation()
+};
+
+function prettyLabel(value) {
+  return String(value || "other")
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+function formatNumber(value) {
+  return Number(value || 0).toLocaleString();
+}
+
+function formatPercent(value) {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) return "0%";
+  return `${numeric.toFixed(0)}%`;
+}
+
+function formatConfidence(value) {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) return "--";
+  return `${Math.round(numeric * 100)}%`;
+}
+
+function showError(message) {
+  el.error.textContent = message;
+  el.error.classList.remove("is-hidden");
+}
+
+function clearError() {
+  el.error.textContent = "";
+  el.error.classList.add("is-hidden");
+}
+
+function readFiltersFromLocation() {
+  try {
+    const currentUrl = new URL(window.location.href);
+    const businessType = currentUrl.searchParams.get("business_type") || FILTER_DEFAULTS.businessType;
+    const completionStatus = currentUrl.searchParams.get("completion_status") || FILTER_DEFAULTS.completionStatus;
+    const timeWindow = currentUrl.searchParams.get("time_window") || FILTER_DEFAULTS.timeWindow;
+    const minSessions = currentUrl.searchParams.get("min_sessions") || FILTER_DEFAULTS.minSessions;
+
+    return {
+      businessType: businessType || FILTER_DEFAULTS.businessType,
+      completionStatus: ["all", "reached_findings", "contact_submitted"].includes(completionStatus)
+        ? completionStatus
+        : FILTER_DEFAULTS.completionStatus,
+      timeWindow: ["7d", "30d", "all"].includes(timeWindow)
+        ? timeWindow
+        : FILTER_DEFAULTS.timeWindow,
+      minSessions: ["1", "3", "5"].includes(minSessions)
+        ? minSessions
+        : FILTER_DEFAULTS.minSessions
+    };
+  } catch (error) {
+    return { ...FILTER_DEFAULTS };
+  }
+}
+
+function syncFilterControls() {
+  if (el.businessTypeFilter) el.businessTypeFilter.value = analyticsState.filters.businessType;
+  if (el.completionStatusFilter) el.completionStatusFilter.value = analyticsState.filters.completionStatus;
+  if (el.timeWindowFilter) el.timeWindowFilter.value = analyticsState.filters.timeWindow;
+  if (el.minSessionsFilter) el.minSessionsFilter.value = analyticsState.filters.minSessions;
+}
+
+function updateBusinessTypeOptions(options) {
+  if (!el.businessTypeFilter) return;
+
+  const currentValue = analyticsState.filters.businessType;
+  const slugs = Array.isArray(options)
+    ? Array.from(new Set(options.map((value) => String(value || "").trim()).filter(Boolean)))
+    : [];
+
+  el.businessTypeFilter.innerHTML = '<option value="all">All business types</option>';
+
+  slugs.forEach((slug) => {
+    const option = document.createElement("option");
+    option.value = slug;
+    option.textContent = prettyLabel(slug);
+    el.businessTypeFilter.appendChild(option);
+  });
+
+  analyticsState.filters.businessType = slugs.includes(currentValue) || currentValue === "all"
+    ? currentValue
+    : "all";
+
+  el.businessTypeFilter.value = analyticsState.filters.businessType;
+}
+
+function describeCompletionFilter(value) {
+  if (value === "reached_findings") return "reached findings";
+  if (value === "contact_submitted") return "contact submitted";
+  return "all sessions";
+}
+
+function describeTimeWindow(value) {
+  if (value === "7d") return "last 7 days";
+  if (value === "30d") return "last 30 days";
+  return "all time";
+}
+
+function renderFilterSummary() {
+  if (!el.filterSummary) return;
+  const businessType = analyticsState.filters.businessType === "all"
+    ? "all business types"
+    : prettyLabel(analyticsState.filters.businessType);
+
+  el.filterSummary.textContent = `Showing ${businessType}, ${describeCompletionFilter(analyticsState.filters.completionStatus)}, ${describeTimeWindow(analyticsState.filters.timeWindow)}, ${analyticsState.filters.minSessions}+ sample rows.`;
+}
+
+function syncPageUrl() {
+  try {
+    const currentUrl = new URL(window.location.href);
+    if (analyticsState.filters.businessType !== "all") {
+      currentUrl.searchParams.set("business_type", analyticsState.filters.businessType);
+    } else {
+      currentUrl.searchParams.delete("business_type");
+    }
+
+    if (analyticsState.filters.completionStatus !== FILTER_DEFAULTS.completionStatus) {
+      currentUrl.searchParams.set("completion_status", analyticsState.filters.completionStatus);
+    } else {
+      currentUrl.searchParams.delete("completion_status");
+    }
+
+    if (analyticsState.filters.timeWindow !== FILTER_DEFAULTS.timeWindow) {
+      currentUrl.searchParams.set("time_window", analyticsState.filters.timeWindow);
+    } else {
+      currentUrl.searchParams.delete("time_window");
+    }
+
+    if (analyticsState.filters.minSessions !== FILTER_DEFAULTS.minSessions) {
+      currentUrl.searchParams.set("min_sessions", analyticsState.filters.minSessions);
+    } else {
+      currentUrl.searchParams.delete("min_sessions");
+    }
+
+    window.history?.replaceState?.({}, "", currentUrl.toString());
+  } catch (error) {
+    // Ignore URL sync errors in non-browser validation harnesses.
+  }
+}
+
+function buildAnalyticsUrl() {
+  const url = new URL(ANALYTICS_URL);
+
+  if (analyticsState.filters.businessType !== "all") {
+    url.searchParams.set("business_type", analyticsState.filters.businessType);
+  }
+
+  if (analyticsState.filters.completionStatus !== "all") {
+    url.searchParams.set("completion_status", analyticsState.filters.completionStatus);
+  }
+
+  if (analyticsState.filters.timeWindow !== "all") {
+    url.searchParams.set("time_window", analyticsState.filters.timeWindow);
+  }
+
+  url.searchParams.set("min_sessions", analyticsState.filters.minSessions || FILTER_DEFAULTS.minSessions);
+
+  return url.toString();
+}
+
+function renderFrequencyList(node, rows, key) {
+  node.innerHTML = "";
+
+  if (!Array.isArray(rows) || rows.length === 0) {
+    node.innerHTML = `<p class="muted">No data yet.</p>`;
+    return;
+  }
+
+  rows.forEach((row) => {
+    const slug = row[key];
+    const count = row.session_count;
+    const item = document.createElement("div");
+    item.className = "list-row";
+    item.innerHTML = `
+      <span class="slug">${slug}</span>
+      <span class="value">${formatNumber(count)}</span>
+    `;
+    node.appendChild(item);
+  });
+}
+
+function renderProductLearning(rows) {
+  el.productLearningList.innerHTML = "";
+
+  if (!Array.isArray(rows) || rows.length === 0) {
+    el.productLearningList.innerHTML = `<p class="muted">No product-learning rows yet.</p>`;
+    return;
+  }
+
+  rows
+    .slice()
+    .sort((a, b) => Number(b.session_count || 0) - Number(a.session_count || 0))
+    .slice(0, 8)
+    .forEach((row) => {
+      const title = [
+        row.completion_status || "unknown",
+        row.last_completed_step || row.drop_off_step || "n/a"
+      ].filter(Boolean).join(" / ");
+
+      const item = document.createElement("div");
+      item.className = "list-row";
+      item.innerHTML = `
+        <div>
+          <div class="slug">${title}</div>
+          <div class="muted">avg questions: ${Number(row.avg_question_count || 0).toFixed(1)}</div>
+        </div>
+        <span class="value">${formatNumber(row.session_count)}</span>
+      `;
+      el.productLearningList.appendChild(item);
+    });
+}
+
+function renderBusinessTypeTable(rows) {
+  el.businessTypeBody.innerHTML = "";
+
+  if (!Array.isArray(rows) || rows.length === 0) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td colspan="4" class="muted">No benchmark rows yet.</td>`;
+    el.businessTypeBody.appendChild(tr);
+    return;
+  }
+
+  rows.forEach((row) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>
+        <div>${prettyLabel(row.primary_business_type)}</div>
+        <div class="muted">${row.primary_business_type || "other"}</div>
+      </td>
+      <td>${formatNumber(row.session_count)}</td>
+      <td>${formatNumber(row.completed_session_count)}</td>
+      <td>${formatPercent(row.completion_rate_pct)}</td>
+    `;
+    el.businessTypeBody.appendChild(tr);
+  });
+}
+
+function formatTrendDate(value) {
+  if (!value) return "";
+  const parsed = new Date(`${value}T00:00:00Z`);
+  return Number.isNaN(parsed.getTime())
+    ? value
+    : parsed.toLocaleDateString([], { month: "short", day: "numeric" });
+}
+
+function renderSessionTrend(rows) {
+  if (!el.sessionTrendBars || !el.sessionTrendRange) return;
+
+  el.sessionTrendBars.innerHTML = "";
+  el.sessionTrendRange.innerHTML = "";
+
+  if (!Array.isArray(rows) || rows.length === 0) {
+    el.sessionTrendBars.innerHTML = `<p class="muted">No trend data yet.</p>`;
+    return;
+  }
+
+  const maxSessions = Math.max(...rows.map((row) => Number(row.sessions || 0)), 0);
+  const totalSessions = rows.reduce((sum, row) => sum + Number(row.sessions || 0), 0);
+
+  rows.forEach((row) => {
+    const value = Number(row.sessions || 0);
+    const bar = document.createElement("div");
+    bar.className = `trend-bar${value === 0 ? " is-zero" : ""}`;
+    bar.style.height = `${maxSessions > 0 ? Math.max((value / maxSessions) * 100, value > 0 ? 12 : 4) : 4}%`;
+    bar.title = `${row.date}: ${formatNumber(value)}`;
+    el.sessionTrendBars.appendChild(bar);
+  });
+
+  const firstDate = rows[0]?.date || "";
+  const lastDate = rows[rows.length - 1]?.date || "";
+  el.sessionTrendRange.innerHTML = `
+    <span>${formatTrendDate(firstDate)}</span>
+    <span>${formatNumber(totalSessions)} sessions</span>
+    <span>${formatTrendDate(lastDate)}</span>
+  `;
+}
+
+function renderCohorts(rows) {
+  if (!el.cohortBody) return;
+  el.cohortBody.innerHTML = "";
+  if (el.cohortNote) {
+    el.cohortNote.textContent = "";
+    el.cohortNote.classList.add("is-hidden");
+  }
+
+  if (!Array.isArray(rows) || rows.length === 0) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td colspan="6" class="muted">No cohort rows yet.</td>`;
+    el.cohortBody.appendChild(tr);
+    if (el.cohortNote && Number(analyticsState.filters.minSessions || 1) > 1) {
+      el.cohortNote.textContent = `Rows under ${analyticsState.filters.minSessions} sessions are hidden`;
+      el.cohortNote.classList.remove("is-hidden");
+    }
+    return;
+  }
+
+  rows.forEach((row) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${prettyLabel(row.business_type)}</td>
+      <td>${prettyLabel(row.size_band)}</td>
+      <td>${formatNumber(row.sessions)}</td>
+      <td>${formatNumber(row.reached_findings)}</td>
+      <td>${formatNumber(row.contact_submitted)}</td>
+      <td>${formatPercent(row.conversion_rate_pct)}</td>
+    `;
+    el.cohortBody.appendChild(tr);
+  });
+}
+
+function renderRecommendationEffectiveness(rows) {
+  if (!el.recommendationEffectivenessBody) return;
+  el.recommendationEffectivenessBody.innerHTML = "";
+  if (el.recommendationEffectivenessNote) {
+    el.recommendationEffectivenessNote.textContent = "";
+    el.recommendationEffectivenessNote.classList.add("is-hidden");
+  }
+
+  if (!Array.isArray(rows) || rows.length === 0) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td colspan="6" class="muted">No recommendation-effectiveness rows yet.</td>`;
+    el.recommendationEffectivenessBody.appendChild(tr);
+    if (el.recommendationEffectivenessNote && Number(analyticsState.filters.minSessions || 1) > 1) {
+      el.recommendationEffectivenessNote.textContent = `Rows under ${analyticsState.filters.minSessions} sessions are hidden`;
+      el.recommendationEffectivenessNote.classList.remove("is-hidden");
+    }
+    return;
+  }
+
+  rows.forEach((row) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>
+        <div>${prettyLabel(row.recommendation_id)}</div>
+        <div class="muted">${row.recommendation_id}</div>
+      </td>
+      <td>${prettyLabel(row.business_type)}</td>
+      <td>${prettyLabel(row.size_band)}</td>
+      <td>${formatNumber(row.sessions_with_recommendation)}</td>
+      <td>${formatNumber(row.contact_submitted)}</td>
+      <td>${formatPercent(row.conversion_rate_pct)}</td>
+    `;
+    el.recommendationEffectivenessBody.appendChild(tr);
+  });
+}
+
+function renderScorecardQuality(confidenceSummary, missingFieldSummary, confidenceByBusinessTypeRows) {
+  if (el.qualityAvgConfidence) {
+    el.qualityAvgConfidence.textContent = formatConfidence(confidenceSummary?.avg_extraction_confidence);
+  }
+  if (el.qualityLowConfidenceRate) {
+    el.qualityLowConfidenceRate.textContent = formatPercent(confidenceSummary?.low_confidence_rate_pct);
+  }
+  if (el.missingBusinessType) {
+    el.missingBusinessType.textContent = formatNumber(missingFieldSummary?.sessions_missing_business_type);
+  }
+  if (el.missingRecommendations) {
+    el.missingRecommendations.textContent = formatNumber(missingFieldSummary?.sessions_missing_recommendations);
+  }
+  if (el.missingCauses) {
+    el.missingCauses.textContent = formatNumber(missingFieldSummary?.sessions_missing_causes);
+  }
+  if (el.missingSymptoms) {
+    el.missingSymptoms.textContent = formatNumber(missingFieldSummary?.sessions_missing_symptoms);
+  }
+
+  if (!el.confidenceByBusinessTypeBody) return;
+  el.confidenceByBusinessTypeBody.innerHTML = "";
+  if (el.confidenceByBusinessTypeNote) {
+    el.confidenceByBusinessTypeNote.textContent = "";
+    el.confidenceByBusinessTypeNote.classList.add("is-hidden");
+  }
+
+  if (!Array.isArray(confidenceByBusinessTypeRows) || confidenceByBusinessTypeRows.length === 0) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td colspan="4" class="muted">No confidence-by-business-type rows yet.</td>`;
+    el.confidenceByBusinessTypeBody.appendChild(tr);
+    if (el.confidenceByBusinessTypeNote && Number(analyticsState.filters.minSessions || 1) > 1) {
+      el.confidenceByBusinessTypeNote.textContent = `Rows under ${analyticsState.filters.minSessions} sessions are hidden`;
+      el.confidenceByBusinessTypeNote.classList.remove("is-hidden");
+    }
+    return;
+  }
+
+  confidenceByBusinessTypeRows.forEach((row) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${prettyLabel(row.business_type)}</td>
+      <td>${formatNumber(row.sessions)}</td>
+      <td>${formatConfidence(row.avg_extraction_confidence)}</td>
+      <td>${formatPercent(row.low_confidence_rate_pct)}</td>
+    `;
+    el.confidenceByBusinessTypeBody.appendChild(tr);
+  });
+}
+
+function renderStageDropoffQuality(summaryRows, byBusinessTypeRows) {
+  if (el.stageDropoffSummaryBody) {
+    el.stageDropoffSummaryBody.innerHTML = "";
+
+    if (!Array.isArray(summaryRows) || summaryRows.length === 0) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td colspan="5" class="muted">No stage summary rows yet.</td>`;
+      el.stageDropoffSummaryBody.appendChild(tr);
+    } else {
+      summaryRows.forEach((row) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${prettyLabel(row.stage)}</td>
+          <td>${formatNumber(row.session_count)}</td>
+          <td>${formatPercent(row.pct_of_sessions)}</td>
+          <td>${formatConfidence(row.avg_extraction_confidence)}</td>
+          <td>${formatPercent(row.low_confidence_rate_pct)}</td>
+        `;
+        el.stageDropoffSummaryBody.appendChild(tr);
+      });
+    }
+  }
+
+  if (!el.stageDropoffByBusinessTypeBody) return;
+  el.stageDropoffByBusinessTypeBody.innerHTML = "";
+  if (el.stageDropoffByBusinessTypeNote) {
+    el.stageDropoffByBusinessTypeNote.textContent = "";
+    el.stageDropoffByBusinessTypeNote.classList.add("is-hidden");
+  }
+
+  if (!Array.isArray(byBusinessTypeRows) || byBusinessTypeRows.length === 0) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td colspan="6" class="muted">No stage-by-business-type rows yet.</td>`;
+    el.stageDropoffByBusinessTypeBody.appendChild(tr);
+    if (el.stageDropoffByBusinessTypeNote && Number(analyticsState.filters.minSessions || 1) > 1) {
+      el.stageDropoffByBusinessTypeNote.textContent = `Rows under ${analyticsState.filters.minSessions} sessions are hidden`;
+      el.stageDropoffByBusinessTypeNote.classList.remove("is-hidden");
+    }
+    return;
+  }
+
+  byBusinessTypeRows.forEach((row) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${prettyLabel(row.business_type)}</td>
+      <td>${prettyLabel(row.stage)}</td>
+      <td>${formatNumber(row.session_count)}</td>
+      <td>${formatPercent(row.pct_within_business_type)}</td>
+      <td>${formatConfidence(row.avg_extraction_confidence)}</td>
+      <td>${formatPercent(row.low_confidence_rate_pct)}</td>
+    `;
+    el.stageDropoffByBusinessTypeBody.appendChild(tr);
+  });
+}
+
+function renderQuestionFriction(summaryRows, byBusinessTypeRows) {
+  if (el.questionFrictionSummaryBody) {
+    el.questionFrictionSummaryBody.innerHTML = "";
+    if (el.questionFrictionSummaryNote) {
+      el.questionFrictionSummaryNote.textContent = "";
+      el.questionFrictionSummaryNote.classList.add("is-hidden");
+    }
+
+    if (!Array.isArray(summaryRows) || summaryRows.length === 0) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td colspan="7" class="muted">No question-friction rows yet.</td>`;
+      el.questionFrictionSummaryBody.appendChild(tr);
+      if (el.questionFrictionSummaryNote && Number(analyticsState.filters.minSessions || 1) > 1) {
+        el.questionFrictionSummaryNote.textContent = `Rows under ${analyticsState.filters.minSessions} sessions are hidden`;
+        el.questionFrictionSummaryNote.classList.remove("is-hidden");
+      }
+    } else {
+      summaryRows.forEach((row) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>
+            <div>${row.question_label || prettyLabel(row.question_key)}</div>
+            <div class="muted">${row.question_key}</div>
+          </td>
+          <td>${formatNumber(row.times_seen)}</td>
+          <td>${formatNumber(row.drop_off_count)} <span class="muted">(${formatPercent(row.drop_off_rate_pct)})</span></td>
+          <td>${formatConfidence(row.avg_extraction_confidence)}</td>
+          <td>${formatPercent(row.missing_symptoms_rate_pct)}</td>
+          <td>${formatPercent(row.missing_causes_rate_pct)}</td>
+          <td>${formatPercent(row.missing_recommendations_rate_pct)}</td>
+        `;
+        el.questionFrictionSummaryBody.appendChild(tr);
+      });
+    }
+  }
+
+  if (!el.questionFrictionByBusinessTypeBody) return;
+  el.questionFrictionByBusinessTypeBody.innerHTML = "";
+  if (el.questionFrictionByBusinessTypeNote) {
+    el.questionFrictionByBusinessTypeNote.textContent = "";
+    el.questionFrictionByBusinessTypeNote.classList.add("is-hidden");
+  }
+
+  if (!Array.isArray(byBusinessTypeRows) || byBusinessTypeRows.length === 0) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td colspan="5" class="muted">No question-by-business-type rows yet.</td>`;
+    el.questionFrictionByBusinessTypeBody.appendChild(tr);
+    if (el.questionFrictionByBusinessTypeNote && Number(analyticsState.filters.minSessions || 1) > 1) {
+      el.questionFrictionByBusinessTypeNote.textContent = `Rows under ${analyticsState.filters.minSessions} sessions are hidden`;
+      el.questionFrictionByBusinessTypeNote.classList.remove("is-hidden");
+    }
+    return;
+  }
+
+  byBusinessTypeRows.forEach((row) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>
+        <div>${row.question_label || prettyLabel(row.question_key)}</div>
+        <div class="muted">${row.question_key}</div>
+      </td>
+      <td>${prettyLabel(row.business_type)}</td>
+      <td>${formatNumber(row.times_seen)}</td>
+      <td>${formatNumber(row.drop_off_count)} <span class="muted">(${formatPercent(row.drop_off_rate_pct)})</span></td>
+      <td>${formatConfidence(row.avg_extraction_confidence)}</td>
+    `;
+    el.questionFrictionByBusinessTypeBody.appendChild(tr);
+  });
+}
+
+function renderSnapshot(snapshot) {
+  const metrics = snapshot.conversion_metrics || {};
+  el.sessions.textContent = formatNumber(metrics.sessions);
+  el.findings.textContent = formatNumber(metrics.reached_findings);
+  el.contact.textContent = formatNumber(metrics.contact_submitted);
+
+  updateBusinessTypeOptions(snapshot.filter_options?.business_types || []);
+  renderBusinessTypeTable(snapshot.business_type_distribution || []);
+  renderSessionTrend(snapshot.session_trend || []);
+  renderCohorts(snapshot.cohorts || []);
+  renderRecommendationEffectiveness(snapshot.recommendation_effectiveness || []);
+  renderScorecardQuality(
+    snapshot.confidence_summary || {},
+    snapshot.missing_field_summary || {},
+    snapshot.confidence_by_business_type || []
+  );
+  renderStageDropoffQuality(
+    snapshot.stage_dropoff_summary || [],
+    snapshot.stage_dropoff_by_business_type || []
+  );
+  renderQuestionFriction(
+    snapshot.question_friction_summary || [],
+    snapshot.question_friction_by_business_type || []
+  );
+  renderFrequencyList(el.symptomList, snapshot.top_symptoms || [], "symptom_slug");
+  renderFrequencyList(el.causeList, snapshot.top_causes || [], "cause_slug");
+  renderFrequencyList(el.recommendationList, snapshot.top_recommendations || [], "recommendation_id");
+  renderProductLearning(snapshot.product_learning || []);
+  renderFilterSummary();
+
+  const generatedAt = snapshot.generated_at ? new Date(snapshot.generated_at) : null;
+  el.lastUpdated.textContent = generatedAt && !Number.isNaN(generatedAt.getTime())
+    ? `Updated ${generatedAt.toLocaleString()}`
+    : "Updated just now";
+}
+
+async function loadAnalytics() {
+  clearError();
+  el.loading.classList.remove("is-hidden");
+  el.shell.classList.add("is-hidden");
+  el.refreshButton.disabled = true;
+
+  try {
+    const response = await fetch(buildAnalyticsUrl(), {
+      method: "GET",
+      headers: {
+        "Accept": "application/json"
+      },
+      cache: "no-store"
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data?.error || `Analytics request failed with status ${response.status}.`);
+    }
+
+    renderSnapshot(data);
+    syncPageUrl();
+    el.shell.classList.remove("is-hidden");
+  } catch (error) {
+    showError(error instanceof Error ? error.message : "Unable to load analytics.");
+  } finally {
+    el.loading.classList.add("is-hidden");
+    el.refreshButton.disabled = false;
+  }
+}
+
+function handleFilterChange() {
+  analyticsState.filters.businessType = el.businessTypeFilter?.value || FILTER_DEFAULTS.businessType;
+  analyticsState.filters.completionStatus = el.completionStatusFilter?.value || FILTER_DEFAULTS.completionStatus;
+  analyticsState.filters.timeWindow = el.timeWindowFilter?.value || FILTER_DEFAULTS.timeWindow;
+  analyticsState.filters.minSessions = el.minSessionsFilter?.value || FILTER_DEFAULTS.minSessions;
+  renderFilterSummary();
+  loadAnalytics();
+}
+
+document.getElementById("refresh-button")?.addEventListener("click", loadAnalytics);
+el.businessTypeFilter?.addEventListener("change", handleFilterChange);
+el.completionStatusFilter?.addEventListener("change", handleFilterChange);
+el.timeWindowFilter?.addEventListener("change", handleFilterChange);
+el.minSessionsFilter?.addEventListener("change", handleFilterChange);
+syncFilterControls();
+renderFilterSummary();
+loadAnalytics();
+  </script>
+</body>
+</html>
