@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy | Operational Clarity</title>
+  <meta name="description" content="Privacy Policy for Operational Clarity, a product from EHI Studio by EHI Group." />
+  <style>
+:root {
+  --bg: #f4f6f8;
+  --panel: #ffffff;
+  --ink: #17212b;
+  --text: #334155;
+  --muted: #66758a;
+  --line: rgba(15, 23, 42, 0.10);
+  --accent: #1f4f82;
+  --shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+  --radius: 18px;
+  --container: 880px;
+  --font: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+}
+a { color: var(--accent); text-decoration: none; }
+a:focus-visible {
+  outline: 3px solid rgba(31, 79, 130, 0.22);
+  outline-offset: 2px;
+}
+h1, h2, p, li { margin-top: 0; }
+.container { width: min(calc(100% - 2rem), var(--container)); margin: 0 auto; }
+.topbar, .footer-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.topbar { padding: 24px 0 16px; }
+.footer-row { padding: 20px 0 32px; border-top: 1px solid var(--line); }
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+}
+.brand::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+.brand-meta, .eyebrow, .small-text {
+  color: var(--muted);
+}
+.eyebrow {
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+h1 {
+  margin-bottom: 12px;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+}
+.hero-copy, p, li {
+  color: var(--text);
+  line-height: 1.65;
+}
+.card {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+.stack {
+  display: grid;
+  gap: 16px;
+  padding-bottom: 28px;
+}
+.section + .section {
+  padding-top: 4px;
+}
+ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+li + li {
+  margin-top: 8px;
+}
+.footer-links {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+@media (max-width: 720px) {
+  .topbar, .footer-row { flex-direction: column; }
+}
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header class="topbar">
+      <div>
+        <a class="brand" href="../index.html">Operational Clarity</a>
+        <p class="brand-meta">A product from EHI Studio, by EHI Group, powered by Human-Enhanced AI.</p>
+      </div>
+      <nav class="footer-links" aria-label="Secondary">
+        <a href="../terms-of-use/">Terms of Use</a>
+        <a href="../contact/">Contact</a>
+      </nav>
+    </header>
+
+    <section class="stack">
+      <div class="card">
+        <p class="eyebrow">Legal</p>
+        <h1>Privacy Policy</h1>
+        <p class="hero-copy">This page describes the data flows currently implemented in the live build of Operational Clarity as of March 24, 2026. Review and replace this placeholder policy with your final legal text before public launch.</p>
+      </div>
+
+      <div class="card section">
+        <h2>What the product collects</h2>
+        <ul>
+          <li>Messages entered into the diagnostic review.</li>
+          <li>Assistant replies, extracted fields, findings, normalized business-type tags, recommendation IDs, and confidence fields.</li>
+          <li>Session metadata such as timestamps, stage progression, page URL, source/channel fields when available, and whether contact details were submitted.</li>
+          <li>If you choose to submit contact details, the current build captures name, email, company, package interest, phone if provided, and message text.</li>
+        </ul>
+      </div>
+
+      <div class="card section">
+        <h2>What is stored in the browser</h2>
+        <ul>
+          <li>The active review session is stored in local browser storage so a session can be restored if the page reloads.</li>
+          <li>Anonymous assessment history, anonymous archive snapshots, and structured intelligence snapshots are also stored locally for benchmarking and restore behavior.</li>
+          <li>If no external lead endpoint is configured, contact-form submissions are stored locally in browser storage.</li>
+        </ul>
+      </div>
+
+      <div class="card section">
+        <h2>What is stored in Supabase</h2>
+        <ul>
+          <li>Anonymous or identified session records may be written to Supabase through the `session-intelligence-ingest` function.</li>
+          <li>Current tables store transcript/message history, extracted JSON, findings JSON, recommendation JSON, normalized business features, symptom tags, cause tags, recommendation links, confidence values, and product-learning fields.</li>
+          <li>If contact is submitted, the session record is updated to reflect `contact_submitted` status.</li>
+        </ul>
+      </div>
+
+      <div class="card section">
+        <h2>What is sent to AI providers</h2>
+        <p>The `business-diagnostic-agent` function sends the review conversation to the configured OpenAI API endpoint together with the internal system prompt needed to produce the diagnostic response. That means any information typed into the review may be processed by the configured AI provider.</p>
+        <p>Do not submit passwords, bank account numbers, medical information, legal claims, employee personal data, or other highly sensitive confidential information.</p>
+      </div>
+
+      <div class="card section">
+        <h2>Cookies and analytics</h2>
+        <p>The current build does not include third-party web analytics scripts, advertising pixels, or cookie consent tooling. The implemented persistence mechanism in the browser is localStorage, not tracking cookies.</p>
+      </div>
+
+      <div class="card section">
+        <h2>Retention and deletion</h2>
+        <ul>
+          <li>The current build does not implement an automatic deletion schedule for Supabase session records.</li>
+          <li>The active local session is cleared when the user resets the review or when the build version changes.</li>
+          <li>Local benchmark and archive stores are capped in code by item count, not by time:
+            anonymous score history is capped to 100 records, anonymous assessment archive to 250 records, and structured intelligence archive to 300 records.</li>
+          <li>If no external lead endpoint is configured, locally stored leads remain in browser storage until manually cleared.</li>
+        </ul>
+      </div>
+
+      <div class="card section">
+        <h2>Diagnostic guidance only</h2>
+        <p>Operational Clarity provides diagnostic guidance only. It does not provide legal, tax, accounting, or financial advice.</p>
+      </div>
+    </section>
+
+    <footer class="footer-row">
+      <div>
+        <p class="small-text">Operational Clarity is a product from EHI Studio, by EHI Group.</p>
+      </div>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="../index.html">Home</a>
+        <a href="../terms-of-use/">Terms of Use</a>
+        <a href="../contact/">Contact</a>
+      </nav>
+    </footer>
+  </main>
+</body>
+</html>

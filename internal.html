@@ -288,6 +288,10 @@ td:last-child, th:last-child {
   color: var(--muted);
   font-size: 0.88rem;
 }
+.empty-row td {
+  color: var(--muted);
+  font-style: italic;
+}
 .footer-note {
   padding: 6px 0 32px;
   color: var(--muted);
@@ -312,9 +316,9 @@ td:last-child, th:last-child {
     </header>
 
     <section class="hero">
-      <p class="kicker">Benchmark Snapshot</p>
+      <p class="kicker">Internal Snapshot</p>
       <h1>Internal analytics</h1>
-      <p class="hero-copy">Read-only benchmark and product-learning metrics from the existing Supabase views. This page does not affect the public diagnostic flow.</p>
+      <p class="hero-copy">Read-only operational signal from the live session dataset. Use filters to inspect direction, quality, friction, and conversion without touching the public diagnostic flow.</p>
       <div class="actions">
         <button id="refresh-button" type="button" class="btn">Refresh data</button>
         <a href="/index.html?internal=1" class="btn btn-secondary">Open live debug panel</a>
@@ -358,7 +362,7 @@ td:last-child, th:last-child {
     </section>
 
     <div id="analytics-error" class="notice warning is-hidden"></div>
-    <div id="analytics-loading" class="notice">Loading analytics snapshot...</div>
+    <div id="analytics-loading" class="notice">Loading live analytics...</div>
 
     <section id="analytics-shell" class="shell is-hidden">
       <div class="metric-grid">
@@ -816,7 +820,7 @@ function renderFrequencyList(node, rows, key) {
   node.innerHTML = "";
 
   if (!Array.isArray(rows) || rows.length === 0) {
-    node.innerHTML = `<p class="muted">No data yet.</p>`;
+    node.innerHTML = `<p class="muted">No rows for this filter.</p>`;
     return;
   }
 
@@ -837,7 +841,7 @@ function renderProductLearning(rows) {
   el.productLearningList.innerHTML = "";
 
   if (!Array.isArray(rows) || rows.length === 0) {
-    el.productLearningList.innerHTML = `<p class="muted">No product-learning rows yet.</p>`;
+    el.productLearningList.innerHTML = `<p class="muted">No rows for this filter.</p>`;
     return;
   }
 
@@ -864,13 +868,31 @@ function renderProductLearning(rows) {
     });
 }
 
+function renderEmptyTableRow(node, colspan, message = "No rows for this filter.") {
+  if (!node) return;
+  const tr = document.createElement("tr");
+  tr.className = "empty-row";
+  tr.innerHTML = `<td colspan="${colspan}">${message}</td>`;
+  node.appendChild(tr);
+}
+
+function resetThresholdNote(node) {
+  if (!node) return;
+  node.textContent = "";
+  node.classList.add("is-hidden");
+}
+
+function showThresholdNote(node) {
+  if (!node || Number(analyticsState.filters.minSessions || 1) <= 1) return;
+  node.textContent = `Rows under ${analyticsState.filters.minSessions} sessions are hidden`;
+  node.classList.remove("is-hidden");
+}
+
 function renderBusinessTypeTable(rows) {
   el.businessTypeBody.innerHTML = "";
 
   if (!Array.isArray(rows) || rows.length === 0) {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td colspan="4" class="muted">No benchmark rows yet.</td>`;
-    el.businessTypeBody.appendChild(tr);
+    renderEmptyTableRow(el.businessTypeBody, 4);
     return;
   }
 
@@ -904,7 +926,7 @@ function renderSessionTrend(rows) {
   el.sessionTrendRange.innerHTML = "";
 
   if (!Array.isArray(rows) || rows.length === 0) {
-    el.sessionTrendBars.innerHTML = `<p class="muted">No trend data yet.</p>`;
+    el.sessionTrendBars.innerHTML = `<p class="muted">No sessions in this window.</p>`;
     return;
   }
 
@@ -932,19 +954,11 @@ function renderSessionTrend(rows) {
 function renderCohorts(rows) {
   if (!el.cohortBody) return;
   el.cohortBody.innerHTML = "";
-  if (el.cohortNote) {
-    el.cohortNote.textContent = "";
-    el.cohortNote.classList.add("is-hidden");
-  }
+  resetThresholdNote(el.cohortNote);
 
   if (!Array.isArray(rows) || rows.length === 0) {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td colspan="6" class="muted">No cohort rows yet.</td>`;
-    el.cohortBody.appendChild(tr);
-    if (el.cohortNote && Number(analyticsState.filters.minSessions || 1) > 1) {
-      el.cohortNote.textContent = `Rows under ${analyticsState.filters.minSessions} sessions are hidden`;
-      el.cohortNote.classList.remove("is-hidden");
-    }
+    renderEmptyTableRow(el.cohortBody, 6);
+    showThresholdNote(el.cohortNote);
     return;
   }
 
@@ -965,19 +979,11 @@ function renderCohorts(rows) {
 function renderRecommendationEffectiveness(rows) {
   if (!el.recommendationEffectivenessBody) return;
   el.recommendationEffectivenessBody.innerHTML = "";
-  if (el.recommendationEffectivenessNote) {
-    el.recommendationEffectivenessNote.textContent = "";
-    el.recommendationEffectivenessNote.classList.add("is-hidden");
-  }
+  resetThresholdNote(el.recommendationEffectivenessNote);
 
   if (!Array.isArray(rows) || rows.length === 0) {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td colspan="6" class="muted">No recommendation-effectiveness rows yet.</td>`;
-    el.recommendationEffectivenessBody.appendChild(tr);
-    if (el.recommendationEffectivenessNote && Number(analyticsState.filters.minSessions || 1) > 1) {
-      el.recommendationEffectivenessNote.textContent = `Rows under ${analyticsState.filters.minSessions} sessions are hidden`;
-      el.recommendationEffectivenessNote.classList.remove("is-hidden");
-    }
+    renderEmptyTableRow(el.recommendationEffectivenessBody, 6);
+    showThresholdNote(el.recommendationEffectivenessNote);
     return;
   }
 
@@ -1020,19 +1026,11 @@ function renderScorecardQuality(confidenceSummary, missingFieldSummary, confiden
 
   if (!el.confidenceByBusinessTypeBody) return;
   el.confidenceByBusinessTypeBody.innerHTML = "";
-  if (el.confidenceByBusinessTypeNote) {
-    el.confidenceByBusinessTypeNote.textContent = "";
-    el.confidenceByBusinessTypeNote.classList.add("is-hidden");
-  }
+  resetThresholdNote(el.confidenceByBusinessTypeNote);
 
   if (!Array.isArray(confidenceByBusinessTypeRows) || confidenceByBusinessTypeRows.length === 0) {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td colspan="4" class="muted">No confidence-by-business-type rows yet.</td>`;
-    el.confidenceByBusinessTypeBody.appendChild(tr);
-    if (el.confidenceByBusinessTypeNote && Number(analyticsState.filters.minSessions || 1) > 1) {
-      el.confidenceByBusinessTypeNote.textContent = `Rows under ${analyticsState.filters.minSessions} sessions are hidden`;
-      el.confidenceByBusinessTypeNote.classList.remove("is-hidden");
-    }
+    renderEmptyTableRow(el.confidenceByBusinessTypeBody, 4);
+    showThresholdNote(el.confidenceByBusinessTypeNote);
     return;
   }
 
@@ -1053,9 +1051,7 @@ function renderStageDropoffQuality(summaryRows, byBusinessTypeRows) {
     el.stageDropoffSummaryBody.innerHTML = "";
 
     if (!Array.isArray(summaryRows) || summaryRows.length === 0) {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `<td colspan="5" class="muted">No stage summary rows yet.</td>`;
-      el.stageDropoffSummaryBody.appendChild(tr);
+      renderEmptyTableRow(el.stageDropoffSummaryBody, 5);
     } else {
       summaryRows.forEach((row) => {
         const tr = document.createElement("tr");
@@ -1073,19 +1069,11 @@ function renderStageDropoffQuality(summaryRows, byBusinessTypeRows) {
 
   if (!el.stageDropoffByBusinessTypeBody) return;
   el.stageDropoffByBusinessTypeBody.innerHTML = "";
-  if (el.stageDropoffByBusinessTypeNote) {
-    el.stageDropoffByBusinessTypeNote.textContent = "";
-    el.stageDropoffByBusinessTypeNote.classList.add("is-hidden");
-  }
+  resetThresholdNote(el.stageDropoffByBusinessTypeNote);
 
   if (!Array.isArray(byBusinessTypeRows) || byBusinessTypeRows.length === 0) {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td colspan="6" class="muted">No stage-by-business-type rows yet.</td>`;
-    el.stageDropoffByBusinessTypeBody.appendChild(tr);
-    if (el.stageDropoffByBusinessTypeNote && Number(analyticsState.filters.minSessions || 1) > 1) {
-      el.stageDropoffByBusinessTypeNote.textContent = `Rows under ${analyticsState.filters.minSessions} sessions are hidden`;
-      el.stageDropoffByBusinessTypeNote.classList.remove("is-hidden");
-    }
+    renderEmptyTableRow(el.stageDropoffByBusinessTypeBody, 6);
+    showThresholdNote(el.stageDropoffByBusinessTypeNote);
     return;
   }
 
@@ -1106,19 +1094,11 @@ function renderStageDropoffQuality(summaryRows, byBusinessTypeRows) {
 function renderQuestionFriction(summaryRows, byBusinessTypeRows) {
   if (el.questionFrictionSummaryBody) {
     el.questionFrictionSummaryBody.innerHTML = "";
-    if (el.questionFrictionSummaryNote) {
-      el.questionFrictionSummaryNote.textContent = "";
-      el.questionFrictionSummaryNote.classList.add("is-hidden");
-    }
+    resetThresholdNote(el.questionFrictionSummaryNote);
 
     if (!Array.isArray(summaryRows) || summaryRows.length === 0) {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `<td colspan="7" class="muted">No question-friction rows yet.</td>`;
-      el.questionFrictionSummaryBody.appendChild(tr);
-      if (el.questionFrictionSummaryNote && Number(analyticsState.filters.minSessions || 1) > 1) {
-        el.questionFrictionSummaryNote.textContent = `Rows under ${analyticsState.filters.minSessions} sessions are hidden`;
-        el.questionFrictionSummaryNote.classList.remove("is-hidden");
-      }
+      renderEmptyTableRow(el.questionFrictionSummaryBody, 7);
+      showThresholdNote(el.questionFrictionSummaryNote);
     } else {
       summaryRows.forEach((row) => {
         const tr = document.createElement("tr");
@@ -1141,19 +1121,11 @@ function renderQuestionFriction(summaryRows, byBusinessTypeRows) {
 
   if (!el.questionFrictionByBusinessTypeBody) return;
   el.questionFrictionByBusinessTypeBody.innerHTML = "";
-  if (el.questionFrictionByBusinessTypeNote) {
-    el.questionFrictionByBusinessTypeNote.textContent = "";
-    el.questionFrictionByBusinessTypeNote.classList.add("is-hidden");
-  }
+  resetThresholdNote(el.questionFrictionByBusinessTypeNote);
 
   if (!Array.isArray(byBusinessTypeRows) || byBusinessTypeRows.length === 0) {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td colspan="5" class="muted">No question-by-business-type rows yet.</td>`;
-    el.questionFrictionByBusinessTypeBody.appendChild(tr);
-    if (el.questionFrictionByBusinessTypeNote && Number(analyticsState.filters.minSessions || 1) > 1) {
-      el.questionFrictionByBusinessTypeNote.textContent = `Rows under ${analyticsState.filters.minSessions} sessions are hidden`;
-      el.questionFrictionByBusinessTypeNote.classList.remove("is-hidden");
-    }
+    renderEmptyTableRow(el.questionFrictionByBusinessTypeBody, 5);
+    showThresholdNote(el.questionFrictionByBusinessTypeNote);
     return;
   }
 
