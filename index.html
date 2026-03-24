@@ -94,13 +94,13 @@ h1 { margin-bottom:10px; max-width:22ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
 .input-helper { margin:0; color:var(--muted); font-size:0.92rem; }
 .trust-card {
   display:grid;
-  gap:12px;
-  padding:14px 16px;
+  gap:10px;
+  padding:13px 16px;
   border:1px solid rgba(31, 79, 130, 0.12);
   border-radius:var(--radius-md);
   background:linear-gradient(180deg, #fafcfe 0%, #f5f8fb 100%);
   box-shadow: inset 0 0 0 1px rgba(255,255,255,0.55);
-  margin-bottom:14px;
+  margin-bottom:12px;
 }
 .trust-head {
   display:flex;
@@ -116,7 +116,7 @@ h1 { margin-bottom:10px; max-width:22ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
 }
 .trust-list {
   display:grid;
-  gap:8px;
+  gap:7px;
 }
 .trust-item {
   display:grid;
@@ -139,6 +139,30 @@ h1 { margin-bottom:10px; max-width:22ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
   line-height:1.5;
 }
 .trust-item strong { color:var(--ink); font-weight:700; }
+.trust-meta {
+  display:grid;
+  gap:7px;
+  padding-top:10px;
+  border-top:1px solid rgba(15, 23, 42, 0.08);
+}
+.trust-meta-label {
+  margin:0;
+  color:var(--muted);
+  font-size:0.8rem;
+  font-weight:700;
+  letter-spacing:0.05em;
+  text-transform:uppercase;
+}
+.trust-meta-list {
+  display:grid;
+  gap:6px;
+}
+.trust-meta-list p {
+  margin:0;
+  color:var(--muted);
+  font-size:0.84rem;
+  line-height:1.5;
+}
 .input-shell { border:1px solid var(--line-strong); border-radius:14px; background:#fbfcfd; padding:14px; }
 .input-shell:focus-within { border-color: rgba(31, 79, 130, 0.38); box-shadow: 0 0 0 4px rgba(31, 79, 130, 0.10); }
 .chat-form textarea, .field input, .field textarea { width:100%; border:0; background:transparent; color:var(--ink); padding:0; resize:vertical; min-height:86px; font-size:0.98rem; line-height:1.55; }
@@ -151,7 +175,7 @@ h1 { margin-bottom:10px; max-width:22ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
 .prompt-chip:hover { border-color:rgba(31,79,130,0.22); background:#f8fbfd; }
 .consent-row { display:flex; align-items:flex-start; gap:12px; }
 .consent-surface {
-  padding:12px 13px;
+  padding:11px 13px;
   border:1px solid rgba(31, 79, 130, 0.14);
   border-radius:12px;
   background:#ffffff;
@@ -309,6 +333,14 @@ a:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visib
                 </div>
                 <div class="trust-item">
                   <p>This review does not provide legal, tax, accounting, or financial advice.</p>
+                </div>
+              </div>
+              <div class="trust-meta">
+                <p class="trust-meta-label">How review information is used</p>
+                <div class="trust-meta-list">
+                  <p>We collect review information to provide diagnostic guidance, improve the quality of the review, and improve Operational Clarity over time.</p>
+                  <p>If you request follow-up help, your submission may also be used to prepare for that conversation.</p>
+                  <p>We do not sell your personal information.</p>
                 </div>
               </div>
               <div class="consent-row consent-surface">
