@@ -269,13 +269,12 @@
                   </div>
 
                   <div class="recommended-deliverables-panel">
-                    <p class="muted-label">What this would include</p>
+                    <p class="muted-label">Included in this step</p>
                     <ul id="recommended-deliverables" class="offer-list"></ul>
 
                     <div class="recommended-action-stack">
                       <button id="recommended-primary-cta" type="button" class="btn btn-primary">Request next-step help</button>
                       <div class="recommended-secondary-actions">
-                        <button id="recommended-followup-cta" type="button" class="text-button">Ask one follow-up first</button>
                         <a class="text-button" href="#diagnostic">Continue diagnostic</a>
                       </div>
                     </div>
@@ -714,7 +713,6 @@ function captureDom() {
   el.recommendedScope = document.getElementById("recommended-scope");
   el.recommendedDeliverables = document.getElementById("recommended-deliverables");
   el.recommendedPrimaryCta = document.getElementById("recommended-primary-cta");
-  el.recommendedFollowupCta = document.getElementById("recommended-followup-cta");
   el.contactSection = document.getElementById("contact");
   el.contactToggle = document.getElementById("contact-toggle");
   el.contactForm = document.getElementById("contact-form");
@@ -756,27 +754,15 @@ function bindEvents() {
   el.chatForm?.addEventListener("submit", handleChatSubmit);
   el.transcriptViewport?.addEventListener("scroll", handleTranscriptScroll, { passive: true });
   el.resetSession?.addEventListener("click", resetSession);
-  el.contactToggle?.addEventListener("click", openContactForm);
+  el.contactToggle?.addEventListener("click", () => openContactForm());
   el.contactForm?.addEventListener("submit", handleContactSubmit);
   el.promptChips?.forEach((chip) => chip.addEventListener("click", handlePromptChipClick));
   el.packageButtons?.forEach((button) => button.addEventListener("click", handlePackageSelect));
-  el.recommendedPrimaryCta?.addEventListener("click", handleRecommendedSetupHelp);
-  el.recommendedFollowupCta?.addEventListener("click", focusReviewInput);
   el.ctaLink?.addEventListener("click", handleCtaLinkClick);
   el.reviewConsentCheckbox?.addEventListener("change", handleReviewConsentChange);
   el.trustModalAccept?.addEventListener("click", handleTrustModalAccept);
   el.reviewConsentToggle?.addEventListener("click", handleReviewConsentDetailsToggle);
   el.followUpConsentCheckbox?.addEventListener("change", handleFollowUpConsentChange);
-}
-
-function focusReviewInput(event) {
-  event?.preventDefault();
-  scrollToSection("diagnostic");
-  window.setTimeout(() => {
-    state.stickConversationToBottom = true;
-    scrollConversationToEnd(true);
-    el.chatInput?.focus({ preventScroll: true });
-  }, 250);
 }
 
 function handlePromptChipClick(event) {
@@ -820,14 +806,11 @@ function applyPackageSelection(packageName, options = {}) {
     el.leadMessage.value = message || deriveLeadPrompt(state.findings);
   }
 
-  openContactForm();
-  window.setTimeout(() => {
-    if (focusField === "message") {
-      el.leadMessage?.focus();
-      return;
-    }
-    el.leadPackage?.focus();
-  }, 250);
+  openContactForm({ focusField });
+}
+
+function hasRecommendationHandoffAvailable() {
+  return Boolean(state.ctaReady || state.findings);
 }
 
 function handleRecommendedSetupHelp() {
@@ -838,7 +821,7 @@ function handleRecommendedSetupHelp() {
 
   const recommendation = deriveRecommendedNextStepModel();
   if (!recommendation) {
-    openContactForm();
+    if (hasRecommendationHandoffAvailable()) openContactForm();
     return;
   }
 
@@ -850,10 +833,15 @@ function handleRecommendedSetupHelp() {
 }
 
 function handleCtaLinkClick(event) {
-  const recommendation = deriveRecommendedNextStepModel();
-  if (!recommendation || state.contactSubmitted) return;
-
   event.preventDefault();
+  if (state.contactSubmitted) return;
+
+  const recommendation = deriveRecommendedNextStepModel();
+  if (!recommendation) {
+    if (hasRecommendationHandoffAvailable()) openContactForm({ focusField: "package" });
+    return;
+  }
+
   applyPackageSelection(recommendation.contactPackageValue, {
     message: recommendation.contactMessage,
     overwriteMessage: true,
@@ -1636,7 +1624,7 @@ function deriveInsightRailModel() {
       ? "Contact form is open with this recommended path prefilled."
       : "Submit the handoff form when you want a human advisor to review this diagnostic.";
     ctaLinkText = "Complete contact request";
-  } else if (state.ctaReady) {
+  } else if (state.ctaReady || recommendation) {
     showCta = true;
     showCtaLink = true;
     ctaValue = recommendation?.railValue || "Move to next-step options";
@@ -1786,7 +1774,7 @@ function deriveRecommendationTheme(symptomTags, causeTags, recommendations) {
     return {
       key: "cash",
       title: "Collections cadence",
-      focusTitle: "Collections cadence and cash visibility",
+      focusTitle: "Faster collections and clearer cash control",
       scopeLabel: "invoice follow-through and cash visibility",
       scopeCopy: "Initial scope would center on billing follow-through, ownership, and aging thresholds.",
       deliverables: {
@@ -1814,7 +1802,7 @@ function deriveRecommendationTheme(symptomTags, causeTags, recommendations) {
     return {
       key: "margin",
       title: "Margin control",
-      focusTitle: "Margin control and job costing",
+      focusTitle: "Stronger pricing discipline and margin control",
       scopeLabel: "pricing discipline and job-level margin visibility",
       scopeCopy: "Initial scope would center on pricing guardrails, costing visibility, and a tighter margin review loop.",
       deliverables: {
@@ -1842,7 +1830,7 @@ function deriveRecommendationTheme(symptomTags, causeTags, recommendations) {
     return {
       key: "owner_handoff",
       title: "Owner handoff",
-      focusTitle: "Owner handoff and role clarity",
+      focusTitle: "Cleaner delegation and less owner drag",
       scopeLabel: "decision ownership and operating follow-through",
       scopeCopy: "Initial scope would center on decision rights, role clarity, and a tighter operating cadence.",
       deliverables: {
@@ -1870,7 +1858,7 @@ function deriveRecommendationTheme(symptomTags, causeTags, recommendations) {
     return {
       key: "handoff",
       title: "Scope handoff",
-      focusTitle: "Scope handoff and clean job starts",
+      focusTitle: "Cleaner handoffs and fewer job-start misses",
       scopeLabel: "scope clarity, handoffs, and cleaner job starts",
       scopeCopy: "Initial scope would center on scope capture, handoff rules, and a tighter closeout loop.",
       deliverables: {
@@ -1898,7 +1886,7 @@ function deriveRecommendationTheme(symptomTags, causeTags, recommendations) {
     return {
       key: "execution",
       title: "Execution stability",
-      focusTitle: "Execution stability and capacity control",
+      focusTitle: "A steadier schedule and clearer capacity control",
       scopeLabel: "dispatch, scheduling, and weekly capacity control",
       scopeCopy: "Initial scope would center on schedule control, crew loading, and fewer reactive reschedules.",
       deliverables: {
@@ -1926,7 +1914,7 @@ function deriveRecommendationTheme(symptomTags, causeTags, recommendations) {
     return {
       key: "visibility",
       title: "Visibility and scorecard",
-      focusTitle: "Visibility and weekly scorecard",
+      focusTitle: "A usable scorecard and better weekly visibility",
       scopeLabel: "faster operating visibility and better review discipline",
       scopeCopy: "Initial scope would center on a short scorecard, clearer definitions, and a review cadence the team actually uses.",
       deliverables: {
@@ -1954,7 +1942,7 @@ function deriveRecommendationTheme(symptomTags, causeTags, recommendations) {
     return {
       key: "pipeline",
       title: "Pipeline quality",
-      focusTitle: "Pipeline quality and qualification",
+      focusTitle: "Better qualification and healthier pipeline decisions",
       scopeLabel: "qualification, targeting, and cleaner growth decisions",
       scopeCopy: "Initial scope would center on fit rules, pipeline visibility, and fewer low-fit pursuits.",
       deliverables: {
@@ -1981,7 +1969,7 @@ function deriveRecommendationTheme(symptomTags, causeTags, recommendations) {
   return {
     key: "general",
     title: "Operating rhythm",
-    focusTitle: "Operating rhythm and first-fix follow-through",
+    focusTitle: "A tighter operating rhythm around the first fix",
     scopeLabel: "the first operating fix and the cadence behind it",
     scopeCopy: "Initial scope would center on the first fix, clear ownership, and a review rhythm that keeps it moving.",
     deliverables: {
@@ -2315,6 +2303,7 @@ function renderRecommendedNextStep() {
   const recommendation = deriveRecommendedNextStepModel();
   if (!recommendation) {
     el.recommendedNextStep.classList.add("is-hidden");
+    if (el.recommendedPrimaryCta) el.recommendedPrimaryCta.onclick = null;
     return;
   }
 
@@ -2334,22 +2323,17 @@ function renderRecommendedNextStep() {
   renderPanelList(el.recommendedDeliverables, recommendation.deliverables);
 
   if (el.recommendedPrimaryCta) {
+    el.recommendedPrimaryCta.onclick = handleRecommendedSetupHelp;
     el.recommendedPrimaryCta.textContent = state.contactSubmitted
       ? "Request submitted"
       : state.contactOpen
         ? "Continue request"
         : recommendation.primaryCtaLabel;
   }
-
-  if (el.recommendedFollowupCta) {
-    const remaining = Math.max(0, CONFIG.freeFollowupLimit - state.freeFollowupsUsed);
-    el.recommendedFollowupCta.disabled = remaining <= 0;
-    el.recommendedFollowupCta.textContent = remaining > 0 ? "Ask one follow-up first" : "Free follow-ups used";
-  }
 }
 
 function renderContact() {
-  const shouldShow = Boolean(state.ctaReady);
+  const shouldShow = hasRecommendationHandoffAvailable();
   el.contactSection.classList.toggle("is-hidden", !shouldShow);
   if (!shouldShow) {
     state.contactOpen = false;
@@ -2372,12 +2356,43 @@ function renderContact() {
   renderRecommendedNextStep();
 }
 
-function openContactForm() {
+function updateLocationHash(hash) {
+  if (!hash || typeof window === "undefined") return;
+  try {
+    window.history.replaceState(null, "", hash);
+  } catch (error) {
+    window.location.hash = hash;
+  }
+}
+
+function focusContactField(field) {
+  if (field === "message") {
+    el.leadMessage?.focus();
+    return;
+  }
+  if (field === "package") {
+    el.leadPackage?.focus();
+  }
+}
+
+function openContactForm(options = {}) {
+  const focusField = options && typeof options === "object" && "focusField" in options
+    ? options.focusField
+    : null;
+
   state.contactOpen = true;
+  el.contactSection?.classList.remove("is-hidden");
   renderContact();
   renderDashboardSummary();
   renderFollowUpConsentState();
-  scrollToSection("contact");
+  updateLocationHash("#contact");
+  window.requestAnimationFrame(() => {
+    scrollToSection("contact");
+    window.setTimeout(() => {
+      scrollToSection("contact");
+      focusContactField(focusField);
+    }, 180);
+  });
   refreshStructuredSessionIntelligence({ sync: false });
   persistSession();
 }
