@@ -19,3 +19,4 @@ Thumbs.db
 
 supabase/.temp/
 .tmp/
+.codex-inline-check.js
