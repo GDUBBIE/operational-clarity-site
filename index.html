@@ -10,7 +10,7 @@
   <meta name="description" content="Operational Clarity helps owners find where time, margin, control, and follow-through are slipping so they can make better decisions with more confidence." />
   <link rel="stylesheet" href="site.css" />
 </head>
-<body class="app-shell" data-build="2026-03-25-v29-consent-collapse">
+<body class="app-shell" data-build="2026-03-25-v30-split-intelligence-console">
   <div id="trust-modal" class="modal-overlay is-hidden" aria-hidden="true">
     <div class="modal-scrim"></div>
     <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="trust-modal-title" aria-describedby="trust-modal-copy">
@@ -64,15 +64,33 @@
     </div>
   </div>
 
-  <main>
+  <main class="console-main">
     <div class="container">
       <header class="topbar">
-        <div class="brand-block">
-          <span class="brand">Operational Clarity</span>
-          <p class="brand-architecture">Developed by EHI Studio, a division of EHI Group.</p>
+        <div class="topbar-authority">
+          <div class="brand-block">
+            <span class="brand">Operational Clarity</span>
+            <p class="brand-architecture">by EHI Studio</p>
+          </div>
+          <p class="topbar-statement">Decision support system for operational diagnosis, structured findings, and next-step advisory intake.</p>
         </div>
-        <div class="topbar-meta">
-          <span class="topbar-note">Anonymous by default</span>
+
+        <div class="topbar-utility">
+          <div class="topbar-context" aria-label="Session context">
+            <div class="context-chip">
+              <span class="context-label">Status</span>
+              <strong id="session-state-label" class="context-value">Waiting</strong>
+            </div>
+            <div class="context-chip">
+              <span class="context-label">Stage</span>
+              <strong id="session-stage-label" class="context-value">Discover</strong>
+            </div>
+            <div class="context-chip">
+              <span class="context-label">Mode</span>
+              <strong id="session-mode-label" class="context-value">Anonymous</strong>
+            </div>
+          </div>
+
           <nav class="topbar-links" aria-label="Legal">
             <a href="privacy-policy/">Privacy</a>
             <a href="terms-of-use/">Terms</a>
@@ -82,134 +100,132 @@
       </header>
     </div>
 
-    <section class="hero">
-      <div class="container">
-        <div class="card hero-shell">
-          <div class="hero-copy-block">
-            <p class="kicker">Operational diagnostic</p>
-            <h1>See the operating pattern faster.</h1>
-            <p class="hero-copy">Start with the one pressure point that feels heaviest. The review turns that into a practical read on the likely issue, what it is costing, and what to fix first.</p>
-            <div class="hero-actions">
-              <a id="start-review-btn" href="#diagnostic" class="btn btn-primary">Start review</a>
-              <a href="#contact" class="btn btn-secondary">See next-step options</a>
-            </div>
-          </div>
-
-          <div class="hero-rail" aria-label="Review highlights">
-            <div class="hero-rail-card">
-              <span class="hero-rail-value">2-4 min</span>
-              <span class="hero-rail-label">Typical review time</span>
-            </div>
-            <div class="hero-rail-card">
-              <span class="hero-rail-value">Anonymous</span>
-              <span class="hero-rail-label">Until you submit contact details</span>
-            </div>
-            <div class="hero-rail-card">
-              <span class="hero-rail-value">Operator read</span>
-              <span class="hero-rail-label">Diagnosis, cause, first priority, next actions</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="workspace section">
+    <section class="workspace console-workspace">
       <div class="container workspace-shell">
+        <aside class="workspace-utility">
+          <div class="utility-stack">
+            <div class="card utility-card">
+              <div class="utility-section">
+                <p class="kicker">System panel</p>
+                <h2>Session map</h2>
+              </div>
+
+              <div class="utility-section">
+                <p class="muted-label">Sections</p>
+                <nav class="utility-nav" aria-label="Workspace sections">
+                  <a href="#diagnostic">Diagnostic input</a>
+                  <a href="#transcript">Transcript</a>
+                  <a href="#findings">Findings</a>
+                  <a href="#contact">Next step</a>
+                </nav>
+              </div>
+
+              <div class="utility-section">
+                <p class="muted-label">Workflow</p>
+                <ol class="utility-steps">
+                  <li>State the main pressure point.</li>
+                  <li>Answer focused follow-up questions.</li>
+                  <li>Review issue, cause, and first priority.</li>
+                  <li>Choose whether to move into next-step help.</li>
+                </ol>
+              </div>
+
+              <div class="utility-section">
+                <p class="muted-label">System looks for</p>
+                <ul class="utility-list">
+                  <li>Repeated bottlenecks or handoff failures</li>
+                  <li>Owner dependency and control drag</li>
+                  <li>Margin, cash, or pricing leakage</li>
+                  <li>Visibility gaps and unclear operating rhythm</li>
+                </ul>
+              </div>
+
+              <div class="utility-section utility-section-compact">
+                <p class="muted-label">Operating notes</p>
+                <p class="utility-note">Keep answers concrete. Use one example. Leave out highly sensitive information.</p>
+              </div>
+            </div>
+          </div>
+        </aside>
+
         <div class="workspace-main">
-          <section id="diagnostic" class="workspace-block">
-            <div class="card chat-card">
-          <div class="chat-header">
-            <div>
-              <p class="kicker">Start here</p>
-              <h2>Describe the pressure point</h2>
-              <p class="header-copy">Use plain language. One clear example is enough to begin.</p>
-            </div>
-            <div class="chat-badges">
-              <span id="stage-badge" class="badge">discover</span>
-              <span id="limit-badge" class="badge">0% ready</span>
-            </div>
-          </div>
-
-          <div id="chat-empty-state" class="chat-empty-state">
-            <div class="empty-state-head">
-              <p class="empty-state-title">Start with the one pressure point that feels most expensive.</p>
-              <p class="empty-state-copy">Concrete detail helps the review get to findings faster.</p>
-            </div>
-            <div class="empty-state-list" aria-label="How to answer well">
-              <div class="empty-state-item">
-                <strong>What to share</strong>
-                <span>The bottleneck, messy handoff, margin problem, or owner dependency that keeps repeating.</span>
+          <section id="diagnostic" class="workspace-block primary-start">
+            <form id="chat-form" class="card composer-card chat-form" aria-labelledby="chat-input-label" aria-describedby="chat-note sensitive-info-note">
+              <div class="sr-only" aria-hidden="true">
+                <span id="stage-badge" class="badge">discover</span>
+                <span id="limit-badge" class="badge">0% ready</span>
               </div>
-              <div class="empty-state-item">
-                <strong>Best inputs</strong>
-                <span>One specific example, where work slows down, and what it is costing in time or control.</span>
+
+              <div class="composer-intro">
+                <label id="chat-input-label" class="composer-title" for="chat-input">What feels heaviest in the business right now?</label>
+                <p id="sensitive-info-note" class="sr-only">Do not submit passwords, bank details, employee personal data, or other highly sensitive confidential information.</p>
               </div>
-              <div class="empty-state-item">
-                <strong>Keep out</strong>
-                <span>Passwords, bank details, employee personal data, or other highly sensitive information.</span>
-              </div>
-            </div>
-          </div>
 
-          <div id="message-list" class="message-list" aria-live="polite"></div>
+              <div class="input-shell composer-shell">
+                <textarea id="chat-input" rows="4" placeholder="Example: We stay busy, but jobs still bottleneck through me and margins are inconsistent."></textarea>
 
-          <div id="typing-row" class="typing-row is-hidden">
-            <span class="typing-dot"></span>
-            <span class="typing-dot"></span>
-            <span class="typing-dot"></span>
-            <span>Working...</span>
-          </div>
-
-          <form id="chat-form" class="chat-form" aria-labelledby="chat-input-label" aria-describedby="chat-note sensitive-info-note review-consent-helper">
-            <div id="review-consent-compact" class="trust-compact is-hidden" aria-live="polite">
-              <div class="trust-compact-row">
-                <div class="trust-inline-copy">
-                  <p class="trust-compact-copy">Trust and use accepted for this browser.</p>
-                  <p id="review-consent-helper" class="consent-helper">AI-assisted diagnostic guidance. Anonymous unless you choose next-step help.</p>
-                </div>
-                <div class="trust-inline-actions">
-                  <a class="text-button" href="privacy-policy/">Privacy</a>
-                  <a class="text-button" href="terms-of-use/">Terms</a>
-                  <button id="review-consent-toggle" type="button" class="text-button" aria-expanded="false" aria-controls="review-consent-details">Details</button>
+                <div class="composer-footer">
+                  <div class="composer-footer-main">
+                    <div id="prompt-chip-list" class="prompt-chips" aria-label="Example prompts">
+                      <button type="button" class="prompt-chip" data-prompt-chip="Sales are inconsistent">Sales are inconsistent</button>
+                      <button type="button" class="prompt-chip" data-prompt-chip="Everything depends on me">Everything depends on me</button>
+                      <button type="button" class="prompt-chip" data-prompt-chip="Cash is tight">Cash is tight</button>
+                      <button type="button" class="prompt-chip" data-prompt-chip="Work is messy">Work is messy</button>
+                      <button type="button" class="prompt-chip" data-prompt-chip="Margins are slipping">Margins are slipping</button>
+                    </div>
+                    <div class="composer-support">
+                      <p id="chat-note" class="command-helper">One concrete example is enough to start.</p>
+                      <details class="input-guidance input-guidance-inline">
+                        <summary>How to answer well</summary>
+                        <div class="input-guidance-body">
+                          <p class="input-guidance-note">Share the repeating problem, one concrete example, and what it is costing in time, cash, margin, or control.</p>
+                          <p class="input-warning">Do not submit passwords, bank details, employee personal data, or other highly sensitive confidential information.</p>
+                        </div>
+                      </details>
+                    </div>
+                  </div>
+                  <button id="send-button" type="submit" class="btn btn-primary">Run diagnostic</button>
                 </div>
               </div>
-              <div id="review-consent-details" class="trust-compact-details is-hidden">
-                <p>Accepted for this browser under the current trust disclosure version.</p>
-                <p>Operational Clarity provides AI-assisted diagnostic guidance and does not provide legal, tax, accounting, or financial advice.</p>
-                <p>Review details are used to generate guidance, improve review quality, and support follow-up if you request next steps.</p>
-                <p>See the <a href="terms-of-use/">Terms of Use</a> and <a href="privacy-policy/">Privacy Policy</a>.</p>
-              </div>
-            </div>
-            <div class="chat-form-head">
-              <label id="chat-input-label" class="input-label" for="chat-input">Describe what feels heaviest in the business right now</label>
-              <p id="chat-note" class="input-helper">Start with a bottleneck, messy handoff, margin issue, or where too much still depends on you.</p>
-              <p id="sensitive-info-note" class="input-warning">Do not submit passwords, bank details, employee personal data, or other highly sensitive confidential information.</p>
-            </div>
-            <div class="input-shell">
-              <textarea id="chat-input" rows="4" placeholder="Example: We stay busy, but jobs still bottleneck through me and margins are inconsistent."></textarea>
-              <div id="prompt-chip-list" class="prompt-chips" aria-label="Example prompts">
-                <button type="button" class="prompt-chip" data-prompt-chip="Sales are inconsistent">Sales are inconsistent</button>
-                <button type="button" class="prompt-chip" data-prompt-chip="Everything depends on me">Everything depends on me</button>
-                <button type="button" class="prompt-chip" data-prompt-chip="Cash is tight">Cash is tight</button>
-                <button type="button" class="prompt-chip" data-prompt-chip="Work is messy">Work is messy</button>
-                <button type="button" class="prompt-chip" data-prompt-chip="Margins are slipping">Margins are slipping</button>
-              </div>
-              <div class="input-footer">
-                <button id="send-button" type="submit" class="btn btn-primary">Send</button>
-              </div>
-            </div>
-          </form>
 
-          <div id="chat-error" class="notice is-hidden"></div>
+              <div id="chat-error" class="notice is-hidden"></div>
+            </form>
+          </section>
+
+          <section id="transcript" class="workspace-block transcript-stage">
+            <div class="card transcript-card">
+              <div class="transcript-head">
+                <div>
+                  <p class="kicker">Advisor interaction</p>
+                  <h2>Transcript</h2>
+                  <p class="header-copy">Follow-up questions and structured output appear here after the first input.</p>
+                </div>
+              </div>
+
+              <div id="chat-empty-state" class="chat-empty-state transcript-empty-state">
+                <div class="empty-state-head">
+                  <p class="empty-state-title">No transcript yet.</p>
+                  <p class="empty-state-copy">Submit the pressure point above to start the diagnostic.</p>
+                </div>
+              </div>
+
+              <div id="message-list" class="message-list" aria-live="polite"></div>
+
+              <div id="typing-row" class="typing-row is-hidden">
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                <span>Working...</span>
+              </div>
             </div>
           </section>
 
           <section id="findings" class="workspace-block is-hidden">
             <div class="card findings-stage">
               <div class="findings-head">
-                <p class="kicker">Findings</p>
+                <p class="kicker">Diagnostic brief</p>
                 <h2 id="findings-title">Findings appear here</h2>
-                <p id="findings-summary" class="section-copy">What is working, what is hurting, what it is costing, and what to fix first.</p>
+                <p id="findings-summary" class="section-copy">Structured read: issue, likely cause, first priority, and next actions.</p>
               </div>
               <div id="findings-grid" class="findings-grid"></div>
             </div>
@@ -219,14 +235,9 @@
             <div class="card contact-card">
               <div class="offer-shell">
                 <div class="offer-intro">
-                  <p class="kicker">Work with us</p>
-                  <h2>Turn the findings into a practical operating plan.</h2>
-                  <p class="section-copy">If the review surfaced a real operating problem, the next step is choosing the level of help that fits. Scope and commercial terms are confirmed after fit.</p>
-                  <div class="hero-chips" aria-label="Follow-up qualities">
-                    <span class="hero-chip">Diagnostic guidance first</span>
-                    <span class="hero-chip">Fit confirmed before scope</span>
-                    <span class="hero-chip">Human advisory follow-up available</span>
-                  </div>
+                  <p class="kicker">Next-step options</p>
+                  <h2>Move from diagnostic to operating action.</h2>
+                  <p class="section-copy">If the session surfaced a real operating problem, choose the level of help that matches it. Fit, scope, and commercial terms are confirmed after review.</p>
                 </div>
 
                 <div class="offer-grid">
@@ -234,7 +245,7 @@
                     <div class="offer-top">
                       <div>
                         <h3>Diagnostic Review</h3>
-                        <p class="offer-note">Best if you want clarity first</p>
+                        <p class="offer-note">Clarify the read and confirm the first move</p>
                       </div>
                       <div class="offer-price">Scoped after review</div>
                     </div>
@@ -242,7 +253,7 @@
                       <li>60-minute review call</li>
                       <li>Walk through findings and priorities</li>
                       <li>Written summary with first actions</li>
-                      <li>Best for owners who want a clear next step</li>
+                      <li>Best when you want clarity before committing to deeper work</li>
                     </ul>
                     <button type="button" class="text-button offer-select" data-package-select="Diagnostic Review">Choose Diagnostic Review</button>
                   </div>
@@ -251,7 +262,7 @@
                     <div class="offer-top">
                       <div>
                         <h3>Operations Sprint</h3>
-                        <p class="offer-note">Best if you want one problem fixed fast</p>
+                        <p class="offer-note">Fix one operating problem with focused implementation</p>
                       </div>
                       <div class="offer-price">Custom scope</div>
                     </div>
@@ -268,7 +279,7 @@
                     <div class="offer-top">
                       <div>
                         <h3>Ongoing Advisory</h3>
-                        <p class="offer-note">Best if you want continued support</p>
+                        <p class="offer-note">Stay in a tighter operating rhythm over time</p>
                       </div>
                       <div class="offer-price">Monthly retainer</div>
                     </div>
@@ -276,7 +287,7 @@
                       <li>Recurring check-ins and decision support</li>
                       <li>Priority tracking and accountability</li>
                       <li>Help tightening systems over time</li>
-                      <li>Best for owners building a stronger operating rhythm</li>
+                      <li>Best for owners building a stronger operating cadence</li>
                     </ul>
                     <button type="button" class="text-button offer-select" data-package-select="Ongoing Advisory">Choose Ongoing Advisory</button>
                   </div>
@@ -284,9 +295,9 @@
 
                 <div class="contact-grid">
                   <div class="steps-card">
-                    <p class="muted-label">Next steps</p>
+                    <p class="muted-label">Handoff flow</p>
                     <ol class="steps-list">
-                      <li>Pick the package that fits the level of help you want.</li>
+                      <li>Pick the package that best matches the level of help you want.</li>
                       <li>Send your info and a short note on what you want to fix first.</li>
                       <li>We review the findings and confirm fit, scope, and timing.</li>
                       <li>If it makes sense, we book the call or kickoff.</li>
@@ -296,13 +307,13 @@
                   <div class="contact-shell">
                     <div class="contact-shell-head">
                       <div>
-                        <p class="kicker">Continue</p>
-                        <h3>Ready to move forward?</h3>
-                        <p class="section-copy">Open the form below and tell us which option looks closest to the help you want.</p>
+                        <p class="kicker">Advisor handoff</p>
+                        <h3>Ready for human follow-up?</h3>
+                        <p class="section-copy">Open the form below and tell us which option is closest to the help you want.</p>
                         <p class="small-text">Operational Clarity provides AI-assisted diagnostic guidance. If you request next-step help, your review may also be assessed by a human advisor from EHI Studio.</p>
                       </div>
 
-                      <button id="contact-toggle" type="button" class="btn btn-primary">Share contact details</button>
+                      <button id="contact-toggle" type="button" class="btn btn-primary">Open contact request</button>
                     </div>
 
                     <form id="contact-form" class="contact-form is-hidden">
@@ -361,18 +372,18 @@
         </div>
 
         <aside class="workspace-side">
-          <div class="card dashboard-card">
-          <div class="dashboard-header">
+          <div class="card dashboard-card insight-rail">
+          <div class="dashboard-header insight-header">
             <div>
-              <p class="kicker">Review snapshot</p>
-              <h2>What the review sees</h2>
-              <p class="header-copy">The dashboard stays lean until there is enough signal to call the pattern with confidence.</p>
+              <p class="kicker">Live insight rail</p>
+              <h2>Session intelligence</h2>
+              <p class="header-copy">Readiness, extracted signal, and recommended next steps stay visible while the diagnostic runs.</p>
             </div>
             <button id="reset-session" type="button" class="text-button">Reset review</button>
           </div>
 
           <div class="dashboard-grid">
-            <div class="panel panel-wide">
+            <div class="panel panel-wide rail-status-panel">
               <div class="meter-head">
                 <span class="signal-label">Readiness</span>
                 <strong id="context-score-label" class="metric-value">0%</strong>
@@ -401,9 +412,15 @@
             </div>
 
             <div id="current-pattern-panel" class="panel is-hidden">
-              <h3>Current pattern</h3>
+              <h3>Business type</h3>
               <p id="business-type-value" class="panel-value">Appears after the first response</p>
-              <p class="panel-copy">The operating pattern the review is picking up so far.</p>
+              <p class="panel-copy">The segment and operating pattern the system is identifying so far.</p>
+            </div>
+
+            <div id="signal-panel" class="panel is-hidden">
+              <h3>Detected signals</h3>
+              <div id="signal-chip-list" class="signal-chip-list"></div>
+              <p class="panel-copy">Pain points and extracted signals normalized from the conversation.</p>
             </div>
 
             <div id="likely-issue-panel" class="panel is-hidden">
@@ -412,16 +429,34 @@
               <p class="panel-copy">The clearest source of friction seen so far.</p>
             </div>
 
+            <div id="likely-cause-panel" class="panel is-hidden">
+              <h3>Likely cause</h3>
+              <p id="likely-cause-value" class="panel-value">Appears after the first response</p>
+              <p class="panel-copy">The system's current read on what is driving the issue.</p>
+            </div>
+
             <div id="first-focus-panel" class="panel is-hidden">
-              <h3>First focus</h3>
+              <h3>First priority</h3>
               <p id="first-focus-value" class="panel-value">Appears after the first response</p>
               <p class="panel-copy">Where attention should go first if the pattern holds.</p>
+            </div>
+
+            <div id="next-actions-panel" class="panel is-hidden">
+              <h3>Next actions</h3>
+              <ol id="next-actions-list" class="panel-list"></ol>
             </div>
 
             <div id="comparison-panel" class="panel is-hidden">
               <h3>Benchmark signal</h3>
               <p id="comparison-value" class="panel-value">Available after findings and enough saved anonymous sessions.</p>
               <p class="panel-copy">How this session compares with saved anonymous reviews in the same segment.</p>
+            </div>
+
+            <div id="cta-panel" class="panel is-hidden">
+              <h3>Recommended next step</h3>
+              <p id="cta-value" class="panel-value">Next-step guidance will appear when the diagnostic is ready.</p>
+              <p id="cta-copy" class="panel-copy">Use the conversation to gather enough signal first.</p>
+              <a id="cta-link" class="text-button is-hidden" href="#contact">Open next-step options</a>
             </div>
 
             <div id="internal-intelligence-panel" class="panel panel-wide internal-panel is-hidden">
@@ -439,26 +474,15 @@
     </section>
   </main>
 
-  <footer>
+  <footer class="console-footer">
     <div class="container footer-row">
-      <div class="footer-meta">
-        <p>Operational Clarity</p>
-        <p class="small-text">Developed by EHI Studio.</p>
-      </div>
-      <nav class="footer-links" aria-label="Legal and contact">
-        <a href="privacy-policy/">Privacy Policy</a>
-        <a href="terms-of-use/">Terms of Use</a>
-        <a href="contact/">Contact</a>
-      </nav>
-    </div>
-    <div class="container footer-disclaimer">
-      <p class="small-text">Build 2026-03-25-v29-consent-collapse</p>
+      <p class="small-text">Operational Clarity by EHI Studio. Build 2026-03-25-v30-split-intelligence-console</p>
     </div>
   </footer>
 
   <script src="operational-intelligence.js"></script>
   <script>
-const BUILD_VERSION = "2026-03-25-v29-consent-collapse";
+const BUILD_VERSION = "2026-03-25-v30-split-intelligence-console";
 
 const CONFIG = {
   functionUrl: "https://lqzvkezgxfknfjnjoqur.supabase.co/functions/v1/business-diagnostic-agent",
@@ -591,6 +615,9 @@ document.addEventListener("DOMContentLoaded", () => {
 function captureDom() {
   el.trustModal = document.getElementById("trust-modal");
   el.trustModalAccept = document.getElementById("trust-modal-accept");
+  el.sessionStateLabel = document.getElementById("session-state-label");
+  el.sessionStageLabel = document.getElementById("session-stage-label");
+  el.sessionModeLabel = document.getElementById("session-mode-label");
   el.messageList = document.getElementById("message-list");
   el.chatEmptyState = document.getElementById("chat-empty-state");
   el.chatForm = document.getElementById("chat-form");
@@ -626,15 +653,25 @@ function captureDom() {
   el.leadPackage = document.getElementById("lead-package");
   el.leadMessage = document.getElementById("lead-message");
   el.mainIssueValue = document.getElementById("main-issue-value");
+  el.likelyCauseValue = document.getElementById("likely-cause-value");
   el.firstFocusValue = document.getElementById("first-focus-value");
   el.businessTypeValue = document.getElementById("business-type-value");
   el.assessmentScoreValue = document.getElementById("assessment-score-value");
   el.assessmentScoreRow = document.getElementById("assessment-score-row");
   el.comparisonValue = document.getElementById("comparison-value");
   el.currentPatternPanel = document.getElementById("current-pattern-panel");
+  el.signalPanel = document.getElementById("signal-panel");
+  el.signalChipList = document.getElementById("signal-chip-list");
   el.likelyIssuePanel = document.getElementById("likely-issue-panel");
+  el.likelyCausePanel = document.getElementById("likely-cause-panel");
   el.firstFocusPanel = document.getElementById("first-focus-panel");
+  el.nextActionsPanel = document.getElementById("next-actions-panel");
+  el.nextActionsList = document.getElementById("next-actions-list");
   el.comparisonPanel = document.getElementById("comparison-panel");
+  el.ctaPanel = document.getElementById("cta-panel");
+  el.ctaValue = document.getElementById("cta-value");
+  el.ctaCopy = document.getElementById("cta-copy");
+  el.ctaLink = document.getElementById("cta-link");
   el.confidenceValue = document.getElementById("confidence-value");
   el.internalIntelligencePanel = document.getElementById("internal-intelligence-panel");
   el.internalIntelligenceJson = document.getElementById("internal-intelligence-json");
@@ -648,7 +685,6 @@ function bindEvents() {
   el.resetSession?.addEventListener("click", resetSession);
   el.contactToggle?.addEventListener("click", openContactForm);
   el.contactForm?.addEventListener("submit", handleContactSubmit);
-  document.getElementById("start-review-btn")?.addEventListener("click", focusReviewInput);
   el.promptChips?.forEach((chip) => chip.addEventListener("click", handlePromptChipClick));
   el.packageButtons?.forEach((button) => button.addEventListener("click", handlePackageSelect));
   el.reviewConsentCheckbox?.addEventListener("change", handleReviewConsentChange);
@@ -706,7 +742,7 @@ function renderReviewConsentState() {
   }
   if (el.reviewConsentHelper) {
     el.reviewConsentHelper.textContent = consentAccepted
-      ? "AI-assisted diagnostic guidance. Anonymous unless you choose next-step help."
+      ? "AI-assisted guidance. Anonymous unless you request next-step help."
       : "Review locked until the trust, privacy, and use terms are accepted.";
   }
   if (el.reviewConsentDetails) {
@@ -916,8 +952,9 @@ function renderAwaiting(isAwaiting) {
   el.typingRow.classList.toggle("is-hidden", !isAwaiting);
   el.chatInput.disabled = isAwaiting;
   if (el.sendButton) {
-    el.sendButton.textContent = isAwaiting ? "Working..." : "Send";
+    el.sendButton.textContent = isAwaiting ? "Working..." : "Run diagnostic";
   }
+  renderSessionContext(describeReadiness(state.contextScore || deriveContextScore()));
   renderReviewConsentState();
 }
 
@@ -1046,31 +1083,55 @@ function renderStatus() {
   el.limitBadge.textContent = state.findings ? `${remaining}/${CONFIG.freeFollowupLimit} follow-ups left` : `${score}% ready`;
   el.stageBadge.dataset.stage = descriptor.badge;
   el.limitBadge.dataset.stage = state.findings ? "ready" : descriptor.badge;
+  renderSessionContext(descriptor);
 
   if (state.findings) {
     el.chatNote.textContent = remaining > 0
-      ? "Use a follow-up to test the findings, or move to contact if you want help."
-      : "The free follow-up limit has been reached for this review.";
+      ? "Use a follow-up to test the findings, or move to contact."
+      : "Free follow-ups are used up for this review.";
     return;
   }
 
   if (!hasConversation) {
-    el.chatNote.textContent = "Start with a bottleneck, messy handoff, margin issue, or where too much still depends on you.";
+    el.chatNote.textContent = "One concrete example is enough to start.";
     return;
   }
 
   if (state.enoughContext && !state.findings) {
-    el.chatNote.textContent = "There is enough signal now. One more useful answer should turn this into findings.";
+    el.chatNote.textContent = "One more useful answer should turn this into findings.";
     return;
   }
 
   if (score >= 72) {
-    el.chatNote.textContent = "The pattern is nearly clear. One more specific answer should be enough.";
+    el.chatNote.textContent = "The pattern is nearly clear. Stay specific.";
   } else if (score >= 45) {
     el.chatNote.textContent = "The pattern is forming. Keep answers specific.";
   } else {
-    el.chatNote.textContent = "Stay concrete: what is breaking down, where work slows down, or where too much still depends on you.";
+    el.chatNote.textContent = "Stay concrete about what breaks, slows, or still depends on you.";
   }
+}
+
+function renderSessionContext(descriptor) {
+  const rawStageValue = state.findings
+    ? "Findings"
+    : formatUserFacingText(state.stage || "discover");
+  const stageValue = rawStageValue.charAt(0).toUpperCase() + rawStageValue.slice(1);
+  const statusValue = state.contactSubmitted
+    ? "Request sent"
+    : state.awaiting
+      ? "Running"
+      : descriptor.phase;
+  const modeValue = state.contactSubmitted
+    ? "Contact shared"
+    : state.contactOpen
+      ? "Contact open"
+      : state.reviewConsentAccepted
+        ? "Anonymous"
+        : "Locked";
+
+  if (el.sessionStateLabel) el.sessionStateLabel.textContent = statusValue;
+  if (el.sessionStageLabel) el.sessionStageLabel.textContent = stageValue;
+  if (el.sessionModeLabel) el.sessionModeLabel.textContent = modeValue;
 }
 
 
@@ -1271,24 +1332,171 @@ function hasDashboardContext() {
 
 function renderDashboardSummary() {
   const summary = deriveDashboardSummary();
-  const showPatternPanels = hasDashboardContext();
+  const insightRail = deriveInsightRailModel();
   const showComparison = Boolean(
     state.findings
     && summary.comparison
     && !/not enough saved assessments yet/i.test(summary.comparison)
   );
 
-  if (el.mainIssueValue) el.mainIssueValue.textContent = summary.mainIssue;
-  if (el.firstFocusValue) el.firstFocusValue.textContent = summary.firstFocus;
-  if (el.businessTypeValue) el.businessTypeValue.textContent = summary.businessType;
+  if (el.mainIssueValue) el.mainIssueValue.textContent = insightRail.mainIssue;
+  if (el.likelyCauseValue) el.likelyCauseValue.textContent = insightRail.likelyCause;
+  if (el.firstFocusValue) el.firstFocusValue.textContent = insightRail.firstFocus;
+  if (el.businessTypeValue) el.businessTypeValue.textContent = insightRail.businessType;
   if (el.assessmentScoreValue) el.assessmentScoreValue.textContent = summary.assessmentScore;
   if (el.comparisonValue) el.comparisonValue.textContent = summary.comparison;
   if (el.confidenceValue) el.confidenceValue.textContent = summary.confidence;
+  if (el.ctaValue) el.ctaValue.textContent = insightRail.ctaValue;
+  if (el.ctaCopy) el.ctaCopy.textContent = insightRail.ctaCopy;
+  renderSignalChips(insightRail.signals);
+  renderPanelList(el.nextActionsList, insightRail.nextActions);
   el.assessmentScoreRow?.classList.toggle("is-hidden", !state.findings);
-  el.currentPatternPanel?.classList.toggle("is-hidden", !showPatternPanels);
-  el.likelyIssuePanel?.classList.toggle("is-hidden", !showPatternPanels);
-  el.firstFocusPanel?.classList.toggle("is-hidden", !showPatternPanels);
+  el.currentPatternPanel?.classList.toggle("is-hidden", !insightRail.businessTypeRaw);
+  el.signalPanel?.classList.toggle("is-hidden", insightRail.signals.length === 0);
+  el.likelyIssuePanel?.classList.toggle("is-hidden", !insightRail.mainIssueRaw);
+  el.likelyCausePanel?.classList.toggle("is-hidden", !insightRail.likelyCauseRaw);
+  el.firstFocusPanel?.classList.toggle("is-hidden", !insightRail.firstFocusRaw);
+  el.nextActionsPanel?.classList.toggle("is-hidden", insightRail.nextActions.length === 0);
   el.comparisonPanel?.classList.toggle("is-hidden", !showComparison);
+  el.ctaPanel?.classList.toggle("is-hidden", !insightRail.showCta);
+  el.ctaLink?.classList.toggle("is-hidden", !insightRail.showCtaLink);
+}
+
+function deriveInsightRailModel() {
+  const findings = state.findings && typeof state.findings === "object" ? state.findings : {};
+  const extracted = state.extracted || {};
+  const intelligence = state.intelligenceRecord || buildStructuredSessionRecord();
+  const display = intelligence?.display || {};
+  const brief = state.findings ? composeDiagnosticBrief(state.findings, intelligence, extracted) : null;
+  const briefSections = Array.isArray(brief?.sections) ? brief.sections : [];
+  const findBriefSection = (title) => briefSections.find((section) => section?.title === title);
+
+  const businessTypeRaw = firstMeaningful([
+    display.business_type,
+    display.secondary_business_type,
+    extracted.primary_business_type,
+    extracted.business_type,
+    findings.business_type
+  ]);
+
+  const mainIssueRaw = firstMeaningful([
+    display.primary_problem,
+    findings.main_issue,
+    findings.priority,
+    findings.core_diagnosis,
+    extracted.main_problem,
+    display.symptom_labels?.[0],
+    Array.isArray(extracted.pain_points) ? extracted.pain_points[0] : null,
+    findBriefSection("Core diagnosis")?.text
+  ]);
+
+  const likelyCauseRaw = firstMeaningful([
+    findings.likely_root_cause,
+    findings.what_this_likely_means,
+    findings.root_cause,
+    Array.isArray(findings.inferred_causes) ? findings.inferred_causes[0] : null,
+    display.cause_labels?.[0],
+    Array.isArray(extracted.inferred_causes) ? extracted.inferred_causes[0] : null,
+    Array.isArray(extracted.cause_tags) ? extracted.cause_tags[0] : null,
+    findBriefSection("Likely root cause")?.text
+  ]);
+
+  const firstFocusRaw = firstMeaningful([
+    findings.first_priority,
+    findings.first_focus,
+    findings.what_to_do_first,
+    findings.next_step,
+    Array.isArray(findings.first_moves) ? findings.first_moves[0] : null,
+    Array.isArray(findings.diy_vs_help) ? findings.diy_vs_help[0] : null,
+    display.recommendation_titles?.[0],
+    findBriefSection("First priority")?.text
+  ]);
+
+  const signals = normalizeSignalLabels(
+    display.symptom_labels,
+    display.cause_labels,
+    extracted.pain_points,
+    extracted.symptoms,
+    extracted.symptom_tags,
+    extracted.cause_tags,
+    findings.symptom_tags,
+    findings.cause_tags
+  ).slice(0, 8);
+
+  const briefNextActions = Array.isArray(findBriefSection("Next actions")?.items)
+    ? findBriefSection("Next actions").items
+    : [];
+  const nextActions = dedupeList(
+    briefNextActions.length
+      ? briefNextActions
+      : normalizeActionList([
+          findings.next_actions,
+          findings.first_moves,
+          findings.recommendations,
+          findings.diy_vs_help,
+          findings.next_step,
+          display.recommendation_titles
+        ])
+  ).slice(0, 4);
+
+  let ctaValue = "";
+  let ctaCopy = "";
+  let showCta = false;
+  let showCtaLink = false;
+
+  if (state.contactSubmitted) {
+    showCta = true;
+    ctaValue = "Request submitted";
+    ctaCopy = "The contact request is captured and ready for fit, scope, and timing review.";
+  } else if (state.contactOpen) {
+    showCta = true;
+    showCtaLink = true;
+    ctaValue = "Complete contact request";
+    ctaCopy = "Submit the handoff form when you want a human advisor to review this diagnostic.";
+  } else if (state.ctaReady) {
+    showCta = true;
+    showCtaLink = true;
+    ctaValue = "Move to next-step options";
+    ctaCopy = "The diagnostic has enough signal to support advisory follow-up if you want help turning the read into action.";
+  }
+
+  return {
+    businessTypeRaw,
+    businessType: cleanSummaryValue(businessTypeRaw),
+    mainIssueRaw,
+    mainIssue: cleanSummaryValue(mainIssueRaw),
+    likelyCauseRaw,
+    likelyCause: cleanSummaryValue(likelyCauseRaw),
+    firstFocusRaw,
+    firstFocus: cleanSummaryValue(firstFocusRaw),
+    signals,
+    nextActions,
+    showCta,
+    showCtaLink,
+    ctaValue,
+    ctaCopy
+  };
+}
+
+function renderSignalChips(values) {
+  if (!el.signalChipList) return;
+  el.signalChipList.innerHTML = "";
+  values.forEach((value) => {
+    const chip = document.createElement("span");
+    chip.className = "signal-chip";
+    chip.textContent = value;
+    el.signalChipList.appendChild(chip);
+  });
+}
+
+function renderPanelList(node, items) {
+  if (!node) return;
+  node.innerHTML = "";
+  items.forEach((item) => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    node.appendChild(li);
+  });
 }
 
 function deriveDashboardSummary() {
@@ -1546,7 +1754,7 @@ function renderContact() {
     el.contactForm?.classList.add("is-hidden");
   }
   if (el.contactToggle) {
-    el.contactToggle.textContent = state.contactOpen ? "Contact form open" : "Share contact details";
+    el.contactToggle.textContent = state.contactOpen ? "Contact request open" : "Open contact request";
     el.contactToggle.setAttribute("aria-expanded", String(Boolean(state.contactOpen)));
   }
   renderFollowUpConsentState();
