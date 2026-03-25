@@ -235,7 +235,91 @@
                 <h2 id="findings-title">Findings appear here</h2>
                 <p id="findings-summary" class="section-copy">Structured read: issue, likely cause, first priority, and next actions.</p>
               </div>
-              <div id="findings-grid" class="findings-grid"></div>
+
+              <div class="findings-overview-grid">
+                <div class="findings-overview-main">
+                  <div class="findings-primary-panel">
+                    <p class="muted-label">Core problem</p>
+                    <h3 id="findings-core-problem" class="findings-core-problem">Core problem appears after the diagnostic is ready.</h3>
+                    <p id="findings-why-it-matters" class="section-copy">Practical business impact appears after the diagnostic is ready.</p>
+                  </div>
+
+                  <div class="findings-focus-grid">
+                    <div class="findings-focus-card">
+                      <p class="muted-label">Likely cause</p>
+                      <p id="findings-likely-cause" class="findings-focus-value">Appears with findings</p>
+                    </div>
+
+                    <div class="findings-focus-card findings-focus-card-priority">
+                      <p class="muted-label">What to work on first</p>
+                      <p id="findings-first-priority" class="findings-focus-value">Appears with findings</p>
+                      <p id="findings-not-yet" class="finding-note">Do not widen the scope until the first priority is controlled.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="findings-overview-side">
+                  <div class="finding-visual-card">
+                    <div class="finding-visual-head">
+                      <div>
+                        <p class="muted-label">Signal snapshot</p>
+                        <h3>Pressure and clarity</h3>
+                      </div>
+                      <p id="findings-pressure-score" class="finding-score-value">0 / 100</p>
+                    </div>
+
+                    <div class="finding-meter-stack">
+                      <div class="finding-meter-row">
+                        <div class="finding-meter-copy">
+                          <span>Operating pressure</span>
+                          <strong id="findings-pressure-label">Building</strong>
+                        </div>
+                        <div class="meter-track" aria-hidden="true">
+                          <div id="findings-pressure-fill" class="meter-fill"></div>
+                        </div>
+                      </div>
+
+                      <div class="finding-meter-row">
+                        <div class="finding-meter-copy">
+                          <span>Signal clarity</span>
+                          <strong id="findings-clarity-score">0 / 100</strong>
+                        </div>
+                        <div class="meter-track" aria-hidden="true">
+                          <div id="findings-clarity-fill" class="meter-fill meter-fill-secondary"></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <p id="findings-confidence-note" class="panel-copy">Confidence and signal note appear after the diagnostic is ready.</p>
+                    <p id="findings-benchmark-note" class="small-text">Benchmark comparison appears here when enough saved sessions exist.</p>
+                  </div>
+
+                  <div class="finding-pattern-card">
+                    <p class="muted-label">Operating pattern</p>
+                    <div class="pattern-flow">
+                      <div class="pattern-step">
+                        <span>Problem</span>
+                        <strong id="pattern-problem">Appears with findings</strong>
+                      </div>
+                      <div class="pattern-arrow" aria-hidden="true">&rarr;</div>
+                      <div class="pattern-step">
+                        <span>Cause</span>
+                        <strong id="pattern-cause">Appears with findings</strong>
+                      </div>
+                      <div class="pattern-arrow" aria-hidden="true">&rarr;</div>
+                      <div class="pattern-step pattern-step-accent">
+                        <span>First priority</span>
+                        <strong id="pattern-priority">Appears with findings</strong>
+                      </div>
+                    </div>
+
+                    <div id="findings-signal-summary" class="signal-chip-list"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="findings-grid" class="findings-grid findings-grid-rich"></div>
+
               <div id="recommended-next-step" class="recommended-next-step is-hidden">
                 <div class="recommended-next-step-head">
                   <p class="kicker">Recommended next step</p>
@@ -250,6 +334,11 @@
                     <h4 id="recommended-package-title" class="recommended-package-title">Recommended package appears here</h4>
                     <p id="recommended-package-note" class="section-copy">The package recommendation will adapt to the business type, priority, and signal pattern.</p>
 
+                    <div class="recommended-why-block">
+                      <p class="muted-label">Why this path</p>
+                      <p id="recommended-why" class="section-copy">The reasoning behind this path appears after the diagnostic is ready.</p>
+                    </div>
+
                     <div class="recommended-meta-grid">
                       <div class="recommended-meta-item">
                         <span class="recommended-meta-label">Business type</span>
@@ -258,6 +347,10 @@
                       <div class="recommended-meta-item">
                         <span class="recommended-meta-label">First priority</span>
                         <strong id="recommended-priority" class="recommended-meta-value">Appears with findings</strong>
+                      </div>
+                      <div class="recommended-meta-item">
+                        <span class="recommended-meta-label">Best for</span>
+                        <p id="recommended-best-fit" class="recommended-meta-value recommended-meta-copy">Appears with findings</p>
                       </div>
                       <div class="recommended-meta-item recommended-meta-item-wide">
                         <span class="recommended-meta-label">Signals behind this path</span>
@@ -269,8 +362,13 @@
                   </div>
 
                   <div class="recommended-deliverables-panel">
-                    <p class="muted-label">Included in this step</p>
+                    <p class="muted-label">What we would provide</p>
                     <ul id="recommended-deliverables" class="offer-list"></ul>
+
+                    <div class="recommended-next-note">
+                      <p class="muted-label">What happens next</p>
+                      <p id="recommended-next-step-note" class="section-copy">The next-step process appears after the diagnostic is ready.</p>
+                    </div>
 
                     <div class="recommended-action-stack">
                       <button id="recommended-primary-cta" type="button" class="btn btn-primary">Request next-step help</button>
@@ -287,86 +385,59 @@
           <section id="contact" class="workspace-block is-hidden">
             <div class="card contact-card">
               <div class="offer-shell">
-                <div class="offer-intro">
-                  <p class="kicker">Next-step options</p>
-                  <h2>Move from diagnostic to operating action.</h2>
-                  <p class="section-copy">If the session surfaced a real operating problem, choose the level of help that matches it. Fit, scope, and commercial terms are confirmed after review.</p>
-                </div>
-
-                <div class="offer-grid">
-                  <div class="offer-card">
-                    <div class="offer-top">
-                      <div>
-                        <h3>Diagnostic Review</h3>
-                        <p class="offer-note">Clarify the read and confirm the first move</p>
-                      </div>
-                      <div class="offer-price">Scoped after review</div>
-                    </div>
-                    <ul class="offer-list">
-                      <li>60-minute review call</li>
-                      <li>Walk through findings and priorities</li>
-                      <li>Written summary with first actions</li>
-                      <li>Best when you want clarity before committing to deeper work</li>
-                    </ul>
-                    <button type="button" class="text-button offer-select" data-package-select="Diagnostic Review">Choose Diagnostic Review</button>
+                <div class="offer-intro offer-intro-grid">
+                  <div>
+                    <p class="kicker">Tailored service options</p>
+                    <h2>Choose the level of help that fits this diagnostic.</h2>
+                    <p id="offer-summary" class="section-copy">Pricing, fit, and next-step guidance appear after the diagnostic is ready.</p>
                   </div>
 
-                  <div class="offer-card featured">
-                    <div class="offer-top">
-                      <div>
-                        <h3>Operations Sprint</h3>
-                        <p class="offer-note">Fix one operating problem with focused implementation</p>
-                      </div>
-                      <div class="offer-price">Custom scope</div>
-                    </div>
-                    <ul class="offer-list">
-                      <li>Focused work on one operating issue</li>
-                      <li>Simple process, dashboard, or workflow buildout</li>
-                      <li>Implementation guidance and review</li>
-                      <li>Best for intake, visibility, pricing, or handoff problems</li>
-                    </ul>
-                    <button type="button" class="text-button offer-select" data-package-select="Operations Sprint">Choose Operations Sprint</button>
-                  </div>
-
-                  <div class="offer-card">
-                    <div class="offer-top">
-                      <div>
-                        <h3>Ongoing Advisory</h3>
-                        <p class="offer-note">Stay in a tighter operating rhythm over time</p>
-                      </div>
-                      <div class="offer-price">Monthly retainer</div>
-                    </div>
-                    <ul class="offer-list">
-                      <li>Recurring check-ins and decision support</li>
-                      <li>Priority tracking and accountability</li>
-                      <li>Help tightening systems over time</li>
-                      <li>Best for owners building a stronger operating cadence</li>
-                    </ul>
-                    <button type="button" class="text-button offer-select" data-package-select="Ongoing Advisory">Choose Ongoing Advisory</button>
+                  <div class="pricing-banner">
+                    <p class="muted-label">Pricing note</p>
+                    <p id="pricing-banner-title" class="pricing-banner-title">Diagnostic Review credit</p>
+                    <p id="pricing-banner-copy" class="panel-copy">If you start with a paid Diagnostic Review and move into a Sprint or Advisory within 14 days, the review fee is applied to the next package.</p>
                   </div>
                 </div>
+
+                <div id="offer-grid" class="offer-grid"></div>
 
                 <div class="contact-grid">
                   <div class="steps-card">
-                    <p class="muted-label">Handoff flow</p>
+                    <p class="muted-label">What happens after you submit</p>
                     <ol class="steps-list">
-                      <li>Pick the package that best matches the level of help you want.</li>
-                      <li>Send your info and a short note on what you want to fix first.</li>
-                      <li>We review the findings and confirm fit, scope, and timing.</li>
-                      <li>If it makes sense, we book the call or kickoff.</li>
+                      <li>We review the diagnostic, signal pattern, and package you selected.</li>
+                      <li>We confirm whether the issue is clear enough for review, sprint, or ongoing advisory.</li>
+                      <li>We reply with the best starting package, scope note, and next-step discussion path.</li>
+                      <li>If there is a fit, we schedule the review call or kickoff that matches the package.</li>
                     </ol>
+                    <p class="finding-note">This request is for fit, scope, and starting-package confirmation. It is not a promise of outcomes or a generic sales callback.</p>
                   </div>
 
                   <div class="contact-shell">
                     <div class="contact-shell-head">
                       <div>
-                        <p class="kicker">Advisor handoff</p>
-                        <h3>Ready for human follow-up?</h3>
-                        <p class="section-copy">Open the form below and tell us which option is closest to the help you want.</p>
-                        <p class="small-text">Operational Clarity provides AI-assisted diagnostic guidance. If you request next-step help, your review may also be assessed by a human advisor from EHI Studio.</p>
+                        <p class="kicker">Request help</p>
+                        <h3>Move this diagnostic into a scoped next step.</h3>
+                        <p id="contact-shell-copy" class="section-copy">Open the form below to request a human review of the diagnostic and the package path that fits it best.</p>
+                        <p id="contact-shell-note" class="small-text">Operational Clarity provides AI-assisted diagnostic guidance. If you request next-step help, your review may also be assessed by a human advisor from EHI Studio.</p>
                       </div>
 
                       <button id="contact-toggle" type="button" class="btn btn-primary">Open contact request</button>
+                    </div>
+
+                    <div class="contact-value-strip">
+                      <div class="contact-value-item">
+                        <span>We review</span>
+                        <strong>your diagnostic, signal pattern, and likely starting scope</strong>
+                      </div>
+                      <div class="contact-value-item">
+                        <span>We confirm</span>
+                        <strong>fit, package level, and whether the issue is ready for implementation help</strong>
+                      </div>
+                      <div class="contact-value-item">
+                        <span>You receive</span>
+                        <strong>a clear next-step reply or kickoff path, not a vague follow-up</strong>
+                      </div>
                     </div>
 
                     <form id="contact-form" class="contact-form is-hidden">
@@ -701,19 +772,44 @@ function captureDom() {
   el.findingsSection = document.getElementById("findings");
   el.findingsTitle = document.getElementById("findings-title");
   el.findingsSummary = document.getElementById("findings-summary");
+  el.findingsCoreProblem = document.getElementById("findings-core-problem");
+  el.findingsWhyItMatters = document.getElementById("findings-why-it-matters");
+  el.findingsLikelyCause = document.getElementById("findings-likely-cause");
+  el.findingsFirstPriority = document.getElementById("findings-first-priority");
+  el.findingsNotYet = document.getElementById("findings-not-yet");
+  el.findingsPressureScore = document.getElementById("findings-pressure-score");
+  el.findingsPressureLabel = document.getElementById("findings-pressure-label");
+  el.findingsPressureFill = document.getElementById("findings-pressure-fill");
+  el.findingsClarityScore = document.getElementById("findings-clarity-score");
+  el.findingsClarityFill = document.getElementById("findings-clarity-fill");
+  el.findingsConfidenceNote = document.getElementById("findings-confidence-note");
+  el.findingsBenchmarkNote = document.getElementById("findings-benchmark-note");
+  el.findingsSignalSummary = document.getElementById("findings-signal-summary");
+  el.patternProblem = document.getElementById("pattern-problem");
+  el.patternCause = document.getElementById("pattern-cause");
+  el.patternPriority = document.getElementById("pattern-priority");
   el.findingsGrid = document.getElementById("findings-grid");
   el.recommendedNextStep = document.getElementById("recommended-next-step");
   el.recommendedBridge = document.getElementById("recommended-bridge");
   el.recommendedPackageType = document.getElementById("recommended-package-type");
   el.recommendedPackageTitle = document.getElementById("recommended-package-title");
   el.recommendedPackageNote = document.getElementById("recommended-package-note");
+  el.recommendedWhy = document.getElementById("recommended-why");
   el.recommendedBusinessType = document.getElementById("recommended-business-type");
   el.recommendedPriority = document.getElementById("recommended-priority");
+  el.recommendedBestFit = document.getElementById("recommended-best-fit");
   el.recommendedSignals = document.getElementById("recommended-signals");
   el.recommendedScope = document.getElementById("recommended-scope");
   el.recommendedDeliverables = document.getElementById("recommended-deliverables");
+  el.recommendedNextStepNote = document.getElementById("recommended-next-step-note");
   el.recommendedPrimaryCta = document.getElementById("recommended-primary-cta");
   el.contactSection = document.getElementById("contact");
+  el.offerSummary = document.getElementById("offer-summary");
+  el.pricingBannerTitle = document.getElementById("pricing-banner-title");
+  el.pricingBannerCopy = document.getElementById("pricing-banner-copy");
+  el.offerGrid = document.getElementById("offer-grid");
+  el.contactShellCopy = document.getElementById("contact-shell-copy");
+  el.contactShellNote = document.getElementById("contact-shell-note");
   el.contactToggle = document.getElementById("contact-toggle");
   el.contactForm = document.getElementById("contact-form");
   el.contactMessage = document.getElementById("contact-message");
@@ -747,7 +843,6 @@ function captureDom() {
   el.internalIntelligenceJson = document.getElementById("internal-intelligence-json");
   el.internalSyncStatus = document.getElementById("internal-sync-status");
   el.promptChips = Array.from(document.querySelectorAll("[data-prompt-chip]"));
-  el.packageButtons = Array.from(document.querySelectorAll("[data-package-select]"));
 }
 
 function bindEvents() {
@@ -757,7 +852,7 @@ function bindEvents() {
   el.contactToggle?.addEventListener("click", () => openContactForm());
   el.contactForm?.addEventListener("submit", handleContactSubmit);
   el.promptChips?.forEach((chip) => chip.addEventListener("click", handlePromptChipClick));
-  el.packageButtons?.forEach((button) => button.addEventListener("click", handlePackageSelect));
+  el.offerGrid?.addEventListener("click", handlePackageSelect);
   el.ctaLink?.addEventListener("click", handleCtaLinkClick);
   el.reviewConsentCheckbox?.addEventListener("change", handleReviewConsentChange);
   el.trustModalAccept?.addEventListener("click", handleTrustModalAccept);
@@ -782,11 +877,13 @@ function handleTranscriptScroll() {
 }
 
 function handlePackageSelect(event) {
-  const button = event?.currentTarget;
+  const button = event?.target?.closest?.("[data-package-select]");
   const packageName = String(button?.dataset?.packageSelect || "").trim();
   if (!packageName) return;
 
   applyPackageSelection(packageName, {
+    message: String(button?.dataset?.packageMessage || "").trim(),
+    overwriteMessage: Boolean(String(button?.dataset?.packageMessage || "").trim()),
     focusField: "package"
   });
 }
@@ -1498,6 +1595,7 @@ function hasDashboardContext() {
 function renderDashboardSummary() {
   const summary = deriveDashboardSummary();
   const insightRail = deriveInsightRailModel();
+  const showDetailedRailPanels = !state.findings;
   const showComparison = Boolean(
     state.findings
     && summary.comparison
@@ -1519,10 +1617,10 @@ function renderDashboardSummary() {
   el.assessmentScoreRow?.classList.toggle("is-hidden", !state.findings);
   el.currentPatternPanel?.classList.toggle("is-hidden", !insightRail.businessTypeRaw);
   el.signalPanel?.classList.toggle("is-hidden", insightRail.signals.length === 0);
-  el.likelyIssuePanel?.classList.toggle("is-hidden", !insightRail.mainIssueRaw);
-  el.likelyCausePanel?.classList.toggle("is-hidden", !insightRail.likelyCauseRaw);
-  el.firstFocusPanel?.classList.toggle("is-hidden", !insightRail.firstFocusRaw);
-  el.nextActionsPanel?.classList.toggle("is-hidden", insightRail.nextActions.length === 0);
+  el.likelyIssuePanel?.classList.toggle("is-hidden", !showDetailedRailPanels || !insightRail.mainIssueRaw);
+  el.likelyCausePanel?.classList.toggle("is-hidden", !showDetailedRailPanels || !insightRail.likelyCauseRaw);
+  el.firstFocusPanel?.classList.toggle("is-hidden", !showDetailedRailPanels || !insightRail.firstFocusRaw);
+  el.nextActionsPanel?.classList.toggle("is-hidden", !showDetailedRailPanels || insightRail.nextActions.length === 0);
   el.comparisonPanel?.classList.toggle("is-hidden", !showComparison);
   el.ctaPanel?.classList.toggle("is-hidden", !insightRail.showCta);
   el.ctaLink?.classList.toggle("is-hidden", !insightRail.showCtaLink);
@@ -1726,6 +1824,17 @@ function deriveRecommendedNextStepModel() {
     : packageType === "advisory"
       ? `Best fit if this needs recurring support around ${theme.scopeLabel}, not a one-off setup.`
       : `Best fit if you want hands-on help tightening ${theme.scopeLabel}.`;
+  const whyPath = packageType === "review"
+    ? `The issue is visible, but the first move should be pressure-tested before implementation work starts around ${theme.scopeLabel}.`
+    : packageType === "advisory"
+      ? `The signal pattern cuts across ownership, cadence, and follow-through, so recurring support is a better fit than a one-off setup around ${theme.scopeLabel}.`
+      : `The issue is clear enough to move into hands-on implementation guidance around ${theme.scopeLabel} without widening the scope too early.`;
+  const bestForCopy = packageType === "review"
+    ? "Best for teams that want a human operator read, a tighter first move, and a clear decision on whether deeper work is warranted."
+    : packageType === "advisory"
+      ? "Best for owners who need recurring prioritization, accountability, and review support across more than one operating cycle."
+      : "Best for teams with one clear operating problem that is ready for structure, cadence, and implementation guidance.";
+  const nextStepCopy = "If you request help, we review this diagnostic, confirm fit and scope, and reply with the right starting package before anything is booked.";
   const contactPackageValue = `${basePackage} - ${theme.title}`;
   const contactMessage = [
     `I want help with the recommended next step: ${basePackage} for ${title}.`,
@@ -1740,13 +1849,19 @@ function deriveRecommendedNextStepModel() {
     packageLabel: basePackage,
     basePackage,
     packageType,
+    themeKey: theme.key,
     transitionCopy,
     packageNote,
+    whyPath,
+    bestForCopy,
+    nextStepCopy,
     businessTypeLabel,
     priorityLabel,
     signals,
+    scopeLabel: theme.scopeLabel,
     scopeCopy,
     deliverables,
+    deliverableLibrary: theme.deliverables,
     railCopy,
     railValue: basePackage,
     primaryCtaLabel: "Request next-step help",
@@ -2032,15 +2147,19 @@ function joinWithAnd(values) {
   return `${items.slice(0, -1).join(", ")}, and ${items[items.length - 1]}`;
 }
 
-function renderSignalChips(values) {
-  if (!el.signalChipList) return;
-  el.signalChipList.innerHTML = "";
+function renderSignalChipsInto(node, values) {
+  if (!node) return;
+  node.innerHTML = "";
   values.forEach((value) => {
     const chip = document.createElement("span");
     chip.className = "signal-chip";
     chip.textContent = value;
-    el.signalChipList.appendChild(chip);
+    node.appendChild(chip);
   });
+}
+
+function renderSignalChips(values) {
+  renderSignalChipsInto(el.signalChipList, values);
 }
 
 function renderPanelList(node, items) {
@@ -2050,6 +2169,205 @@ function renderPanelList(node, items) {
     const li = document.createElement("li");
     li.textContent = item;
     node.appendChild(li);
+  });
+}
+
+function parseNumericScore(value) {
+  const numeric = Number(String(value || "").split("/")[0].trim());
+  return Number.isFinite(numeric) ? numeric : 0;
+}
+
+function clampNumber(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function stripTrailingPunctuation(value) {
+  return String(value || "").trim().replace(/[.!?]+$/, "");
+}
+
+function describePressureLevel(score) {
+  if (score >= 75) return "High";
+  if (score >= 55) return "Elevated";
+  if (score >= 35) return "Moderate";
+  return "Contained";
+}
+
+function deriveOperatingConsequences(themeKey = "general") {
+  const catalog = {
+    cash: [
+      "Invoices stay open longer than they should, so cash visibility weakens week to week.",
+      "Owner or manager time is pulled into follow-up instead of forward planning.",
+      "Exceptions and overdue accounts keep resurfacing because the cadence is not stable."
+    ],
+    margin: [
+      "Jobs can stay busy without protecting profit at the job level.",
+      "Pricing decisions drift because estimate-versus-actual feedback is weak.",
+      "Change-order misses and delivery noise quietly turn into margin leakage."
+    ],
+    owner_handoff: [
+      "Decisions queue behind the owner and the team waits for clearance.",
+      "Roles stay unclear because escalation rules are not settled.",
+      "Follow-through depends on direct owner rescue instead of a durable lane."
+    ],
+    handoff: [
+      "Details are lost between quoting, planning, and delivery.",
+      "Rework and clarification loops grow because handoff rules are too loose.",
+      "Starts and closeouts depend on memory instead of a shared packet."
+    ],
+    execution: [
+      "The schedule changes faster than the team can absorb cleanly.",
+      "Capacity gets loaded unevenly, which increases reactive dispatch.",
+      "Day-of changes pull attention away from weekly planning and exception control."
+    ],
+    visibility: [
+      "The team spends time compiling numbers instead of acting on them.",
+      "Weekly reviews lack a stable scoreboard, so problems surface late.",
+      "Definitions drift, which makes accountability and prioritization harder."
+    ],
+    pipeline: [
+      "Time is spent on lower-fit work that does not strengthen backlog quality.",
+      "Growth decisions drift away from delivery capacity and margin discipline.",
+      "Qualification noise makes demand look healthier than it really is."
+    ],
+    general: [
+      "Energy gets spread across too many fixes instead of one controlled move.",
+      "Follow-through depends on memory instead of cadence and ownership.",
+      "The main issue stays reactive longer than it should."
+    ]
+  };
+  return catalog[themeKey] || catalog.general;
+}
+
+function deriveDeferredFocus(themeKey = "general") {
+  const catalog = {
+    cash: "Do not widen this into broader pricing or reporting work until collections ownership, aging rules, and weekly follow-through are stable.",
+    margin: "Do not chase more volume or a bigger dashboard until pricing rules and margin visibility are reliable.",
+    owner_handoff: "Do not solve this by staying more available. Move decision ownership and escalation rules first.",
+    handoff: "Do not jump into a broader software change until the handoff points and exception rules are defined.",
+    execution: "Do not add more scheduling tools until the weekly planning cadence and exception rules are holding.",
+    visibility: "Do not build a larger reporting layer until the few numbers that drive weekly decisions are defined and owned.",
+    pipeline: "Do not widen sales activity until qualification rules and fit thresholds are tighter.",
+    general: "Do not widen the scope into multiple fixes at once. Lock the first priority, owner, and review rhythm first."
+  };
+  return catalog[themeKey] || catalog.general;
+}
+
+function buildFindingsViewModel() {
+  if (!state.findings) return null;
+
+  const intelligence = state.intelligenceRecord || buildStructuredSessionRecord();
+  const extracted = state.extracted || {};
+  const brief = composeDiagnosticBrief(state.findings, intelligence, extracted);
+  const summary = deriveDashboardSummary();
+  const insightRail = deriveInsightRailModel();
+  const recommendation = deriveRecommendedNextStepModel();
+  const sections = Array.isArray(brief?.sections) ? brief.sections : [];
+  const findSection = (title) => sections.find((section) => section?.title === title);
+  const themeKey = recommendation?.themeKey || "general";
+  const assessmentScore = parseNumericScore(summary.assessmentScore);
+  const pressureScore = clampNumber((100 - assessmentScore) + 12, 26, 94);
+  const clarityScore = clampNumber(Math.max(state.contextScore || 0, state.findings ? 74 : 0), 42, 96);
+  const confidenceNote = findSection("Confidence / signal note")?.text
+    || summarizeConfidence(state.findings || {}, recommendation?.signals || [], []);
+  const benchmarkNote = state.findings
+    ? summary.comparison
+    : "Benchmark comparison appears here when enough saved sessions exist.";
+
+  return {
+    coreProblem: withPeriod(findSection("Core diagnosis")?.text || insightRail.mainIssue || brief.summary),
+    businessImpact: withPeriod(findSection("Business impact")?.text || brief.summary),
+    likelyCause: withPeriod(findSection("Likely root cause")?.text || insightRail.likelyCause || "Likely cause is still being clarified."),
+    firstPriority: withPeriod(findSection("First priority")?.text || insightRail.firstFocus || "First priority is still forming."),
+    nextActions: Array.isArray(findSection("Next actions")?.items) && findSection("Next actions").items.length
+      ? findSection("Next actions").items
+      : insightRail.nextActions.slice(0, 4),
+    confidenceNote,
+    benchmarkNote,
+    signals: (recommendation?.signals || insightRail.signals || []).slice(0, 6),
+    notYet: deriveDeferredFocus(themeKey),
+    consequences: deriveOperatingConsequences(themeKey),
+    pressureScore,
+    clarityScore,
+    pressureLabel: describePressureLevel(pressureScore),
+    patternProblem: stripTrailingPunctuation(insightRail.mainIssueRaw || findSection("Core diagnosis")?.text || brief.summary),
+    patternCause: stripTrailingPunctuation(insightRail.likelyCauseRaw || findSection("Likely root cause")?.text || ""),
+    patternPriority: stripTrailingPunctuation(insightRail.firstFocusRaw || findSection("First priority")?.text || "")
+  };
+}
+
+function buildPackageMessageForOption(packageType, recommendation) {
+  const scopeLabel = recommendation?.scopeLabel || "the first operating fix";
+  const priorityLabel = recommendation?.priorityLabel || "the first operating issue";
+
+  if (packageType === "review") {
+    return `I want a Diagnostic Review to validate this diagnostic and confirm the right first move around ${scopeLabel}. Priority to confirm: ${priorityLabel}.`;
+  }
+  if (packageType === "advisory") {
+    return `I want Ongoing Advisory to support prioritization, accountability, and operating cadence around ${scopeLabel}. Priority to address first: ${priorityLabel}.`;
+  }
+  return `I want an Operations Sprint to build the first fix around ${scopeLabel}. Priority to address first: ${priorityLabel}.`;
+}
+
+function derivePackageFitCopy(packageType, recommendation) {
+  const scopeLabel = recommendation?.scopeLabel || "the first operating fix";
+  if (packageType === "review") {
+    return `Best when the issue is visible but you want a human read before building around ${scopeLabel}.`;
+  }
+  if (packageType === "advisory") {
+    return `Best when this needs recurring review, prioritization, and accountability around ${scopeLabel}.`;
+  }
+  return `Best when one operating issue is clear enough to structure and implement around ${scopeLabel}.`;
+}
+
+function buildPackageOptionsModel(recommendation = null) {
+  const activeRecommendation = recommendation || deriveRecommendedNextStepModel() || {};
+  const deliverableLibrary = activeRecommendation.deliverableLibrary || {};
+  const reviewCreditCopy = "If you start with a paid Diagnostic Review and move into a Sprint or Advisory within 14 days, the review fee is applied to the starting package.";
+  const catalog = [
+    {
+      key: "review",
+      name: "Diagnostic Review",
+      price: "$600",
+      billingNote: "One-time review",
+      discount: reviewCreditCopy
+    },
+    {
+      key: "sprint",
+      name: "Operations Sprint",
+      price: "$2,800",
+      billingNote: "Focused setup package",
+      discount: "Review credit available if you want to validate the first move before implementation starts."
+    },
+    {
+      key: "advisory",
+      name: "Ongoing Advisory",
+      price: "$1,650 / month",
+      billingNote: "Monthly cadence support",
+      discount: "Review credit available if you begin with a Diagnostic Review before ongoing support."
+    }
+  ];
+
+  return catalog.map((entry) => {
+    const isRecommended = activeRecommendation.packageType === entry.key;
+    const items = buildRecommendedDeliverables({
+      packageType: entry.key,
+      theme: { deliverables: deliverableLibrary },
+      priorityLabel: activeRecommendation.priorityLabel || "the first operating issue"
+    }).slice(0, 3);
+
+    return {
+      ...entry,
+      isRecommended,
+      recommendedLabel: isRecommended ? "Recommended for this diagnostic" : "",
+      fitCopy: derivePackageFitCopy(entry.key, activeRecommendation),
+      items,
+      packageValue: isRecommended
+        ? activeRecommendation.contactPackageValue || entry.name
+        : entry.name,
+      packageMessage: isRecommended
+        ? activeRecommendation.contactMessage || buildPackageMessageForOption(entry.key, activeRecommendation)
+        : buildPackageMessageForOption(entry.key, activeRecommendation)
+    };
   });
 }
 
@@ -2254,16 +2572,60 @@ function renderFindings() {
     return;
   }
 
+  const findingsView = buildFindingsViewModel();
   el.findingsSection.classList.remove("is-hidden");
   el.findingsGrid.innerHTML = "";
   el.findingsTitle.textContent = deriveFindingsTitle(findings);
   el.findingsSummary.textContent = deriveFindingsSummary(findings);
 
-  const brief = composeDiagnosticBrief(findings, state.intelligenceRecord || buildStructuredSessionRecord(), state.extracted || {});
-  brief.sections.forEach((entry) => {
+  if (el.findingsCoreProblem) el.findingsCoreProblem.textContent = stripTrailingPunctuation(findingsView?.coreProblem || "Core problem appears after the diagnostic is ready.");
+  if (el.findingsWhyItMatters) el.findingsWhyItMatters.textContent = findingsView?.businessImpact || "Practical business impact appears after the diagnostic is ready.";
+  if (el.findingsLikelyCause) el.findingsLikelyCause.textContent = stripTrailingPunctuation(findingsView?.likelyCause || "Likely cause appears with findings.");
+  if (el.findingsFirstPriority) el.findingsFirstPriority.textContent = stripTrailingPunctuation(findingsView?.firstPriority || "First priority appears with findings.");
+  if (el.findingsNotYet) el.findingsNotYet.textContent = findingsView?.notYet || "Do not widen the scope until the first priority is controlled.";
+  if (el.findingsPressureScore) el.findingsPressureScore.textContent = `${Math.round(findingsView?.pressureScore || 0)} / 100`;
+  if (el.findingsPressureLabel) el.findingsPressureLabel.textContent = findingsView?.pressureLabel || "Building";
+  if (el.findingsClarityScore) el.findingsClarityScore.textContent = `${Math.round(findingsView?.clarityScore || 0)} / 100`;
+  if (el.findingsPressureFill) el.findingsPressureFill.style.width = `${Math.round(findingsView?.pressureScore || 0)}%`;
+  if (el.findingsClarityFill) el.findingsClarityFill.style.width = `${Math.round(findingsView?.clarityScore || 0)}%`;
+  if (el.findingsConfidenceNote) el.findingsConfidenceNote.textContent = findingsView?.confidenceNote || "Confidence and signal note appear after the diagnostic is ready.";
+  if (el.findingsBenchmarkNote) {
+    el.findingsBenchmarkNote.textContent = findingsView?.benchmarkNote || "Benchmark comparison appears here when enough saved sessions exist.";
+  }
+  if (el.patternProblem) el.patternProblem.textContent = findingsView?.patternProblem || "Appears with findings";
+  if (el.patternCause) el.patternCause.textContent = findingsView?.patternCause || "Appears with findings";
+  if (el.patternPriority) el.patternPriority.textContent = findingsView?.patternPriority || "Appears with findings";
+  renderSignalChipsInto(el.findingsSignalSummary, findingsView?.signals || []);
+
+  const supportCards = [
+    {
+      title: "What this is likely causing",
+      type: "list",
+      items: findingsView?.consequences?.length
+        ? findingsView.consequences
+        : ["The likely downstream effects will appear here after the diagnostic is ready."]
+    },
+    {
+      title: "First moves to lock in",
+      type: "ordered_list",
+      items: findingsView?.nextActions?.length
+        ? findingsView.nextActions
+        : ["Confirm one owner, one metric, and one review cadence before widening the work."]
+    },
+    {
+      title: "Signal note",
+      text: findingsView?.confidenceNote || "Confidence and signal note appear after the diagnostic is ready."
+    },
+    {
+      title: "What not to focus on yet",
+      text: findingsView?.notYet || "Keep the scope narrow until the first priority is controlled.",
+      note: findingsView?.benchmarkNote || null
+    }
+  ];
+
+  supportCards.forEach((entry) => {
     const card = document.createElement("div");
     card.className = "card finding-card";
-    if (entry.primary) card.classList.add("finding-card-primary");
 
     const title = document.createElement("h3");
     title.textContent = entry.title;
@@ -2312,14 +2674,17 @@ function renderRecommendedNextStep() {
   if (el.recommendedPackageType) el.recommendedPackageType.textContent = recommendation.packageLabel;
   if (el.recommendedPackageTitle) el.recommendedPackageTitle.textContent = recommendation.title;
   if (el.recommendedPackageNote) el.recommendedPackageNote.textContent = recommendation.packageNote;
+  if (el.recommendedWhy) el.recommendedWhy.textContent = recommendation.whyPath;
   if (el.recommendedBusinessType) el.recommendedBusinessType.textContent = recommendation.businessTypeLabel;
   if (el.recommendedPriority) el.recommendedPriority.textContent = recommendation.priorityLabel;
+  if (el.recommendedBestFit) el.recommendedBestFit.textContent = recommendation.bestForCopy;
   if (el.recommendedSignals) {
     el.recommendedSignals.textContent = recommendation.signals.length
       ? recommendation.signals.slice(0, 4).join(", ")
       : "Signal pattern is still being normalized.";
   }
   if (el.recommendedScope) el.recommendedScope.textContent = recommendation.scopeCopy;
+  if (el.recommendedNextStepNote) el.recommendedNextStepNote.textContent = recommendation.nextStepCopy;
   renderPanelList(el.recommendedDeliverables, recommendation.deliverables);
 
   if (el.recommendedPrimaryCta) {
@@ -2332,6 +2697,88 @@ function renderRecommendedNextStep() {
   }
 }
 
+function renderOfferCards(recommendation) {
+  if (!el.offerGrid) return;
+
+  const options = buildPackageOptionsModel(recommendation);
+  el.offerGrid.innerHTML = "";
+
+  options.forEach((option) => {
+    const card = document.createElement("div");
+    card.className = "offer-card";
+    if (option.isRecommended) card.classList.add("featured");
+
+    if (option.isRecommended) {
+      const badge = document.createElement("p");
+      badge.className = "offer-badge";
+      badge.textContent = option.recommendedLabel;
+      card.appendChild(badge);
+    }
+
+    const top = document.createElement("div");
+    top.className = "offer-top";
+
+    const topCopy = document.createElement("div");
+    const heading = document.createElement("h3");
+    heading.textContent = option.name;
+    topCopy.appendChild(heading);
+
+    const note = document.createElement("p");
+    note.className = "offer-note";
+    note.textContent = option.fitCopy;
+    topCopy.appendChild(note);
+
+    const pricing = document.createElement("div");
+    pricing.className = "offer-pricing";
+
+    const price = document.createElement("div");
+    price.className = "offer-price";
+    price.textContent = option.price;
+    pricing.appendChild(price);
+
+    const billing = document.createElement("div");
+    billing.className = "offer-price-note";
+    billing.textContent = option.billingNote;
+    pricing.appendChild(billing);
+
+    top.appendChild(topCopy);
+    top.appendChild(pricing);
+    card.appendChild(top);
+
+    const list = document.createElement("ul");
+    list.className = "offer-list";
+    option.items.forEach((item) => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      list.appendChild(li);
+    });
+    card.appendChild(list);
+
+    const discount = document.createElement("div");
+    discount.className = "offer-discount";
+
+    const discountLabel = document.createElement("span");
+    discountLabel.className = "offer-discount-label";
+    discountLabel.textContent = "Pricing note";
+    discount.appendChild(discountLabel);
+
+    const discountCopy = document.createElement("p");
+    discountCopy.textContent = option.discount;
+    discount.appendChild(discountCopy);
+    card.appendChild(discount);
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = option.isRecommended ? "btn btn-primary offer-select" : "btn btn-secondary offer-select";
+    button.dataset.packageSelect = option.packageValue;
+    button.dataset.packageMessage = option.packageMessage;
+    button.textContent = option.isRecommended ? `Choose ${option.name}` : `Start with ${option.name}`;
+    card.appendChild(button);
+
+    el.offerGrid.appendChild(card);
+  });
+}
+
 function renderContact() {
   const shouldShow = hasRecommendationHandoffAvailable();
   el.contactSection.classList.toggle("is-hidden", !shouldShow);
@@ -2339,10 +2786,37 @@ function renderContact() {
     state.contactOpen = false;
     state.followUpConsentAccepted = false;
     el.contactForm?.classList.add("is-hidden");
+    if (el.offerGrid) el.offerGrid.innerHTML = "";
     renderFollowUpConsentState();
     renderRecommendedNextStep();
     return;
   }
+
+  const recommendation = deriveRecommendedNextStepModel();
+  renderOfferCards(recommendation);
+
+  if (el.offerSummary) {
+    el.offerSummary.textContent = recommendation
+      ? `The current diagnostic suggests ${recommendation.basePackage} as the strongest starting point. Compare pricing and scope below before deciding how much help you want.`
+      : "Compare pricing and scope below before deciding how much help you want.";
+  }
+  if (el.pricingBannerTitle) {
+    el.pricingBannerTitle.textContent = "Diagnostic Review credit";
+  }
+  if (el.pricingBannerCopy) {
+    el.pricingBannerCopy.textContent = "If you start with a paid Diagnostic Review and move into a Sprint or Advisory within 14 days, the review fee is applied to the starting package.";
+  }
+  if (el.contactShellCopy) {
+    el.contactShellCopy.textContent = recommendation
+      ? `Open the form below if you want us to review this diagnostic, confirm whether ${recommendation.basePackage} is the right starting package, and reply with the next-step discussion or kickoff path.`
+      : "Open the form below if you want a human review of the diagnostic and the right starting package.";
+  }
+  if (el.contactShellNote) {
+    el.contactShellNote.textContent = recommendation
+      ? `We confirm fit, scope, and starting package first. We do not promise outcomes or book work until that review is complete.`
+      : "We confirm fit, scope, and starting package first.";
+  }
+
   if (state.contactOpen) {
     el.contactForm?.classList.remove("is-hidden");
   } else {
