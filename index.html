@@ -102,6 +102,47 @@ h1 { margin-bottom:10px; max-width:22ch; font-size:clamp(2rem, 4vw, 3.2rem); lin
   box-shadow: inset 0 0 0 1px rgba(255,255,255,0.55);
   margin-bottom:12px;
 }
+.trust-compact {
+  display:grid;
+  gap:8px;
+  padding:10px 12px;
+  border:1px solid rgba(31, 79, 130, 0.14);
+  border-radius:12px;
+  background:#f7fafd;
+  margin-bottom:12px;
+}
+.trust-compact-row {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+.trust-compact-copy {
+  margin:0;
+  color:var(--ink);
+  font-size:0.88rem;
+  font-weight:600;
+  line-height:1.4;
+}
+.trust-compact-details {
+  padding-top:8px;
+  border-top:1px solid rgba(15, 23, 42, 0.08);
+  display:grid;
+  gap:8px;
+}
+.trust-compact-details p {
+  margin:0;
+  color:var(--muted);
+  font-size:0.84rem;
+  line-height:1.5;
+}
+.trust-compact-details a {
+  color:var(--accent);
+  font-weight:700;
+  text-decoration:underline;
+  text-decoration-thickness:1px;
+  text-underline-offset:3px;
+}
 .trust-head {
   display:flex;
   align-items:baseline;
@@ -225,9 +266,12 @@ a:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visib
 .status-line:last-child { padding-bottom:0; border-bottom:0; }
 .findings-head { margin-bottom:18px; }
 .findings-grid { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:14px; }
+.finding-card.finding-card-primary { grid-column: 1 / -1; background:#f8fafc; border-color:rgba(53,93,140,0.24); }
 .finding-card h3 { font-size:1.1rem; margin-bottom:10px; }
 .finding-card ul { margin:0; padding-left:1.15rem; color:var(--text); }
+.finding-card ol { margin:0; padding-left:1.2rem; color:var(--text); }
 .finding-card li + li { margin-top:8px; }
+.finding-note { margin-top:10px; color:var(--muted); font-size:0.85rem; line-height:1.45; }
 .contact-card { background:#ffffff; }
 .contact-shell { display:grid; gap:14px; }
 .field-grid { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:14px; }
@@ -264,10 +308,11 @@ a:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visib
   h1 { max-width: 14ch; }
   .chat-header, .dashboard-header, .chat-actions, .footer-row, .footer-disclaimer, .input-footer, .topbar { flex-direction:column; align-items:flex-start; }
   .message { max-width:100%; }
+  .trust-compact-row { align-items:flex-start; }
 }
   </style>
 </head>
-<body data-build="2026-03-24-v28-trust-consent">
+<body data-build="2026-03-25-v29-consent-collapse">
   <main>
     <div class="container narrow">
       <header class="topbar">
@@ -314,7 +359,7 @@ a:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visib
           </div>
 
           <form id="chat-form" class="chat-form" aria-labelledby="chat-input-label" aria-describedby="chat-note sensitive-info-note review-consent-helper">
-            <div class="trust-card" aria-labelledby="trust-use-title">
+            <div id="review-consent-expanded" class="trust-card" aria-labelledby="trust-use-title">
               <div class="trust-head">
                 <p class="muted-label">Trust and use</p>
                 <p class="trust-caption">Required before starting the review</p>
@@ -347,6 +392,17 @@ a:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visib
                   <label class="consent-label" for="review-consent-checkbox">I agree to the <a href="terms-of-use/">Terms of Use</a>, acknowledge the <a href="privacy-policy/">Privacy Policy</a>, and understand this review provides diagnostic guidance only.</label>
                   <p id="review-consent-helper" class="consent-helper">Required before sending the first message.</p>
                 </div>
+              </div>
+            </div>
+            <div id="review-consent-compact" class="trust-compact is-hidden" aria-live="polite">
+              <div class="trust-compact-row">
+                <p class="trust-compact-copy">Terms accepted for this review.</p>
+                <button id="review-consent-toggle" type="button" class="text-button" aria-expanded="false" aria-controls="review-consent-details">Details</button>
+              </div>
+              <div id="review-consent-details" class="trust-compact-details is-hidden">
+                <p>Operational Clarity provides AI-assisted diagnostic guidance and does not provide legal, tax, accounting, or financial advice.</p>
+                <p>Review details are used to generate guidance, improve review quality, and support follow-up if you request next steps.</p>
+                <p>See the <a href="terms-of-use/">Terms of Use</a> and <a href="privacy-policy/">Privacy Policy</a>.</p>
               </div>
             </div>
             <div class="chat-form-head">
@@ -600,13 +656,13 @@ a:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visib
       </nav>
     </div>
     <div class="container narrow footer-disclaimer">
-      <p class="small-text">Build 2026-03-24-v28-trust-consent</p>
+      <p class="small-text">Build 2026-03-25-v29-consent-collapse</p>
     </div>
   </footer>
 
   <script src="operational-intelligence.js"></script>
   <script>
-const BUILD_VERSION = "2026-03-24-v28-trust-consent";
+const BUILD_VERSION = "2026-03-25-v29-consent-collapse";
 
 const CONFIG = {
   functionUrl: "https://lqzvkezgxfknfjnjoqur.supabase.co/functions/v1/business-diagnostic-agent",
@@ -644,6 +700,7 @@ const state = {
   contactOpen: false,
   contactSubmitted: false,
   followUpConsentAccepted: false,
+  reviewConsentDetailsOpen: false,
   contactDetails: null,
   pendingNotificationEvents: [],
   assessmentLogged: false,
@@ -698,6 +755,10 @@ function captureDom() {
   el.sendButton = document.getElementById("send-button");
   el.reviewConsentCheckbox = document.getElementById("review-consent-checkbox");
   el.reviewConsentHelper = document.getElementById("review-consent-helper");
+  el.reviewConsentExpanded = document.getElementById("review-consent-expanded");
+  el.reviewConsentCompact = document.getElementById("review-consent-compact");
+  el.reviewConsentToggle = document.getElementById("review-consent-toggle");
+  el.reviewConsentDetails = document.getElementById("review-consent-details");
   el.contextMeterFill = document.getElementById("context-meter-fill");
   el.contextScoreLabel = document.getElementById("context-score-label");
   el.contextMeterCopy = document.getElementById("context-meter-copy");
@@ -738,6 +799,7 @@ function bindEvents() {
   document.getElementById("start-review-btn")?.addEventListener("click", focusReviewInput);
   el.promptChips?.forEach((chip) => chip.addEventListener("click", handlePromptChipClick));
   el.reviewConsentCheckbox?.addEventListener("change", handleReviewConsentChange);
+  el.reviewConsentToggle?.addEventListener("click", handleReviewConsentDetailsToggle);
   el.followUpConsentCheckbox?.addEventListener("change", handleFollowUpConsentChange);
 }
 
@@ -767,6 +829,13 @@ function updateMessageListVisibility() {
 
 function renderReviewConsentState() {
   const consentAccepted = Boolean(state.reviewConsentAccepted || state.started);
+
+  if (el.reviewConsentExpanded) {
+    el.reviewConsentExpanded.classList.toggle("is-hidden", consentAccepted);
+  }
+  if (el.reviewConsentCompact) {
+    el.reviewConsentCompact.classList.toggle("is-hidden", !consentAccepted);
+  }
   if (el.reviewConsentCheckbox) {
     el.reviewConsentCheckbox.checked = consentAccepted;
     el.reviewConsentCheckbox.disabled = Boolean(state.started);
@@ -775,6 +844,12 @@ function renderReviewConsentState() {
     el.reviewConsentHelper.textContent = state.started
       ? "Accepted for this review."
       : "Required before sending the first message.";
+  }
+  if (el.reviewConsentDetails) {
+    el.reviewConsentDetails.classList.toggle("is-hidden", !state.reviewConsentDetailsOpen || !consentAccepted);
+  }
+  if (el.reviewConsentToggle) {
+    el.reviewConsentToggle.setAttribute("aria-expanded", String(Boolean(state.reviewConsentDetailsOpen && consentAccepted)));
   }
   if (el.sendButton) {
     el.sendButton.disabled = Boolean(state.awaiting || (!state.started && !consentAccepted));
@@ -797,8 +872,20 @@ function renderFollowUpConsentState() {
 
 function handleReviewConsentChange(event) {
   state.reviewConsentAccepted = Boolean(event?.currentTarget?.checked);
+  if (!state.reviewConsentAccepted) {
+    state.reviewConsentDetailsOpen = false;
+  }
+  if (!state.started && state.reviewConsentAccepted) {
+    state.reviewConsentDetailsOpen = false;
+  }
   renderReviewConsentState();
   persistSession();
+}
+
+function handleReviewConsentDetailsToggle() {
+  if (!state.reviewConsentAccepted && !state.started) return;
+  state.reviewConsentDetailsOpen = !state.reviewConsentDetailsOpen;
+  renderReviewConsentState();
 }
 
 function handleFollowUpConsentChange(event) {
@@ -1378,7 +1465,7 @@ function firstMeaningful(values) {
 
 function cleanSummaryValue(value) {
   if (!value) return "Still forming";
-  if (typeof value === "string") return value;
+  if (typeof value === "string") return formatUserFacingText(value);
   return stringifyValue(value);
 }
 
@@ -1521,16 +1608,18 @@ function renderFindings() {
   el.findingsSection.classList.remove("is-hidden");
   el.findingsGrid.innerHTML = "";
 
-  normalizeFindings(findings).forEach((entry) => {
+  const brief = composeDiagnosticBrief(findings, state.intelligenceRecord || buildStructuredSessionRecord(), state.extracted || {});
+  brief.sections.forEach((entry) => {
     const card = document.createElement("div");
     card.className = "card finding-card";
+    if (entry.primary) card.classList.add("finding-card-primary");
 
     const title = document.createElement("h3");
     title.textContent = entry.title;
     card.appendChild(title);
 
-    if (entry.type === "list") {
-      const list = document.createElement("ul");
+    if (entry.type === "list" || entry.type === "ordered_list") {
+      const list = document.createElement(entry.type === "ordered_list" ? "ol" : "ul");
       entry.items.forEach((item) => {
         const li = document.createElement("li");
         li.textContent = item;
@@ -1542,6 +1631,13 @@ function renderFindings() {
       p.className = "section-copy";
       p.textContent = entry.text;
       card.appendChild(p);
+    }
+
+    if (entry.note) {
+      const note = document.createElement("p");
+      note.className = "finding-note";
+      note.textContent = entry.note;
+      card.appendChild(note);
     }
 
     el.findingsGrid.appendChild(card);
@@ -1765,28 +1861,411 @@ function isMeaningfulValue(value) {
 
 function normalizeFindings(findings) {
   if (typeof findings === "string") {
-    return [{ title: "Assessment", type: "text", text: findings }];
+    return [{ title: "Core diagnosis", type: "text", text: findings }];
   }
   if (Array.isArray(findings)) {
-    return [{ title: "Assessment", type: "list", items: findings.map(stringifyValue) }];
+    return [{ title: "Next actions", type: "list", items: findings.map(stringifyValue) }];
   }
   if (findings && typeof findings === "object") {
+    const sectionPlan = [
+      { title: "Core diagnosis", keys: ["main_issue", "priority", "diagnosis", "biggest_leak", "headline"] },
+      { title: "Why it matters", keys: ["value_gap", "costing", "impact", "business_risk", "why_it_matters"] },
+      { title: "Likely cause", keys: ["what_this_likely_means", "root_cause", "cause", "cause_tags", "inferred_causes"] },
+      { title: "First priority", keys: ["first_focus", "diy_vs_help", "first_fix", "first_move"] },
+      { title: "Next actions", keys: ["next_step", "first_moves", "recommendations", "recommendation_ids"] },
+      { title: "Confidence note", keys: ["confidence_note", "confidence_label", "confidence", "clarity_level", "urgency_level"] }
+    ];
+
+    const consumedKeys = new Set();
+    const usedSentences = new Set();
     const entries = [];
-    Object.entries(findings).forEach(([key, value]) => {
-      if (value == null || value === "" || (Array.isArray(value) && value.length === 0)) return;
-      const title = humanizeKey(key);
-      if (Array.isArray(value)) {
-        entries.push({ title, type: "list", items: value.map(stringifyValue) });
-      } else if (typeof value === "object") {
-        const nested = Object.entries(value).map(([nestedKey, nestedValue]) => `${humanizeKey(nestedKey)}: ${stringifyValue(nestedValue)}`);
-        entries.push({ title, type: "list", items: nested });
-      } else {
-        entries.push({ title, type: "text", text: stringifyValue(value) });
-      }
+
+    sectionPlan.forEach((section) => {
+      const value = pickFindingValue(findings, section.keys, consumedKeys);
+      if (!value) return;
+
+      const prepared = prepareFindingEntry(section.title, value, usedSentences);
+      if (!prepared) return;
+
+      entries.push(prepared);
+      section.keys.forEach((key) => consumedKeys.add(key));
     });
-    return entries.length ? entries : [{ title: "Assessment", type: "text", text: "Findings are available, but the response did not include displayable detail." }];
+
+    return entries.length
+      ? entries
+      : [{ title: "Core diagnosis", type: "text", text: "Findings are available, but there is not enough structured detail to render full sections yet." }];
   }
-  return [{ title: "Assessment", type: "text", text: "Findings are available, but the response shape was unexpected." }];
+  return [{ title: "Core diagnosis", type: "text", text: "Findings are available, but the response shape was unexpected." }];
+}
+
+function pickFindingValue(findings, keys, consumedKeys) {
+  for (const key of keys) {
+    if (consumedKeys.has(key)) continue;
+    const value = findings[key];
+    if (value == null || value === "" || (Array.isArray(value) && value.length === 0)) continue;
+    return value;
+  }
+  return null;
+}
+
+function prepareFindingEntry(title, value, usedSentences) {
+  if (Array.isArray(value)) {
+    const items = value
+      .map(stringifyValue)
+      .map((item) => item.trim())
+      .filter((item) => item && !isDuplicateSentence(item, usedSentences));
+    if (!items.length) return null;
+    items.forEach((item) => usedSentences.add(normalizeSentence(item)));
+    return { title, type: "list", items };
+  }
+
+  if (typeof value === "object") {
+    const items = Object.entries(value)
+      .map(([nestedKey, nestedValue]) => `${humanizeKey(nestedKey)}: ${stringifyValue(nestedValue)}`)
+      .map((item) => item.trim())
+      .filter((item) => item && !isDuplicateSentence(item, usedSentences));
+    if (!items.length) return null;
+    items.forEach((item) => usedSentences.add(normalizeSentence(item)));
+    return { title, type: "list", items };
+  }
+
+  const text = stringifyValue(value).trim();
+  if (!text || isDuplicateSentence(text, usedSentences)) return null;
+  usedSentences.add(normalizeSentence(text));
+  return { title, type: "text", text };
+}
+
+function normalizeSentence(value) {
+  return String(value).toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+function isDuplicateSentence(value, usedSentences) {
+  const normalized = normalizeSentence(value);
+  return !normalized || usedSentences.has(normalized);
+}
+
+function composeDiagnosticBrief(findings, intelligence = null, extracted = {}) {
+  if (!findings) {
+    return {
+      title: "Your diagnostic brief",
+      summary: "No findings available yet.",
+      sections: []
+    };
+  }
+
+  const findingsObject = findings && typeof findings === "object" && !Array.isArray(findings) ? findings : {};
+  const display = intelligence?.display || {};
+  const symptoms = normalizeSignalLabels(display.symptom_labels, findingsObject.symptom_tags, extracted.symptoms, extracted.pain_points).slice(0, 3);
+  const causes = normalizeSignalLabels(display.cause_labels, findingsObject.cause_tags, findingsObject.inferred_causes, extracted.cause_tags).slice(0, 3);
+
+  const coreDiagnosis = firstMeaningful([
+    findingsObject.core_diagnosis,
+    findingsObject.main_issue,
+    findingsObject.priority,
+    findingsObject.quick_read,
+    findingsObject.what_is_hurting,
+    findingsObject.summary
+  ]) || "The operating pattern points to execution friction that is weakening margin and consistency.";
+
+  const businessImpact = firstMeaningful([
+    findingsObject.business_impact,
+    findingsObject.value_gap,
+    findingsObject.costing,
+    findingsObject.what_it_is_costing
+  ]) || inferBusinessImpact(symptoms, causes, extracted);
+
+  const rootCause = firstMeaningful([
+    findingsObject.likely_root_cause,
+    findingsObject.what_this_likely_means,
+    findingsObject.root_cause,
+    Array.isArray(findingsObject.inferred_causes) ? findingsObject.inferred_causes[0] : null,
+    causes[0] ? `Likely rooted in ${causes[0].toLowerCase()}.` : null
+  ]) || "The current system is likely relying on heroics instead of a consistent operating rhythm.";
+
+  const firstPriority = firstMeaningful([
+    findingsObject.first_priority,
+    findingsObject.first_focus,
+    findingsObject.what_to_do_first,
+    findingsObject.next_step,
+    Array.isArray(findingsObject.first_moves) ? findingsObject.first_moves[0] : null,
+    display.recommendation_titles?.[0]
+  ]) || "Set one clear operating priority for the next two weeks and assign direct ownership.";
+
+  const nextActions = dedupeList(
+    normalizeActionList([
+      findingsObject.next_actions,
+      findingsObject.first_moves,
+      findingsObject.recommendations,
+      findingsObject.diy_vs_help,
+      findingsObject.next_step,
+      display.recommendation_titles
+    ])
+  ).slice(0, 4);
+
+  const confidenceSummary = summarizeConfidence(findingsObject, symptoms, causes);
+
+  return {
+    title: deriveFindingsTitle(findingsObject),
+    summary: deriveFindingsSummary(findingsObject),
+    sections: [
+      {
+        title: "Core diagnosis",
+        text: withPeriod(coreDiagnosis),
+        note: symptoms.length ? `Primary signals: ${symptoms.join(", ")}.` : null,
+        primary: true
+      },
+      { title: "Business impact", text: withPeriod(businessImpact) },
+      { title: "Likely root cause", text: withPeriod(rootCause) },
+      { title: "First priority", text: withPeriod(firstPriority) },
+      {
+        title: "Next actions",
+        type: "ordered_list",
+        items: nextActions.length
+          ? nextActions
+          : ["Confirm one owner, one metric, and one review cadence before adding more initiatives."]
+      },
+      {
+        title: "Confidence / signal note",
+        text: confidenceSummary
+      }
+    ]
+  };
+}
+
+function normalizeSignalLabels(...sources) {
+  return dedupeList(
+    sources
+      .flatMap((source) => Array.isArray(source) ? source : source ? [source] : [])
+      .map((item) => stringifyValue(item))
+      .map((item) => item.replace(/[_-]/g, " ").trim())
+      .filter((item) => item && !/^\[|\]$/.test(item))
+      .map((item) => item.replace(/\b\w/g, (char) => char.toUpperCase()))
+  );
+}
+
+function normalizeActionList(sources) {
+  return sources
+    .flatMap((source) => Array.isArray(source) ? source : source ? [source] : [])
+    .map((item) => stringifyValue(item).trim())
+    .filter((item) => item && item.length > 12)
+    .filter((item) => !/(summary|n\/a|unknown|assessment)/i.test(item));
+}
+
+function inferBusinessImpact(symptoms, causes, extracted = {}) {
+  const corpus = normalizeCorpus([
+    symptoms.join(" "),
+    causes.join(" "),
+    stringifyValue(extracted.main_problem || "")
+  ].join(" "));
+  if (/margin|underpric|cost|rework/.test(corpus)) return "Margin is likely leaking through pricing misses and avoidable rework.";
+  if (/cash|collection|aging|slow/.test(corpus)) return "Cash conversion is likely slower than it should be, increasing day-to-day pressure.";
+  if (/schedule|dispatch|handoff|capacity/.test(corpus)) return "Execution instability is likely creating labor waste, delays, and missed commitments.";
+  return "The current operating pattern is likely increasing effort while suppressing profit and delivery reliability.";
+}
+
+function summarizeConfidence(findingsObject, symptoms, causes) {
+  const confidenceRaw = findingsObject.confidence;
+  const confidencePercent = typeof confidenceRaw === "number"
+    ? Math.round(Math.max(0, Math.min(1, confidenceRaw)) * 100)
+    : null;
+  const contextScore = Number(state.contextScore || 0);
+  const signalCount = symptoms.length + causes.length;
+  const strength = confidencePercent != null
+    ? `${confidencePercent}% confidence`
+    : contextScore >= 85
+      ? "High confidence"
+      : contextScore >= 60
+        ? "Medium confidence"
+        : "Directional confidence";
+  return `${strength} based on ${signalCount || "limited"} consistent signal${signalCount === 1 ? "" : "s"}. Validate with job-level numbers before major changes.`;
+}
+
+function withPeriod(value) {
+  const trimmed = String(value || "").trim();
+  if (!trimmed) return "";
+  return /[.!?]$/.test(trimmed) ? trimmed : `${trimmed}.`;
+}
+
+function dedupeList(values) {
+  const seen = new Set();
+  const result = [];
+  values.forEach((value) => {
+    const key = String(value || "").trim().toLowerCase();
+    if (!key || seen.has(key)) return;
+    seen.add(key);
+    result.push(String(value).trim());
+  });
+  return result;
+}
+
+function normalizeCorpus(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/[^\w\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function composeDiagnosticBrief(findings, intelligence = null, extracted = {}) {
+  if (!findings) {
+    return {
+      title: "Your diagnostic brief",
+      summary: "No findings available yet.",
+      sections: []
+    };
+  }
+
+  const findingsObject = findings && typeof findings === "object" && !Array.isArray(findings) ? findings : {};
+  const display = intelligence?.display || {};
+  const symptoms = normalizeSignalLabels(display.symptom_labels, findingsObject.symptom_tags, extracted.symptoms, extracted.pain_points).slice(0, 3);
+  const causes = normalizeSignalLabels(display.cause_labels, findingsObject.cause_tags, findingsObject.inferred_causes, extracted.cause_tags).slice(0, 3);
+
+  const coreDiagnosis = firstMeaningful([
+    findingsObject.core_diagnosis,
+    findingsObject.main_issue,
+    findingsObject.priority,
+    findingsObject.quick_read,
+    findingsObject.what_is_hurting,
+    findingsObject.summary
+  ]) || "The operating pattern points to execution friction that is weakening margin and consistency.";
+
+  const businessImpact = firstMeaningful([
+    findingsObject.business_impact,
+    findingsObject.value_gap,
+    findingsObject.costing,
+    findingsObject.what_it_is_costing
+  ]) || inferBusinessImpact(symptoms, causes, extracted);
+
+  const rootCause = firstMeaningful([
+    findingsObject.likely_root_cause,
+    findingsObject.what_this_likely_means,
+    findingsObject.root_cause,
+    Array.isArray(findingsObject.inferred_causes) ? findingsObject.inferred_causes[0] : null,
+    causes[0] ? `Likely rooted in ${causes[0].toLowerCase()}.` : null
+  ]) || "The current system is likely relying on heroics instead of a consistent operating rhythm.";
+
+  const firstPriority = firstMeaningful([
+    findingsObject.first_priority,
+    findingsObject.first_focus,
+    findingsObject.what_to_do_first,
+    findingsObject.next_step,
+    Array.isArray(findingsObject.first_moves) ? findingsObject.first_moves[0] : null,
+    display.recommendation_titles?.[0]
+  ]) || "Set one clear operating priority for the next two weeks and assign direct ownership.";
+
+  const nextActions = dedupeList(
+    normalizeActionList([
+      findingsObject.next_actions,
+      findingsObject.first_moves,
+      findingsObject.recommendations,
+      findingsObject.diy_vs_help,
+      findingsObject.next_step,
+      display.recommendation_titles
+    ])
+  ).slice(0, 4);
+
+  const confidenceSummary = summarizeConfidence(findingsObject, symptoms, causes);
+
+  return {
+    title: deriveFindingsTitle(findingsObject),
+    summary: deriveFindingsSummary(findingsObject),
+    sections: [
+      {
+        title: "Core diagnosis",
+        text: withPeriod(coreDiagnosis),
+        note: symptoms.length ? `Primary signals: ${symptoms.join(", ")}.` : null,
+        primary: true
+      },
+      { title: "Business impact", text: withPeriod(businessImpact) },
+      { title: "Likely root cause", text: withPeriod(rootCause) },
+      { title: "First priority", text: withPeriod(firstPriority) },
+      {
+        title: "Next actions",
+        type: "ordered_list",
+        items: nextActions.length
+          ? nextActions
+          : ["Confirm one owner, one metric, and one review cadence before adding more initiatives."]
+      },
+      {
+        title: "Confidence / signal note",
+        text: confidenceSummary
+      }
+    ]
+  };
+}
+
+function normalizeSignalLabels(...sources) {
+  return dedupeList(
+    sources
+      .flatMap((source) => Array.isArray(source) ? source : source ? [source] : [])
+      .map((item) => stringifyValue(item))
+      .map((item) => item.replace(/[_-]/g, " ").trim())
+      .filter((item) => item && !/^\[|\]$/.test(item))
+      .map((item) => item.replace(/\b\w/g, (char) => char.toUpperCase()))
+  );
+}
+
+function normalizeActionList(sources) {
+  return sources
+    .flatMap((source) => Array.isArray(source) ? source : source ? [source] : [])
+    .map((item) => stringifyValue(item).trim())
+    .filter((item) => item && item.length > 12)
+    .filter((item) => !/(summary|n\/a|unknown|assessment)/i.test(item));
+}
+
+function inferBusinessImpact(symptoms, causes, extracted = {}) {
+  const corpus = normalizeCorpus([
+    symptoms.join(" "),
+    causes.join(" "),
+    stringifyValue(extracted.main_problem || "")
+  ].join(" "));
+  if (/margin|underpric|cost|rework/.test(corpus)) return "Margin is likely leaking through pricing misses and avoidable rework.";
+  if (/cash|collection|aging|slow/.test(corpus)) return "Cash conversion is likely slower than it should be, increasing day-to-day pressure.";
+  if (/schedule|dispatch|handoff|capacity/.test(corpus)) return "Execution instability is likely creating labor waste, delays, and missed commitments.";
+  return "The current operating pattern is likely increasing effort while suppressing profit and delivery reliability.";
+}
+
+function summarizeConfidence(findingsObject, symptoms, causes) {
+  const confidenceRaw = findingsObject.confidence;
+  const confidencePercent = typeof confidenceRaw === "number"
+    ? Math.round(Math.max(0, Math.min(1, confidenceRaw)) * 100)
+    : null;
+  const contextScore = Number(state.contextScore || 0);
+  const signalCount = symptoms.length + causes.length;
+  const strength = confidencePercent != null
+    ? `${confidencePercent}% confidence`
+    : contextScore >= 85
+      ? "High confidence"
+      : contextScore >= 60
+        ? "Medium confidence"
+        : "Directional confidence";
+  return `${strength} based on ${signalCount || "limited"} consistent signal${signalCount === 1 ? "" : "s"}. Validate with job-level numbers before major changes.`;
+}
+
+function withPeriod(value) {
+  const trimmed = String(value || "").trim();
+  if (!trimmed) return "";
+  return /[.!?]$/.test(trimmed) ? trimmed : `${trimmed}.`;
+}
+
+function dedupeList(values) {
+  const seen = new Set();
+  const result = [];
+  values.forEach((value) => {
+    const key = String(value || "").trim().toLowerCase();
+    if (!key || seen.has(key)) return;
+    seen.add(key);
+    result.push(String(value).trim());
+  });
+  return result;
+}
+
+function normalizeCorpus(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/[^\w\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function humanizeKey(key) {
@@ -1801,7 +2280,15 @@ function humanizeKey(key) {
     diy_vs_help: "First fix",
     diyvshelp: "First fix",
     next_step: "First fix",
-    summary: "Summary"
+    summary: "Summary",
+    symptom_tags: "Symptoms",
+    cause_tags: "Likely causes",
+    inferred_causes: "Likely causes",
+    recommendation_ids: "Recommendations",
+    recommendations: "Recommendations",
+    operating_archetype: "Operating pattern",
+    business_type: "Business type",
+    primary_business_type: "Business type"
   };
   const normalized = String(key).replace(/[_\s-]/g, "").toLowerCase();
   if (map[normalized]) return map[normalized];
@@ -1810,18 +2297,18 @@ function humanizeKey(key) {
 
 function deriveFindingsTitle(findings) {
   if (typeof findings === "object" && findings && !Array.isArray(findings)) {
-    return findings.title || findings.headline || findings.summary_title || "Your findings";
+    return findings.title || findings.headline || findings.summary_title || "Your diagnostic brief";
   }
-  return "Your findings";
+  return "Your diagnostic brief";
 }
 
 function deriveFindingsSummary(findings) {
-  if (typeof findings === "string") return findings;
-  if (Array.isArray(findings)) return "There is enough context to surface the main pressure points and likely leaks inside the operation.";
+  if (typeof findings === "string") return "Focused operator read: diagnosis, cause, first priority, and next actions.";
+  if (Array.isArray(findings)) return "Focused operator read with clear next actions.";
   if (findings && typeof findings === "object") {
-    return findings.summary || findings.overview || findings.executive_summary || "There is enough context to show what is working, what is hurting, and what should be fixed first.";
+    return findings.overview || findings.executive_summary || "Focused operator read: diagnosis, cause, first priority, and next actions.";
   }
-  return "There is enough context to show what is working, what is hurting, and what should be fixed first.";
+  return "Focused operator read: diagnosis, cause, first priority, and next actions.";
 }
 
 function deriveLeadPrompt(findings) {
@@ -1833,9 +2320,58 @@ function deriveLeadPrompt(findings) {
 }
 
 function stringifyValue(value) {
-  if (typeof value === "string") return value;
+  if (typeof value === "string") return formatUserFacingText(value);
   if (typeof value === "number" || typeof value === "boolean") return String(value);
-  return JSON.stringify(value);
+  if (Array.isArray(value)) return value.map((item) => stringifyValue(item)).join(", ");
+  if (value && typeof value === "object") {
+    return Object.entries(value)
+      .map(([key, nestedValue]) => `${humanizeKey(key)}: ${stringifyValue(nestedValue)}`)
+      .join("; ");
+  }
+  return "";
+}
+
+function buildTaxonomyLookup() {
+  const lookup = new Map();
+  const taxonomy = window.OperationalClarityIntelligence?.TAXONOMY;
+  if (!taxonomy) return lookup;
+
+  const groups = [
+    taxonomy.businessTypes,
+    taxonomy.businessModels,
+    taxonomy.symptomTags,
+    taxonomy.causeTags,
+    taxonomy.operatingArchetypes
+  ];
+  groups.forEach((items) => {
+    (Array.isArray(items) ? items : []).forEach((item) => {
+      if (item?.slug && item?.label) lookup.set(String(item.slug).toLowerCase(), item.label);
+    });
+  });
+
+  (Array.isArray(taxonomy.recommendationLibrary) ? taxonomy.recommendationLibrary : []).forEach((item) => {
+    if (item?.id && item?.title) lookup.set(String(item.id).toLowerCase(), item.title);
+    if (item?.slug && item?.title) lookup.set(String(item.slug).toLowerCase(), item.title);
+  });
+
+  return lookup;
+}
+
+const TAXONOMY_LABEL_LOOKUP = buildTaxonomyLookup();
+
+function formatUserFacingText(value) {
+  const text = String(value || "").trim();
+  if (!text) return "";
+
+  const taxonomyHit = TAXONOMY_LABEL_LOOKUP.get(text.toLowerCase());
+  if (taxonomyHit) return taxonomyHit;
+
+  if (/^[a-z0-9]+(?:[_-][a-z0-9]+)+$/.test(text)) {
+    const sentence = text.replace(/[_-]+/g, " ");
+    return sentence.charAt(0).toUpperCase() + sentence.slice(1);
+  }
+
+  return text;
 }
 
 async function callDiagnosticAgent(conversation) {
@@ -1974,6 +2510,7 @@ function resetSession() {
   state.awaiting = false;
   state.started = false;
   state.reviewConsentAccepted = false;
+  state.reviewConsentDetailsOpen = false;
   state.contextScore = 0;
   state.contactOpen = false;
   state.contactSubmitted = false;
