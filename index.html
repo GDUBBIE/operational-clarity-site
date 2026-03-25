@@ -96,18 +96,27 @@
             <a href="terms-of-use/">Terms</a>
             <a href="contact/">Contact</a>
           </nav>
+
+          <div class="mobile-console-actions" aria-label="Mobile workspace panels">
+            <a class="mobile-panel-trigger" href="#system-panel">System panel</a>
+            <a class="mobile-panel-trigger" href="#insights-panel">View insights</a>
+          </div>
         </div>
       </header>
     </div>
 
     <section class="workspace console-workspace">
       <div class="container workspace-shell">
-        <aside class="workspace-utility">
+        <aside id="system-panel" class="workspace-utility">
+          <a class="mobile-panel-scrim" href="#diagnostic" aria-label="Close system panel"></a>
           <div class="utility-stack">
             <div class="card utility-card">
-              <div class="utility-section">
-                <p class="kicker">System panel</p>
-                <h2>Session map</h2>
+              <div class="utility-section utility-panel-head">
+                <div>
+                  <p class="kicker">System panel</p>
+                  <h2>Session map</h2>
+                </div>
+                <a class="mobile-panel-close text-button" href="#diagnostic">Close</a>
               </div>
 
               <div class="utility-section">
@@ -371,7 +380,8 @@
           </section>
         </div>
 
-        <aside class="workspace-side">
+        <aside id="insights-panel" class="workspace-side">
+          <a class="mobile-panel-scrim" href="#diagnostic" aria-label="Close insights panel"></a>
           <div class="card dashboard-card insight-rail">
           <div class="dashboard-header insight-header">
             <div>
@@ -379,7 +389,10 @@
               <h2>Session intelligence</h2>
               <p class="header-copy">Readiness, extracted signal, and recommended next steps stay visible while the diagnostic runs.</p>
             </div>
-            <button id="reset-session" type="button" class="text-button">Reset review</button>
+            <div class="insight-header-actions">
+              <button id="reset-session" type="button" class="text-button">Reset review</button>
+              <a class="mobile-panel-close text-button" href="#diagnostic">Close</a>
+            </div>
           </div>
 
           <div class="dashboard-grid">
