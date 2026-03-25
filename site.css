@@ -905,6 +905,28 @@ body.internal-shell a {
   color: var(--accent);
 }
 
+body.subpage-shell a.btn-primary,
+body.subpage-shell a.btn-primary:link,
+body.subpage-shell a.btn-primary:visited {
+  background: linear-gradient(180deg, #174765 0%, #103245 100%);
+}
+
+body.subpage-shell a.btn-primary:hover,
+body.subpage-shell a.btn-primary:focus,
+body.subpage-shell a.btn-primary:focus-visible,
+body.subpage-shell a.btn-primary:active {
+  background: linear-gradient(180deg, #123d56 0%, #0d2b3c 100%);
+}
+
+body.subpage-shell a.btn-primary,
+body.subpage-shell a.btn-primary:visited,
+body.subpage-shell a.btn-primary:hover,
+body.subpage-shell a.btn-primary:focus,
+body.subpage-shell a.btn-primary:focus-visible,
+body.subpage-shell a.btn-primary:active {
+  color: #ffffff;
+}
+
 body.app-shell .input-shell {
   border: 1px solid var(--line-strong);
   border-radius: 20px;
