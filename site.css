@@ -3250,10 +3250,25 @@ body.app-shell .workspace-side .dashboard-card {
   box-shadow: none;
 }
 
+body.app-shell .mobile-console-actions,
+body.app-shell .mobile-panel-trigger,
+body.app-shell .mobile-panel-close,
+body.app-shell .mobile-panel-scrim {
+  display: none;
+}
+
 body.app-shell .workspace-utility .utility-card {
   padding: 10px 12px;
   border-radius: 16px;
   background: rgba(247, 250, 252, 0.82);
+}
+
+body.app-shell .utility-panel-head,
+body.app-shell .insight-header-actions {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 body.app-shell .utility-card .kicker,
@@ -3489,8 +3504,440 @@ body.app-shell .panel-list li::before {
   }
 }
 
+@media (max-width: 1080px) {
+  body.app-shell {
+    overflow-x: clip;
+  }
+
+  body.app-shell .console-main {
+    padding-top: 0;
+  }
+
+  body.app-shell .container {
+    width: min(calc(100% - 1rem), 1560px);
+  }
+
+  body.app-shell .topbar {
+    margin: 8px 0 8px;
+    padding: max(12px, env(safe-area-inset-top)) 14px 12px;
+    border-radius: 18px;
+    gap: 10px;
+  }
+
+  body.app-shell .topbar-authority {
+    gap: 4px;
+  }
+
+  body.app-shell .topbar-statement {
+    max-width: none;
+    font-size: 0.82rem;
+    line-height: 1.36;
+  }
+
+  body.app-shell .topbar-utility {
+    width: 100%;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  body.app-shell .topbar-context {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    gap: 6px;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+  }
+
+  body.app-shell .context-chip {
+    min-width: 0;
+    flex: 1 1 0;
+    padding: 8px 10px;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  body.app-shell .context-label {
+    font-size: 0.66rem;
+  }
+
+  body.app-shell .context-value {
+    font-size: 0.84rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  body.app-shell .topbar-links {
+    gap: 12px;
+  }
+
+  body.app-shell .topbar-links a {
+    font-size: 0.82rem;
+  }
+
+  body.app-shell .mobile-console-actions {
+    display: flex;
+    align-self: flex-start;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding-top: 2px;
+  }
+
+  body.app-shell .mobile-panel-trigger,
+  body.app-shell .mobile-panel-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+    padding: 0 11px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(247, 250, 252, 0.88);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+
+  body.app-shell .workspace-utility .mobile-panel-close,
+  body.app-shell .workspace-side .mobile-panel-close {
+    border-color: rgba(19, 33, 45, 0.1);
+    background: rgba(19, 33, 45, 0.05);
+    color: var(--ink);
+  }
+
+  body.app-shell .workspace {
+    padding: 0 0 16px;
+  }
+
+  body.app-shell .workspace-shell {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  body.app-shell .workspace-main {
+    gap: 8px;
+  }
+
+  body.app-shell .workspace-utility,
+  body.app-shell .workspace-side {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    background: rgba(12, 23, 34, 0.42);
+    touch-action: none;
+    transition: opacity 0.22s ease, visibility 0.22s ease;
+  }
+
+  body.app-shell .workspace-utility:target,
+  body.app-shell .workspace-side:target {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  body.app-shell .mobile-panel-scrim {
+    display: block;
+    position: absolute;
+    inset: 0;
+  }
+
+  body.app-shell .workspace-utility .utility-stack {
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(292px, calc(100vw - 56px));
+    padding: 8px 8px 8px max(0px, env(safe-area-inset-left));
+    overflow: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    transform: translateX(-102%);
+    transition: transform 0.22s ease;
+  }
+
+  body.app-shell .workspace-utility:target .utility-stack {
+    transform: translateX(0);
+  }
+
+  body.app-shell .workspace-utility .utility-card {
+    box-sizing: border-box;
+    min-height: 100dvh;
+    padding: max(14px, env(safe-area-inset-top)) 14px calc(18px + env(safe-area-inset-bottom));
+    border-radius: 0 18px 18px 0;
+    background: rgba(247, 250, 252, 0.98);
+    box-shadow: 0 18px 40px rgba(12, 23, 34, 0.16);
+  }
+
+  body.app-shell .workspace-side .insight-rail {
+    box-sizing: border-box;
+    position: absolute;
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-height: min(78dvh, calc(100dvh - 56px));
+    overflow: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    padding:
+      8px
+      max(12px, env(safe-area-inset-right))
+      calc(14px + env(safe-area-inset-bottom))
+      max(12px, env(safe-area-inset-left));
+    border-radius: 20px 20px 0 0;
+    background: rgba(246, 249, 252, 0.98);
+    box-shadow: 0 -20px 48px rgba(12, 23, 34, 0.18);
+    transform: translateY(104%);
+    transition: transform 0.22s ease;
+  }
+
+  body.app-shell .workspace-side:target .insight-rail {
+    transform: translateY(0);
+  }
+
+  body.app-shell .workspace-side .insight-rail::before {
+    content: "";
+    display: block;
+    width: 38px;
+    height: 4px;
+    margin: 0 auto 10px;
+    border-radius: 999px;
+    background: rgba(19, 33, 45, 0.16);
+  }
+
+  body.app-shell .composer-card {
+    padding: 12px;
+    border-radius: 16px;
+  }
+
+  body.app-shell .composer-intro {
+    margin-bottom: 4px;
+  }
+
+  body.app-shell .composer-title {
+    font-size: clamp(1.08rem, 4.8vw, 1.24rem);
+    line-height: 1.08;
+  }
+
+  body.app-shell .chat-form textarea {
+    min-height: 136px;
+    padding: 12px 14px;
+    border-radius: 14px;
+  }
+
+  body.app-shell .composer-footer {
+    gap: 8px;
+    margin-top: 8px;
+    padding-top: 8px;
+  }
+
+  body.app-shell .composer-footer-main,
+  body.app-shell .composer-support {
+    gap: 6px;
+  }
+
+  body.app-shell .prompt-chip {
+    min-height: 29px;
+    padding: 0 10px;
+    font-size: 0.78rem;
+  }
+
+  body.app-shell .command-helper {
+    max-width: none;
+    font-size: 0.78rem;
+  }
+
+  body.app-shell .composer-footer .btn {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+  }
+
+  body.app-shell .transcript-stage:not(:has(.message-list.is-empty)) {
+    animation: mobile-transcript-enter 0.18s ease;
+  }
+
+  body.app-shell .transcript-stage:has(.message-list.is-empty) {
+    display: none;
+  }
+
+  body.app-shell .transcript-card {
+    padding: 12px;
+    border-radius: 16px;
+    overflow: clip;
+  }
+
+  body.app-shell .transcript-head {
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+  }
+
+  body.app-shell .transcript-head .header-copy {
+    font-size: 0.84rem;
+  }
+
+  body.app-shell .utility-panel-head,
+  body.app-shell .insight-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: inherit;
+  }
+
+  body.app-shell .utility-panel-head {
+    align-items: center;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(19, 33, 45, 0.08);
+  }
+
+  body.app-shell .insight-header {
+    margin: 0 -12px 8px;
+    padding: 0 12px 8px;
+  }
+
+  body.app-shell .insight-header-actions {
+    align-items: center;
+  }
+
+  body.app-shell .console-footer .footer-row {
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  }
+}
+
 @media (max-width: 720px) {
   body.app-shell .utility-section-compact {
     display: grid;
+  }
+}
+
+@media (max-width: 768px) {
+  body.app-shell .topbar {
+    margin: 6px 0 6px;
+    padding: max(10px, env(safe-area-inset-top)) 12px 10px;
+    border-radius: 16px;
+  }
+
+  body.app-shell .topbar-statement,
+  body.app-shell .topbar-links {
+    display: none;
+  }
+
+  body.app-shell .topbar-context {
+    gap: 5px;
+  }
+
+  body.app-shell .context-chip {
+    padding: 7px 8px;
+  }
+
+  body.app-shell .context-label {
+    font-size: 0.62rem;
+  }
+
+  body.app-shell .context-value {
+    font-size: 0.78rem;
+  }
+
+  body.app-shell .mobile-console-actions {
+    gap: 6px;
+  }
+
+  body.app-shell .mobile-panel-trigger,
+  body.app-shell .mobile-panel-close {
+    min-height: 30px;
+    padding: 0 9px;
+    font-size: 0.74rem;
+  }
+
+  body.app-shell .workspace {
+    padding: 0 0 12px;
+  }
+
+  body.app-shell .workspace-main {
+    gap: 6px;
+  }
+
+  body.app-shell .composer-card {
+    padding: 10px;
+    border-radius: 14px;
+  }
+
+  body.app-shell .chat-form textarea {
+    min-height: 118px;
+    padding: 11px 12px;
+  }
+
+  body.app-shell .composer-footer {
+    gap: 7px;
+    margin-top: 7px;
+    padding-top: 7px;
+  }
+
+  body.app-shell .input-guidance summary,
+  body.app-shell .command-helper {
+    font-size: 0.76rem;
+  }
+
+  body.app-shell .workspace-side .insight-rail {
+    max-height: min(80dvh, calc(100dvh - 44px));
+    padding:
+      8px
+      max(10px, env(safe-area-inset-right))
+      calc(12px + env(safe-area-inset-bottom))
+      max(10px, env(safe-area-inset-left));
+    border-radius: 18px 18px 0 0;
+  }
+
+  body.app-shell .workspace-utility .utility-stack {
+    width: min(274px, calc(100vw - 40px));
+    padding: 6px 6px 6px max(0px, env(safe-area-inset-left));
+  }
+
+  body.app-shell .workspace-utility .utility-card {
+    border-radius: 0 16px 16px 0;
+    padding: max(12px, env(safe-area-inset-top)) 12px calc(16px + env(safe-area-inset-bottom));
+  }
+
+  body.app-shell .utility-panel-head {
+    padding-bottom: 7px;
+  }
+
+  body.app-shell .insight-header {
+    margin: 0 -10px 7px;
+    padding: 0 10px 7px;
+  }
+
+  body.app-shell .insight-header .header-copy {
+    font-size: 0.78rem;
+  }
+
+  body.app-shell .workspace-side .insight-rail::before {
+    margin-bottom: 8px;
+  }
+
+  body.app-shell .console-footer .footer-row {
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  }
+}
+
+@keyframes mobile-transcript-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
