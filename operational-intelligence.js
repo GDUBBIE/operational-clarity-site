@@ -1388,6 +1388,9 @@
       normalization_source: normalizationSource,
       agent_normalized: agentNormalizedFlag
     };
+    const pendingNotificationEvents = Array.isArray(state.pendingNotificationEvents)
+      ? state.pendingNotificationEvents
+      : [];
 
     return {
       schema_version: SCHEMA_VERSION,
@@ -1395,6 +1398,10 @@
       raw_session: rawSession,
       normalized_features: normalizedFeatures,
       product_learning: productLearning,
+      contact_details: state.contactDetails && typeof state.contactDetails === "object"
+        ? state.contactDetails
+        : null,
+      pending_notification_events: pendingNotificationEvents,
       normalization_source: normalizationSource,
       agent_normalized: agentNormalizedFlag,
       agent_normalized_payload: agentNormalized,

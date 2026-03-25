@@ -614,11 +614,10 @@ const CONFIG = {
   requestTimeoutMs: 300000,
   freeFollowupLimit: 3,
   sessionStorageKey: "oc_live_diagnostic_session_v14",
-  leadStorageKey: "oc_leads_local_v1",
   assessmentHistoryKey: "oc_assessment_history_v1",
   assessmentArchiveKey: "oc_assessment_archive_v1",
   intelligenceArchiveKey: "oc_intelligence_sessions_v1",
-  leadEndpoint: ""
+  syncRetryLimit: 3
 };
 
 const SYSTEM_MESSAGE = {
@@ -645,6 +644,8 @@ const state = {
   contactOpen: false,
   contactSubmitted: false,
   followUpConsentAccepted: false,
+  contactDetails: null,
+  pendingNotificationEvents: [],
   assessmentLogged: false,
   anonymousAssessmentSaved: false,
   sessionId: createSessionId(),
@@ -1207,6 +1208,19 @@ function refreshStructuredSessionIntelligence({ sync = false } = {}) {
   return record;
 }
 
+function queueNotificationEvent(eventType, metadata = {}) {
+  const allowed = new Set(["contact_submitted", "package_selected"]);
+  if (!allowed.has(eventType)) return;
+  const pending = Array.isArray(state.pendingNotificationEvents) ? state.pendingNotificationEvents : [];
+  const next = pending.filter((entry) => entry?.event_type !== eventType);
+  next.push({
+    event_type: eventType,
+    triggered_at: new Date().toISOString(),
+    metadata
+  });
+  state.pendingNotificationEvents = next;
+}
+
 function queueStructuredSessionSync(record) {
   if (!CONFIG.intelligenceIngestUrl) {
     state.intelligenceSyncStatus = "Local only";
@@ -1240,6 +1254,7 @@ async function syncStructuredSessionRecord(record) {
 
     state.lastIntelligenceSyncedAt = new Date().toISOString();
     state.intelligenceSyncStatus = "Synced";
+    state.pendingNotificationEvents = [];
   } catch (error) {
     state.intelligenceSyncStatus = "Local backup";
     if (INTERNAL_VIEW_ENABLED) {
@@ -1591,24 +1606,30 @@ async function handleContactSubmit(event) {
   }
 
   try {
-    if (CONFIG.leadEndpoint) {
-      const response = await fetch(CONFIG.leadEndpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+    state.contactDetails = {
+      name: payload.name,
+      email: payload.email,
+      company: payload.company,
+      phone: payload.phone || null,
+      package: payload.package || null,
+      message: payload.message,
+      follow_up_consent: payload.follow_up_consent,
+      submitted_at: payload.submitted_at
+    };
+    queueNotificationEvent("contact_submitted", { source: "contact_form" });
+    if (payload.package) {
+      queueNotificationEvent("package_selected", {
+        package: payload.package,
+        source: "contact_form"
       });
-      if (!response.ok) throw new Error("Lead capture failed.");
-    } else {
-      const saved = JSON.parse(localStorage.getItem(CONFIG.leadStorageKey) || "[]");
-      saved.push(payload);
-      localStorage.setItem(CONFIG.leadStorageKey, JSON.stringify(saved));
     }
-
     markAnonymousAssessmentAsContacted();
     state.contactSubmitted = true;
     if (!state.completedAt && state.findings) state.completedAt = new Date().toISOString();
-    refreshStructuredSessionIntelligence({ sync: true });
-    showNotice(el.contactMessage, "Request saved locally.", "success");
+    const record = refreshStructuredSessionIntelligence({ sync: false });
+    if (!record) throw new Error("Unable to build session payload.");
+    await syncStructuredSessionRecord(record);
+    showNotice(el.contactMessage, "Request sent successfully.", "success");
     state.followUpConsentAccepted = false;
     el.contactForm.reset();
     el.leadMessage.value = deriveLeadPrompt(state.findings);
@@ -1889,6 +1910,8 @@ function persistSession() {
     contactOpen: state.contactOpen,
     contactSubmitted: state.contactSubmitted,
     followUpConsentAccepted: state.followUpConsentAccepted,
+    contactDetails: state.contactDetails,
+    pendingNotificationEvents: state.pendingNotificationEvents,
     assessmentLogged: state.assessmentLogged,
     anonymousAssessmentSaved: state.anonymousAssessmentSaved,
     sessionId: state.sessionId,
@@ -1922,6 +1945,8 @@ function restoreSession() {
     state.contactOpen = Boolean(saved.contactOpen);
     state.contactSubmitted = Boolean(saved.contactSubmitted);
     state.followUpConsentAccepted = Boolean(saved.followUpConsentAccepted);
+    state.contactDetails = saved.contactDetails && typeof saved.contactDetails === "object" ? saved.contactDetails : null;
+    state.pendingNotificationEvents = Array.isArray(saved.pendingNotificationEvents) ? saved.pendingNotificationEvents : [];
     state.assessmentLogged = Boolean(saved.assessmentLogged);
     state.anonymousAssessmentSaved = Boolean(saved.anonymousAssessmentSaved);
     state.sessionId = saved.sessionId || createSessionId();
@@ -1953,6 +1978,8 @@ function resetSession() {
   state.contactOpen = false;
   state.contactSubmitted = false;
   state.followUpConsentAccepted = false;
+  state.contactDetails = null;
+  state.pendingNotificationEvents = [];
   state.assessmentLogged = false;
   state.anonymousAssessmentSaved = false;
   state.stageHistory = ["discover"];
