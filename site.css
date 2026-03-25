@@ -5233,7 +5233,8 @@ body.app-shell .conversation-head > div {
 
 body.app-shell .transcript-viewport {
   gap: 18px;
-  padding: 16px 10px calc(62px + env(safe-area-inset-bottom)) 0;
+  padding: 16px 10px calc(76px + env(safe-area-inset-bottom)) 0;
+  scroll-padding-bottom: calc(86px + env(safe-area-inset-bottom));
 }
 
 body.app-shell .conversation-card .message {
@@ -5256,6 +5257,7 @@ body.app-shell .conversation-card .message.assistant.is-latest-assistant {
 
 body.app-shell .conversation-composer {
   gap: 7px;
+  margin-top: 10px;
   padding-top: 10px;
   background:
     linear-gradient(180deg, rgba(247, 250, 252, 0.04) 0%, rgba(247, 250, 252, 0.84) 16%, rgba(255, 255, 255, 0.98) 38%, rgba(255, 255, 255, 1) 100%);
@@ -5518,6 +5520,16 @@ body.app-shell .workspace-side .dashboard-card {
 
   body.app-shell .workspace-main {
     gap: 26px;
+  }
+
+  body.app-shell .transcript-viewport {
+    padding-bottom: calc(124px + env(safe-area-inset-bottom));
+    scroll-padding-bottom: calc(136px + env(safe-area-inset-bottom));
+  }
+
+  body.app-shell .conversation-composer {
+    margin-top: 12px;
+    padding-top: 12px;
   }
 
   body.app-shell .workspace-side .dashboard-card {
