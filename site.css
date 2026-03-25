@@ -4810,8 +4810,7 @@ body.app-shell .findings-overview-side {
 
 body.app-shell .findings-primary-panel,
 body.app-shell .findings-focus-card,
-body.app-shell .finding-visual-card,
-body.app-shell .finding-pattern-card {
+body.app-shell .finding-visual-card {
   border: 1px solid rgba(19, 33, 45, 0.08);
   border-radius: 24px;
   background: rgba(255, 255, 255, 0.94);
@@ -4858,8 +4857,7 @@ body.app-shell .findings-focus-value {
   line-height: 1.52;
 }
 
-body.app-shell .finding-visual-card,
-body.app-shell .finding-pattern-card {
+body.app-shell .finding-visual-card {
   display: grid;
   gap: 16px;
   padding: 22px 24px;
@@ -5107,35 +5105,6 @@ body.app-shell .contact-shell {
   border-radius: 24px;
 }
 
-body.app-shell .contact-value-strip {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-}
-
-body.app-shell .contact-value-item {
-  display: grid;
-  gap: 6px;
-  padding: 14px 16px;
-  border: 1px solid rgba(19, 33, 45, 0.08);
-  border-radius: 18px;
-  background: rgba(247, 250, 252, 0.88);
-}
-
-body.app-shell .contact-value-item span {
-  color: var(--muted);
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-body.app-shell .contact-value-item strong {
-  color: var(--ink);
-  font-size: 0.9rem;
-  line-height: 1.46;
-}
-
 @media (min-width: 1081px) {
   body.app-shell .container {
     width: min(calc(100% - 2.5rem), 1680px);
@@ -5195,9 +5164,6 @@ body.app-shell .contact-value-item strong {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  body.app-shell .contact-value-strip {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 960px) {
@@ -5211,7 +5177,6 @@ body.app-shell .contact-value-item strong {
   body.app-shell .findings-primary-panel,
   body.app-shell .findings-focus-card,
   body.app-shell .finding-visual-card,
-  body.app-shell .finding-pattern-card,
   body.app-shell .steps-card,
   body.app-shell .contact-shell {
     padding: 20px;
@@ -5255,5 +5220,348 @@ body.app-shell .contact-value-item strong {
   body.app-shell .offer-pricing {
     justify-items: start;
     text-align: left;
+  }
+}
+
+body.app-shell .conversation-head {
+  padding-bottom: 14px;
+}
+
+body.app-shell .conversation-head > div {
+  gap: 8px;
+}
+
+body.app-shell .transcript-viewport {
+  gap: 18px;
+  padding: 16px 10px calc(62px + env(safe-area-inset-bottom)) 0;
+}
+
+body.app-shell .conversation-card .message {
+  max-width: 90%;
+}
+
+body.app-shell .conversation-card .message.user {
+  max-width: min(82%, 720px);
+}
+
+body.app-shell .conversation-card .message.assistant {
+  border-color: rgba(19, 33, 45, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(250, 252, 253, 0.98) 100%);
+}
+
+body.app-shell .conversation-card .message.assistant.is-latest-assistant {
+  border-color: rgba(29, 86, 116, 0.16);
+  box-shadow: 0 16px 32px rgba(12, 23, 34, 0.06);
+}
+
+body.app-shell .conversation-composer {
+  gap: 7px;
+  padding-top: 10px;
+  background:
+    linear-gradient(180deg, rgba(247, 250, 252, 0.04) 0%, rgba(247, 250, 252, 0.84) 16%, rgba(255, 255, 255, 0.98) 38%, rgba(255, 255, 255, 1) 100%);
+}
+
+body.app-shell .conversation-composer .composer-intro {
+  gap: 4px;
+}
+
+body.app-shell .conversation-composer .composer-shell {
+  gap: 6px;
+}
+
+body.app-shell .conversation-composer .composer-footer {
+  align-items: flex-start;
+  gap: 9px;
+  margin-top: 4px;
+}
+
+body.app-shell .conversation-composer .composer-footer-main {
+  gap: 7px;
+}
+
+body.app-shell .prompt-chips {
+  gap: 6px;
+}
+
+body.app-shell .prompt-chip {
+  min-height: 30px;
+  padding: 0 11px;
+  border-color: rgba(19, 33, 45, 0.07);
+  background: rgba(247, 250, 252, 0.94);
+  font-weight: 700;
+}
+
+body.app-shell .findings-stage,
+body.app-shell .contact-card {
+  gap: 24px;
+}
+
+body.app-shell .findings-overview-grid {
+  grid-template-columns: minmax(0, 1.7fr) minmax(320px, 0.85fr);
+  gap: 18px;
+}
+
+body.app-shell .findings-overview-main,
+body.app-shell .findings-overview-side {
+  gap: 14px;
+}
+
+body.app-shell .findings-primary-panel {
+  gap: 10px;
+  padding: 24px 26px 22px;
+  box-shadow: none;
+}
+
+body.app-shell .findings-focus-grid {
+  gap: 12px;
+}
+
+body.app-shell .findings-focus-card {
+  padding: 16px 18px;
+  background: rgba(247, 250, 252, 0.9);
+  box-shadow: none;
+}
+
+body.app-shell .findings-focus-card-priority {
+  background: linear-gradient(180deg, rgba(237, 244, 248, 0.8) 0%, rgba(255, 255, 255, 0.96) 100%);
+}
+
+body.app-shell .finding-visual-card {
+  gap: 14px;
+  padding: 20px 22px;
+  box-shadow: none;
+  background: linear-gradient(180deg, rgba(245, 249, 252, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%);
+}
+
+body.app-shell .finding-visual-divider {
+  height: 1px;
+  background: rgba(19, 33, 45, 0.08);
+}
+
+body.app-shell .pattern-flow {
+  gap: 8px;
+}
+
+body.app-shell .findings-grid-rich {
+  gap: 14px;
+}
+
+body.app-shell .findings-grid-rich .finding-card {
+  padding: 18px 20px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: none;
+}
+
+body.app-shell .recommended-next-step {
+  gap: 22px;
+  padding: 30px 32px;
+}
+
+body.app-shell .recommended-next-step-head {
+  gap: 8px;
+}
+
+body.app-shell .recommended-next-step-grid {
+  grid-template-columns: minmax(0, 1.85fr) minmax(280px, 0.75fr);
+  gap: 32px;
+}
+
+body.app-shell .recommended-package-panel {
+  padding-right: 30px;
+}
+
+body.app-shell .recommended-package-type {
+  display: inline-flex;
+  width: max-content;
+  padding: 6px 10px;
+  border: 1px solid rgba(29, 86, 116, 0.12);
+  border-radius: 999px;
+  background: rgba(237, 244, 248, 0.92);
+}
+
+body.app-shell .recommended-package-title {
+  max-width: 19ch;
+}
+
+body.app-shell .recommended-deliverables-panel {
+  gap: 12px;
+  padding: 0 0 0 30px;
+  border: 0;
+  border-left: 1px solid rgba(19, 33, 45, 0.08);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body.app-shell .recommended-deliverables-panel .offer-list {
+  gap: 10px;
+}
+
+body.app-shell .recommended-action-stack {
+  gap: 12px;
+  padding-top: 16px;
+}
+
+body.app-shell .offer-shell {
+  gap: 20px;
+}
+
+body.app-shell .offer-intro-grid {
+  gap: 16px;
+}
+
+body.app-shell .pricing-banner {
+  padding: 18px 20px;
+  border-radius: 22px;
+  box-shadow: none;
+}
+
+body.app-shell .offer-grid {
+  gap: 16px;
+}
+
+body.app-shell .offer-card {
+  gap: 14px;
+  padding: 18px 18px 16px;
+  border-radius: 22px;
+  box-shadow: none;
+}
+
+body.app-shell .offer-card.featured {
+  box-shadow: none;
+}
+
+body.app-shell .offer-card h3 {
+  margin-bottom: 4px;
+  font-size: 1.22rem;
+}
+
+body.app-shell .offer-note {
+  font-size: 0.88rem;
+}
+
+body.app-shell .offer-price {
+  font-size: 1.34rem;
+}
+
+body.app-shell .offer-list {
+  gap: 8px;
+}
+
+body.app-shell .offer-discount {
+  gap: 4px;
+  margin-top: 0;
+  padding: 10px 0 0;
+  border: 0;
+  border-top: 1px solid rgba(19, 33, 45, 0.08);
+  border-radius: 0;
+  background: transparent;
+}
+
+body.app-shell .offer-discount p {
+  font-size: 0.8rem;
+}
+
+body.app-shell .offer-select {
+  min-height: 44px;
+}
+
+body.app-shell .contact-grid {
+  grid-template-columns: minmax(270px, 0.72fr) minmax(0, 1.28fr);
+  gap: 18px;
+}
+
+body.app-shell .steps-card,
+body.app-shell .contact-shell {
+  padding: 20px 22px;
+  border-radius: 22px;
+  box-shadow: none;
+}
+
+body.app-shell .steps-card {
+  background: rgba(247, 250, 252, 0.9);
+}
+
+body.app-shell .contact-shell {
+  gap: 14px;
+}
+
+body.app-shell .contact-form {
+  gap: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(19, 33, 45, 0.08);
+}
+
+body.app-shell .field-grid {
+  gap: 12px 14px;
+}
+
+body.app-shell .field textarea {
+  min-height: 116px;
+}
+
+body.app-shell .workspace-side .dashboard-card {
+  background: rgba(250, 252, 253, 0.84);
+  box-shadow: none;
+}
+
+@media (min-width: 1081px) {
+  body.app-shell .container {
+    width: min(calc(100% - 2rem), 1700px);
+  }
+
+  body.app-shell .workspace-shell {
+    grid-template-columns: minmax(0, 1fr) 236px;
+    gap: 26px;
+  }
+
+  body.app-shell .workspace-main {
+    gap: 26px;
+  }
+
+  body.app-shell .workspace-side .dashboard-card {
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  body.app-shell .insight-header {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+  }
+
+  body.app-shell .insight-header .header-copy {
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
+  body.app-shell .dashboard-grid {
+    gap: 10px;
+  }
+
+  body.app-shell .panel {
+    padding: 13px 14px;
+    background: rgba(255, 255, 255, 0.78);
+  }
+}
+
+@media (min-width: 1360px) {
+  body.app-shell .workspace-shell {
+    grid-template-columns: 170px minmax(0, 1fr) 236px;
+  }
+}
+
+@media (max-width: 960px) {
+  body.app-shell .finding-visual-card,
+  body.app-shell .findings-grid-rich .finding-card,
+  body.app-shell .steps-card,
+  body.app-shell .contact-shell {
+    border-radius: 20px;
+  }
+
+  body.app-shell .recommended-deliverables-panel {
+    padding: 18px 0 0;
+    border: 0;
+    border-top: 1px solid rgba(19, 33, 45, 0.08);
   }
 }

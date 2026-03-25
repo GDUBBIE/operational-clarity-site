@@ -203,10 +203,9 @@
                   <div class="composer-footer">
                     <div class="composer-footer-main">
                       <div id="prompt-chip-list" class="prompt-chips" aria-label="Example prompts">
-                        <button type="button" class="prompt-chip" data-prompt-chip="Sales are inconsistent">Sales are inconsistent</button>
-                        <button type="button" class="prompt-chip" data-prompt-chip="Everything depends on me">Everything depends on me</button>
+                        <button type="button" class="prompt-chip" data-prompt-chip="Everything still depends on me">Owner is the bottleneck</button>
                         <button type="button" class="prompt-chip" data-prompt-chip="Cash is tight">Cash is tight</button>
-                        <button type="button" class="prompt-chip" data-prompt-chip="Work is messy">Work is messy</button>
+                        <button type="button" class="prompt-chip" data-prompt-chip="Scheduling changes constantly">Scheduling keeps changing</button>
                         <button type="button" class="prompt-chip" data-prompt-chip="Margins are slipping">Margins are slipping</button>
                       </div>
                       <div class="composer-support">
@@ -292,9 +291,8 @@
 
                     <p id="findings-confidence-note" class="panel-copy">Confidence and signal note appear after the diagnostic is ready.</p>
                     <p id="findings-benchmark-note" class="small-text">Benchmark comparison appears here when enough saved sessions exist.</p>
-                  </div>
 
-                  <div class="finding-pattern-card">
+                    <div class="finding-visual-divider"></div>
                     <p class="muted-label">Operating pattern</p>
                     <div class="pattern-flow">
                       <div class="pattern-step">
@@ -422,22 +420,7 @@
                         <p id="contact-shell-note" class="small-text">Operational Clarity provides AI-assisted diagnostic guidance. If you request next-step help, your review may also be assessed by a human advisor from EHI Studio.</p>
                       </div>
 
-                      <button id="contact-toggle" type="button" class="btn btn-primary">Open contact request</button>
-                    </div>
-
-                    <div class="contact-value-strip">
-                      <div class="contact-value-item">
-                        <span>We review</span>
-                        <strong>your diagnostic, signal pattern, and likely starting scope</strong>
-                      </div>
-                      <div class="contact-value-item">
-                        <span>We confirm</span>
-                        <strong>fit, package level, and whether the issue is ready for implementation help</strong>
-                      </div>
-                      <div class="contact-value-item">
-                        <span>You receive</span>
-                        <strong>a clear next-step reply or kickoff path, not a vague follow-up</strong>
-                      </div>
+                      <button id="contact-toggle" type="button" class="btn btn-primary">Open request form</button>
                     </div>
 
                     <form id="contact-form" class="contact-form is-hidden">
@@ -501,8 +484,8 @@
           <div class="dashboard-header insight-header">
             <div>
               <p class="kicker">Live insight rail</p>
-              <h2>Session intelligence</h2>
-              <p class="header-copy">Readiness, extracted signal, and recommended next steps stay visible while the diagnostic runs.</p>
+              <h2>Session snapshot</h2>
+              <p class="header-copy">Readiness, current signal, and the next-step read stay visible while the diagnostic runs.</p>
             </div>
             <div class="insight-header-actions">
               <button id="reset-session" type="button" class="text-button">Reset review</button>
@@ -581,7 +564,7 @@
             </div>
 
             <div id="cta-panel" class="panel is-hidden">
-              <h3>Recommended next step</h3>
+              <h3>Current recommendation</h3>
               <p id="cta-value" class="panel-value">Next-step guidance will appear when the diagnostic is ready.</p>
               <p id="cta-copy" class="panel-copy">Use the conversation to gather enough signal first.</p>
               <a id="cta-link" class="text-button is-hidden" href="#contact">Open next-step options</a>
@@ -1200,6 +1183,10 @@ function addVisualMessage(role, content) {
   div.className = `message ${role}`;
 
   if (role === "assistant") {
+    el.messageList?.querySelectorAll(".message.assistant.is-latest-assistant").forEach((node) => {
+      node.classList.remove("is-latest-assistant");
+    });
+    div.classList.add("is-latest-assistant");
     renderAssistantMessage(div, normalizeAssistantText(content));
   } else {
     div.textContent = content;
@@ -1616,7 +1603,7 @@ function renderDashboardSummary() {
   renderPanelList(el.nextActionsList, insightRail.nextActions);
   el.assessmentScoreRow?.classList.toggle("is-hidden", !state.findings);
   el.currentPatternPanel?.classList.toggle("is-hidden", !insightRail.businessTypeRaw);
-  el.signalPanel?.classList.toggle("is-hidden", insightRail.signals.length === 0);
+  el.signalPanel?.classList.toggle("is-hidden", !showDetailedRailPanels || insightRail.signals.length === 0);
   el.likelyIssuePanel?.classList.toggle("is-hidden", !showDetailedRailPanels || !insightRail.mainIssueRaw);
   el.likelyCausePanel?.classList.toggle("is-hidden", !showDetailedRailPanels || !insightRail.likelyCauseRaw);
   el.firstFocusPanel?.classList.toggle("is-hidden", !showDetailedRailPanels || !insightRail.firstFocusRaw);
@@ -2270,7 +2257,9 @@ function buildFindingsViewModel() {
   const confidenceNote = findSection("Confidence / signal note")?.text
     || summarizeConfidence(state.findings || {}, recommendation?.signals || [], []);
   const benchmarkNote = state.findings
-    ? summary.comparison
+    ? (/not enough saved/i.test(summary.comparison)
+      ? "Benchmark comparison becomes available after more saved anonymous sessions."
+      : summary.comparison)
     : "Benchmark comparison appears here when enough saved sessions exist.";
 
   return {
@@ -2311,39 +2300,41 @@ function buildPackageMessageForOption(packageType, recommendation) {
 function derivePackageFitCopy(packageType, recommendation) {
   const scopeLabel = recommendation?.scopeLabel || "the first operating fix";
   if (packageType === "review") {
-    return `Best when the issue is visible but you want a human read before building around ${scopeLabel}.`;
+    return `Use when the issue is visible but you want a human read before building around ${scopeLabel}.`;
   }
   if (packageType === "advisory") {
-    return `Best when this needs recurring review, prioritization, and accountability around ${scopeLabel}.`;
+    return `Use when this needs recurring prioritization, accountability, and review support around ${scopeLabel}.`;
   }
-  return `Best when one operating issue is clear enough to structure and implement around ${scopeLabel}.`;
+  return `Use when one operating issue is clear enough to structure and implement around ${scopeLabel}.`;
 }
 
 function buildPackageOptionsModel(recommendation = null) {
   const activeRecommendation = recommendation || deriveRecommendedNextStepModel() || {};
   const deliverableLibrary = activeRecommendation.deliverableLibrary || {};
-  const reviewCreditCopy = "If you start with a paid Diagnostic Review and move into a Sprint or Advisory within 14 days, the review fee is applied to the starting package.";
   const catalog = [
     {
       key: "review",
       name: "Diagnostic Review",
       price: "$600",
       billingNote: "One-time review",
-      discount: reviewCreditCopy
+      discountLabel: "Credit eligible",
+      discount: "Applied to a Sprint or Advisory if you move forward within 14 days."
     },
     {
       key: "sprint",
       name: "Operations Sprint",
       price: "$2,800",
       billingNote: "Focused setup package",
-      discount: "Review credit available if you want to validate the first move before implementation starts."
+      discountLabel: "Review credit",
+      discount: "$600 applied if you start with a Diagnostic Review first."
     },
     {
       key: "advisory",
       name: "Ongoing Advisory",
       price: "$1,650 / month",
       billingNote: "Monthly cadence support",
-      discount: "Review credit available if you begin with a Diagnostic Review before ongoing support."
+      discountLabel: "Review credit",
+      discount: "$600 applied if you begin with a Diagnostic Review first."
     }
   ];
 
@@ -2353,7 +2344,7 @@ function buildPackageOptionsModel(recommendation = null) {
       packageType: entry.key,
       theme: { deliverables: deliverableLibrary },
       priorityLabel: activeRecommendation.priorityLabel || "the first operating issue"
-    }).slice(0, 3);
+    }).slice(0, 2);
 
     return {
       ...entry,
@@ -2606,20 +2597,11 @@ function renderFindings() {
         : ["The likely downstream effects will appear here after the diagnostic is ready."]
     },
     {
-      title: "First moves to lock in",
+      title: "First operating moves",
       type: "ordered_list",
       items: findingsView?.nextActions?.length
         ? findingsView.nextActions
         : ["Confirm one owner, one metric, and one review cadence before widening the work."]
-    },
-    {
-      title: "Signal note",
-      text: findingsView?.confidenceNote || "Confidence and signal note appear after the diagnostic is ready."
-    },
-    {
-      title: "What not to focus on yet",
-      text: findingsView?.notYet || "Keep the scope narrow until the first priority is controlled.",
-      note: findingsView?.benchmarkNote || null
     }
   ];
 
@@ -2759,7 +2741,7 @@ function renderOfferCards(recommendation) {
 
     const discountLabel = document.createElement("span");
     discountLabel.className = "offer-discount-label";
-    discountLabel.textContent = "Pricing note";
+    discountLabel.textContent = option.discountLabel || "Pricing note";
     discount.appendChild(discountLabel);
 
     const discountCopy = document.createElement("p");
@@ -2772,7 +2754,7 @@ function renderOfferCards(recommendation) {
     button.className = option.isRecommended ? "btn btn-primary offer-select" : "btn btn-secondary offer-select";
     button.dataset.packageSelect = option.packageValue;
     button.dataset.packageMessage = option.packageMessage;
-    button.textContent = option.isRecommended ? `Choose ${option.name}` : `Start with ${option.name}`;
+    button.textContent = `Choose ${option.name}`;
     card.appendChild(button);
 
     el.offerGrid.appendChild(card);
@@ -2797,8 +2779,8 @@ function renderContact() {
 
   if (el.offerSummary) {
     el.offerSummary.textContent = recommendation
-      ? `The current diagnostic suggests ${recommendation.basePackage} as the strongest starting point. Compare pricing and scope below before deciding how much help you want.`
-      : "Compare pricing and scope below before deciding how much help you want.";
+      ? `The current diagnostic points to ${recommendation.basePackage} as the strongest starting point. Compare the packages below by fit, support level, and price before deciding how much help you want.`
+      : "Compare the packages below by fit, support level, and price before deciding how much help you want.";
   }
   if (el.pricingBannerTitle) {
     el.pricingBannerTitle.textContent = "Diagnostic Review credit";
@@ -2813,7 +2795,7 @@ function renderContact() {
   }
   if (el.contactShellNote) {
     el.contactShellNote.textContent = recommendation
-      ? `We confirm fit, scope, and starting package first. We do not promise outcomes or book work until that review is complete.`
+      ? `After submission, we review the diagnostic, confirm fit and scope, recommend the right starting package, and only then move into the next conversation or kickoff path.`
       : "We confirm fit, scope, and starting package first.";
   }
 
@@ -2823,7 +2805,7 @@ function renderContact() {
     el.contactForm?.classList.add("is-hidden");
   }
   if (el.contactToggle) {
-    el.contactToggle.textContent = state.contactOpen ? "Contact request open" : "Open contact request";
+    el.contactToggle.textContent = state.contactOpen ? "Request form open" : "Open request form";
     el.contactToggle.setAttribute("aria-expanded", String(Boolean(state.contactOpen)));
   }
   renderFollowUpConsentState();
