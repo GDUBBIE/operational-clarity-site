@@ -122,8 +122,7 @@
               <div class="utility-section">
                 <p class="muted-label">Sections</p>
                 <nav class="utility-nav" aria-label="Workspace sections">
-                  <a href="#diagnostic">Diagnostic input</a>
-                  <a href="#transcript">Transcript</a>
+                  <a href="#diagnostic">Conversation</a>
                   <a href="#findings">Findings</a>
                   <a href="#contact">Next step</a>
                 </nav>
@@ -158,84 +157,74 @@
         </aside>
 
         <div class="workspace-main">
-          <section id="diagnostic" class="workspace-block primary-start">
-            <form id="chat-form" class="card composer-card chat-form" aria-labelledby="chat-input-label" aria-describedby="chat-note sensitive-info-note">
-              <div class="sr-only" aria-hidden="true">
-                <span id="stage-badge" class="badge">discover</span>
-                <span id="limit-badge" class="badge">0% ready</span>
-              </div>
-
-              <div class="composer-intro">
-                <label id="chat-input-label" class="composer-title" for="chat-input">What feels heaviest in the business right now?</label>
-                <p id="sensitive-info-note" class="sr-only">Do not submit passwords, bank details, employee personal data, or other highly sensitive confidential information.</p>
-              </div>
-
-              <div class="input-shell composer-shell">
-                <textarea id="chat-input" rows="4" placeholder="Example: We stay busy, but jobs still bottleneck through me and margins are inconsistent."></textarea>
-
-                <div class="composer-footer">
-                  <div class="composer-footer-main">
-                    <div id="prompt-chip-list" class="prompt-chips" aria-label="Example prompts">
-                      <button type="button" class="prompt-chip" data-prompt-chip="Sales are inconsistent">Sales are inconsistent</button>
-                      <button type="button" class="prompt-chip" data-prompt-chip="Everything depends on me">Everything depends on me</button>
-                      <button type="button" class="prompt-chip" data-prompt-chip="Cash is tight">Cash is tight</button>
-                      <button type="button" class="prompt-chip" data-prompt-chip="Work is messy">Work is messy</button>
-                      <button type="button" class="prompt-chip" data-prompt-chip="Margins are slipping">Margins are slipping</button>
-                    </div>
-                    <div class="composer-support">
-                      <p id="chat-note" class="command-helper">One concrete example is enough to start.</p>
-                      <details class="input-guidance input-guidance-inline">
-                        <summary>How to answer well</summary>
-                        <div class="input-guidance-body">
-                          <p class="input-guidance-note">Share the repeating problem, one concrete example, and what it is costing in time, cash, margin, or control.</p>
-                          <p class="input-warning">Do not submit passwords, bank details, employee personal data, or other highly sensitive confidential information.</p>
-                        </div>
-                      </details>
-                    </div>
-                  </div>
-                  <button id="send-button" type="submit" class="btn btn-primary">Run diagnostic</button>
-                </div>
-
-                <div class="mobile-flow-note" aria-hidden="true">
-                  <p class="mobile-flow-note-lead">Your analysis appears below after submission.</p>
-                  <p class="mobile-flow-note-copy">Next: transcript, follow-up, then findings.</p>
-                  <ul class="mobile-flow-note-list">
-                    <li>The transcript opens with the first response.</li>
-                    <li>The system asks one focused follow-up at a time.</li>
-                    <li>Findings and next steps appear as signal builds.</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div id="chat-error" class="notice is-hidden"></div>
-            </form>
-          </section>
-
-          <section id="transcript" class="workspace-block transcript-stage">
-            <div class="card transcript-card">
-              <div class="transcript-head">
+          <section id="diagnostic" class="workspace-block primary-start conversation-stage">
+            <div class="card transcript-card conversation-card">
+              <div id="transcript" class="transcript-head conversation-head">
                 <div>
-                  <p class="kicker">Advisor interaction</p>
-                  <h2>Transcript</h2>
-                  <p class="header-copy">Follow-up questions and structured output appear here after the first input.</p>
+                  <p class="kicker">Live advisor conversation</p>
+                  <h2>Operational diagnostic</h2>
+                  <p class="header-copy">The conversation and the input now stay in one working thread. Read the latest response, then reply directly below it.</p>
                 </div>
               </div>
 
-              <div id="chat-empty-state" class="chat-empty-state transcript-empty-state">
-                <div class="empty-state-head">
-                  <p class="empty-state-title">No transcript yet.</p>
-                  <p class="empty-state-copy">Submit the pressure point above to start the diagnostic.</p>
+              <div id="transcript-viewport" class="transcript-viewport">
+                <div id="chat-empty-state" class="chat-empty-state transcript-empty-state">
+                  <div class="empty-state-head">
+                    <p class="empty-state-title">Start the conversation.</p>
+                    <p class="empty-state-copy">Share the main pressure point below. The advisor's responses, follow-up questions, and read all appear here in the same thread.</p>
+                  </div>
+                </div>
+
+                <div id="message-list" class="message-list" aria-live="polite"></div>
+
+                <div id="typing-row" class="typing-row is-hidden">
+                  <span class="typing-dot"></span>
+                  <span class="typing-dot"></span>
+                  <span class="typing-dot"></span>
+                  <span>Working...</span>
                 </div>
               </div>
 
-              <div id="message-list" class="message-list" aria-live="polite"></div>
+              <form id="chat-form" class="conversation-composer chat-form" aria-labelledby="chat-input-label" aria-describedby="chat-note sensitive-info-note">
+                <div class="sr-only" aria-hidden="true">
+                  <span id="stage-badge" class="badge">discover</span>
+                  <span id="limit-badge" class="badge">0% ready</span>
+                </div>
 
-              <div id="typing-row" class="typing-row is-hidden">
-                <span class="typing-dot"></span>
-                <span class="typing-dot"></span>
-                <span class="typing-dot"></span>
-                <span>Working...</span>
-              </div>
+                <div class="composer-intro">
+                  <label id="chat-input-label" class="composer-title" for="chat-input">Reply with the next detail or answer.</label>
+                  <p id="chat-note" class="command-helper">One concrete example or direct answer is enough to keep the read moving.</p>
+                  <p id="sensitive-info-note" class="sr-only">Do not submit passwords, bank details, employee personal data, or other highly sensitive confidential information.</p>
+                </div>
+
+                <div class="input-shell composer-shell">
+                  <textarea id="chat-input" rows="4" placeholder="Example: We stay busy, but jobs still bottleneck through me and margins are inconsistent."></textarea>
+
+                  <div class="composer-footer">
+                    <div class="composer-footer-main">
+                      <div id="prompt-chip-list" class="prompt-chips" aria-label="Example prompts">
+                        <button type="button" class="prompt-chip" data-prompt-chip="Sales are inconsistent">Sales are inconsistent</button>
+                        <button type="button" class="prompt-chip" data-prompt-chip="Everything depends on me">Everything depends on me</button>
+                        <button type="button" class="prompt-chip" data-prompt-chip="Cash is tight">Cash is tight</button>
+                        <button type="button" class="prompt-chip" data-prompt-chip="Work is messy">Work is messy</button>
+                        <button type="button" class="prompt-chip" data-prompt-chip="Margins are slipping">Margins are slipping</button>
+                      </div>
+                      <div class="composer-support">
+                        <details class="input-guidance input-guidance-inline">
+                          <summary>How to answer well</summary>
+                          <div class="input-guidance-body">
+                            <p class="input-guidance-note">Share the repeating problem, one concrete example, and what it is costing in time, cash, margin, or control.</p>
+                            <p class="input-warning">Do not submit passwords, bank details, employee personal data, or other highly sensitive confidential information.</p>
+                          </div>
+                        </details>
+                      </div>
+                    </div>
+                    <button id="send-button" type="submit" class="btn btn-primary">Start conversation</button>
+                  </div>
+                </div>
+
+                <div id="chat-error" class="notice is-hidden"></div>
+              </form>
             </div>
           </section>
 
@@ -542,6 +531,7 @@ const state = {
   awaiting: false,
   started: false,
   reviewConsentAccepted: false,
+  stickConversationToBottom: true,
   contextScore: 0,
   contactOpen: false,
   contactSubmitted: false,
@@ -642,6 +632,7 @@ function captureDom() {
   el.sessionStageLabel = document.getElementById("session-stage-label");
   el.sessionModeLabel = document.getElementById("session-mode-label");
   el.messageList = document.getElementById("message-list");
+  el.transcriptViewport = document.getElementById("transcript-viewport");
   el.chatEmptyState = document.getElementById("chat-empty-state");
   el.chatForm = document.getElementById("chat-form");
   el.chatInput = document.getElementById("chat-input");
@@ -705,6 +696,7 @@ function captureDom() {
 
 function bindEvents() {
   el.chatForm?.addEventListener("submit", handleChatSubmit);
+  el.transcriptViewport?.addEventListener("scroll", handleTranscriptScroll, { passive: true });
   el.resetSession?.addEventListener("click", resetSession);
   el.contactToggle?.addEventListener("click", openContactForm);
   el.contactForm?.addEventListener("submit", handleContactSubmit);
@@ -719,7 +711,11 @@ function bindEvents() {
 function focusReviewInput(event) {
   event?.preventDefault();
   scrollToSection("diagnostic");
-  window.setTimeout(() => el.chatInput?.focus(), 250);
+  window.setTimeout(() => {
+    state.stickConversationToBottom = true;
+    scrollConversationToEnd(true);
+    el.chatInput?.focus({ preventScroll: true });
+  }, 250);
 }
 
 function handlePromptChipClick(event) {
@@ -732,6 +728,10 @@ function handlePromptChipClick(event) {
     : promptText;
 
   el.chatInput.focus();
+}
+
+function handleTranscriptScroll() {
+  state.stickConversationToBottom = isConversationNearBottom();
 }
 
 function handlePackageSelect(event) {
@@ -851,6 +851,9 @@ function renderInitialState() {
   renderFindings();
   renderContact();
   renderInternalIntelligence();
+  renderComposerAction();
+  state.stickConversationToBottom = true;
+  updateConversationStickiness();
 }
 
 async function handleChatSubmit(event) {
@@ -890,6 +893,7 @@ async function handleChatSubmit(event) {
 
   state.started = true;
   state.reviewConsentAccepted = true;
+  state.stickConversationToBottom = true;
   if (isFollowup) state.freeFollowupsUsed += 1;
 
   const userMessage = { role: "user", content: text };
@@ -974,17 +978,22 @@ function applyAgentResponse(data) {
 function renderAwaiting(isAwaiting) {
   el.typingRow.classList.toggle("is-hidden", !isAwaiting);
   el.chatInput.disabled = isAwaiting;
-  if (el.sendButton) {
-    el.sendButton.textContent = isAwaiting ? "Working..." : "Run diagnostic";
-  }
+  renderComposerAction();
   renderSessionContext(describeReadiness(state.contextScore || deriveContextScore()));
   renderReviewConsentState();
+  if (isAwaiting || state.stickConversationToBottom) {
+    scrollConversationToEnd(true);
+  }
+  if (!isAwaiting && state.stickConversationToBottom) {
+    window.setTimeout(() => el.chatInput?.focus({ preventScroll: true }), 50);
+  }
 }
 
 function renderConversation() {
   el.messageList.innerHTML = "";
   state.conversation.filter((m) => m.role !== "system").forEach((m) => addVisualMessage(m.role, m.content));
   updateMessageListVisibility();
+  scrollConversationToEnd(true);
 }
 
 function addVisualMessage(role, content) {
@@ -999,7 +1008,38 @@ function addVisualMessage(role, content) {
 
   el.messageList.appendChild(div);
   updateMessageListVisibility();
-  el.messageList.scrollTop = el.messageList.scrollHeight;
+  scrollConversationToEnd(role === "user" || state.stickConversationToBottom);
+}
+
+function renderComposerAction() {
+  if (!el.sendButton) return;
+  if (state.awaiting) {
+    el.sendButton.textContent = "Working...";
+    return;
+  }
+  const hasUserTurn = state.conversation.some((entry) => entry?.role === "user");
+  el.sendButton.textContent = hasUserTurn ? "Send reply" : "Start conversation";
+}
+
+function scrollConversationToEnd(force = false) {
+  const scroller = el.transcriptViewport || el.messageList;
+  if (!scroller) return;
+  if (!force && !state.stickConversationToBottom) return;
+  window.requestAnimationFrame(() => {
+    scroller.scrollTop = scroller.scrollHeight;
+    state.stickConversationToBottom = true;
+  });
+}
+
+function updateConversationStickiness() {
+  state.stickConversationToBottom = isConversationNearBottom();
+}
+
+function isConversationNearBottom(threshold = 72) {
+  const scroller = el.transcriptViewport || el.messageList;
+  if (!scroller) return true;
+  const remaining = scroller.scrollHeight - scroller.clientHeight - scroller.scrollTop;
+  return remaining <= threshold;
 }
 
 function normalizeAssistantText(content) {

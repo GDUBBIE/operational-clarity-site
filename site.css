@@ -4073,3 +4073,191 @@ body.app-shell .panel-list li::before {
     transform: translateY(0);
   }
 }
+
+body.app-shell .workspace-shell {
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 14px;
+}
+
+body.app-shell .workspace-utility {
+  display: none;
+}
+
+body.app-shell .conversation-stage {
+  min-width: 0;
+}
+
+body.app-shell .conversation-card {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: min(820px, calc(100dvh - 148px));
+  min-height: 560px;
+  overflow: hidden;
+}
+
+body.app-shell .conversation-head {
+  margin-bottom: 0;
+}
+
+body.app-shell .transcript-viewport {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+  scroll-padding-bottom: calc(32px + env(safe-area-inset-bottom));
+  padding: 4px 6px calc(28px + env(safe-area-inset-bottom)) 0;
+}
+
+body.app-shell .transcript-viewport::-webkit-scrollbar {
+  width: 10px;
+}
+
+body.app-shell .transcript-viewport::-webkit-scrollbar-thumb {
+  background: rgba(29, 86, 116, 0.15);
+  border-radius: 999px;
+}
+
+body.app-shell .conversation-card .chat-empty-state {
+  margin-bottom: 0;
+}
+
+body.app-shell .conversation-card .message-list {
+  min-height: 0;
+  max-height: none;
+  overflow: visible;
+  margin: 0;
+  padding: 0;
+}
+
+body.app-shell .conversation-card .typing-row {
+  margin-bottom: 0;
+}
+
+body.app-shell .conversation-composer {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  display: grid;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(19, 33, 45, 0.08);
+  background:
+    linear-gradient(180deg, rgba(247, 250, 252, 0) 0%, rgba(247, 250, 252, 0.82) 12%, rgba(247, 250, 252, 0.98) 32%, rgba(255, 255, 255, 0.98) 100%);
+}
+
+body.app-shell .conversation-composer .composer-intro {
+  gap: 4px;
+  margin-bottom: 0;
+}
+
+body.app-shell .conversation-composer .composer-title {
+  font-size: clamp(1rem, 1.3vw, 1.12rem);
+  line-height: 1.14;
+}
+
+body.app-shell .conversation-composer .command-helper {
+  max-width: none;
+}
+
+body.app-shell .conversation-composer .input-shell {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body.app-shell .conversation-composer .input-shell:focus-within {
+  box-shadow: none;
+}
+
+body.app-shell .conversation-composer .composer-shell {
+  display: grid;
+  gap: 10px;
+}
+
+body.app-shell .conversation-composer textarea {
+  min-height: 128px;
+  max-height: 240px;
+  padding: 14px 16px;
+  border: 1px solid rgba(19, 33, 45, 0.1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.96);
+}
+
+body.app-shell .conversation-composer .composer-footer {
+  align-items: flex-end;
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+body.app-shell .conversation-composer .composer-footer-main {
+  flex: 1 1 auto;
+}
+
+body.app-shell .conversation-composer .composer-footer .btn {
+  min-width: 158px;
+}
+
+@media (max-width: 1080px) {
+  body.app-shell .workspace-utility {
+    display: block;
+  }
+
+  body.app-shell .workspace-shell {
+    grid-template-columns: 1fr;
+  }
+
+  body.app-shell .conversation-card {
+    height: calc(100dvh - 156px);
+    min-height: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  body.app-shell .conversation-card {
+    height: calc(100dvh - 124px);
+    min-height: 0;
+  }
+
+  body.app-shell .transcript-viewport {
+    gap: 10px;
+    padding-right: 2px;
+    padding-bottom: calc(22px + env(safe-area-inset-bottom));
+  }
+
+  body.app-shell .conversation-composer {
+    gap: 8px;
+    padding-top: 10px;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
+  }
+
+  body.app-shell .conversation-composer .composer-title {
+    font-size: 0.96rem;
+  }
+
+  body.app-shell .conversation-composer textarea {
+    min-height: 104px;
+    padding: 12px 14px;
+    border-radius: 14px;
+  }
+
+  body.app-shell .conversation-composer .composer-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  body.app-shell .conversation-composer .composer-footer-main {
+    width: 100%;
+  }
+
+  body.app-shell .conversation-composer .composer-footer .btn {
+    width: 100%;
+    min-width: 0;
+  }
+}
