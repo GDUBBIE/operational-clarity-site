@@ -3880,8 +3880,8 @@ body.app-shell .panel-list li::before {
 
   body.app-shell .composer-footer {
     gap: 7px;
-    margin-top: 7px;
-    padding-top: 7px;
+    margin-top: 6px;
+    padding-top: 6px;
   }
 
   body.app-shell .input-guidance summary,
@@ -3892,8 +3892,8 @@ body.app-shell .panel-list li::before {
   body.app-shell .mobile-flow-note {
     display: grid;
     gap: 5px;
-    margin-top: 9px;
-    padding-top: 9px;
+    margin-top: 6px;
+    padding-top: 6px;
     border-top: 1px solid rgba(19, 33, 45, 0.08);
   }
 
