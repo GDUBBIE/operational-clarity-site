@@ -236,6 +236,52 @@
                 <p id="findings-summary" class="section-copy">Structured read: issue, likely cause, first priority, and next actions.</p>
               </div>
               <div id="findings-grid" class="findings-grid"></div>
+              <div id="recommended-next-step" class="recommended-next-step is-hidden">
+                <div class="recommended-next-step-head">
+                  <p class="kicker">Recommended next step</p>
+                  <h3>How to act on this diagnostic</h3>
+                  <p id="recommended-bridge" class="section-copy">Action guidance appears after the diagnostic is ready.</p>
+                </div>
+
+                <div class="recommended-next-step-grid">
+                  <div class="recommended-package-panel">
+                    <p class="muted-label">Best-fit path</p>
+                    <p id="recommended-package-type" class="recommended-package-type">Recommended package appears here</p>
+                    <h4 id="recommended-package-title" class="recommended-package-title">Recommended package appears here</h4>
+                    <p id="recommended-package-note" class="section-copy">The package recommendation will adapt to the business type, priority, and signal pattern.</p>
+
+                    <div class="recommended-meta-grid">
+                      <div class="recommended-meta-item">
+                        <span class="recommended-meta-label">Business type</span>
+                        <strong id="recommended-business-type" class="recommended-meta-value">Appears with findings</strong>
+                      </div>
+                      <div class="recommended-meta-item">
+                        <span class="recommended-meta-label">First priority</span>
+                        <strong id="recommended-priority" class="recommended-meta-value">Appears with findings</strong>
+                      </div>
+                      <div class="recommended-meta-item recommended-meta-item-wide">
+                        <span class="recommended-meta-label">Signals behind this path</span>
+                        <p id="recommended-signals" class="recommended-meta-value recommended-meta-copy">Appears with findings</p>
+                      </div>
+                    </div>
+
+                    <p id="recommended-scope" class="finding-note">Likely first scope appears after the diagnostic is ready.</p>
+                  </div>
+
+                  <div class="recommended-deliverables-panel">
+                    <p class="muted-label">What this would include</p>
+                    <ul id="recommended-deliverables" class="offer-list"></ul>
+
+                    <div class="recommended-action-stack">
+                      <button id="recommended-primary-cta" type="button" class="btn btn-primary">Request next-step help</button>
+                      <div class="recommended-secondary-actions">
+                        <button id="recommended-followup-cta" type="button" class="text-button">Ask one follow-up first</button>
+                        <a class="text-button" href="#diagnostic">Continue diagnostic</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
 
@@ -657,6 +703,18 @@ function captureDom() {
   el.findingsTitle = document.getElementById("findings-title");
   el.findingsSummary = document.getElementById("findings-summary");
   el.findingsGrid = document.getElementById("findings-grid");
+  el.recommendedNextStep = document.getElementById("recommended-next-step");
+  el.recommendedBridge = document.getElementById("recommended-bridge");
+  el.recommendedPackageType = document.getElementById("recommended-package-type");
+  el.recommendedPackageTitle = document.getElementById("recommended-package-title");
+  el.recommendedPackageNote = document.getElementById("recommended-package-note");
+  el.recommendedBusinessType = document.getElementById("recommended-business-type");
+  el.recommendedPriority = document.getElementById("recommended-priority");
+  el.recommendedSignals = document.getElementById("recommended-signals");
+  el.recommendedScope = document.getElementById("recommended-scope");
+  el.recommendedDeliverables = document.getElementById("recommended-deliverables");
+  el.recommendedPrimaryCta = document.getElementById("recommended-primary-cta");
+  el.recommendedFollowupCta = document.getElementById("recommended-followup-cta");
   el.contactSection = document.getElementById("contact");
   el.contactToggle = document.getElementById("contact-toggle");
   el.contactForm = document.getElementById("contact-form");
@@ -702,6 +760,9 @@ function bindEvents() {
   el.contactForm?.addEventListener("submit", handleContactSubmit);
   el.promptChips?.forEach((chip) => chip.addEventListener("click", handlePromptChipClick));
   el.packageButtons?.forEach((button) => button.addEventListener("click", handlePackageSelect));
+  el.recommendedPrimaryCta?.addEventListener("click", handleRecommendedSetupHelp);
+  el.recommendedFollowupCta?.addEventListener("click", focusReviewInput);
+  el.ctaLink?.addEventListener("click", handleCtaLinkClick);
   el.reviewConsentCheckbox?.addEventListener("change", handleReviewConsentChange);
   el.trustModalAccept?.addEventListener("click", handleTrustModalAccept);
   el.reviewConsentToggle?.addEventListener("click", handleReviewConsentDetailsToggle);
@@ -739,12 +800,65 @@ function handlePackageSelect(event) {
   const packageName = String(button?.dataset?.packageSelect || "").trim();
   if (!packageName) return;
 
+  applyPackageSelection(packageName, {
+    focusField: "package"
+  });
+}
+
+function applyPackageSelection(packageName, options = {}) {
+  const {
+    message = "",
+    overwriteMessage = false,
+    focusField = "package"
+  } = options;
+
   if (el.leadPackage) {
     el.leadPackage.value = packageName;
   }
 
+  if (el.leadMessage && (overwriteMessage || !el.leadMessage.value.trim())) {
+    el.leadMessage.value = message || deriveLeadPrompt(state.findings);
+  }
+
   openContactForm();
-  window.setTimeout(() => el.leadPackage?.focus(), 250);
+  window.setTimeout(() => {
+    if (focusField === "message") {
+      el.leadMessage?.focus();
+      return;
+    }
+    el.leadPackage?.focus();
+  }, 250);
+}
+
+function handleRecommendedSetupHelp() {
+  if (state.contactSubmitted) {
+    scrollToSection("contact");
+    return;
+  }
+
+  const recommendation = deriveRecommendedNextStepModel();
+  if (!recommendation) {
+    openContactForm();
+    return;
+  }
+
+  applyPackageSelection(recommendation.contactPackageValue, {
+    message: recommendation.contactMessage,
+    overwriteMessage: true,
+    focusField: state.contactOpen ? "message" : "package"
+  });
+}
+
+function handleCtaLinkClick(event) {
+  const recommendation = deriveRecommendedNextStepModel();
+  if (!recommendation || state.contactSubmitted) return;
+
+  event.preventDefault();
+  applyPackageSelection(recommendation.contactPackageValue, {
+    message: recommendation.contactMessage,
+    overwriteMessage: true,
+    focusField: state.contactOpen ? "message" : "package"
+  });
 }
 
 function updateMessageListVisibility() {
@@ -1411,6 +1525,7 @@ function renderDashboardSummary() {
   if (el.confidenceValue) el.confidenceValue.textContent = summary.confidence;
   if (el.ctaValue) el.ctaValue.textContent = insightRail.ctaValue;
   if (el.ctaCopy) el.ctaCopy.textContent = insightRail.ctaCopy;
+  if (el.ctaLink) el.ctaLink.textContent = insightRail.ctaLinkText || "Open next-step options";
   renderSignalChips(insightRail.signals);
   renderPanelList(el.nextActionsList, insightRail.nextActions);
   el.assessmentScoreRow?.classList.toggle("is-hidden", !state.findings);
@@ -1431,6 +1546,7 @@ function deriveInsightRailModel() {
   const intelligence = state.intelligenceRecord || buildStructuredSessionRecord();
   const display = intelligence?.display || {};
   const brief = state.findings ? composeDiagnosticBrief(state.findings, intelligence, extracted) : null;
+  const recommendation = state.findings ? deriveRecommendedNextStepModel() : null;
   const briefSections = Array.isArray(brief?.sections) ? brief.sections : [];
   const findBriefSection = (title) => briefSections.find((section) => section?.title === title);
 
@@ -1506,6 +1622,7 @@ function deriveInsightRailModel() {
   let ctaCopy = "";
   let showCta = false;
   let showCtaLink = false;
+  let ctaLinkText = "Open next-step options";
 
   if (state.contactSubmitted) {
     showCta = true;
@@ -1514,13 +1631,17 @@ function deriveInsightRailModel() {
   } else if (state.contactOpen) {
     showCta = true;
     showCtaLink = true;
-    ctaValue = "Complete contact request";
-    ctaCopy = "Submit the handoff form when you want a human advisor to review this diagnostic.";
+    ctaValue = recommendation?.railValue || "Complete contact request";
+    ctaCopy = recommendation
+      ? "Contact form is open with this recommended path prefilled."
+      : "Submit the handoff form when you want a human advisor to review this diagnostic.";
+    ctaLinkText = "Complete contact request";
   } else if (state.ctaReady) {
     showCta = true;
     showCtaLink = true;
-    ctaValue = "Move to next-step options";
-    ctaCopy = "The diagnostic has enough signal to support advisory follow-up if you want help turning the read into action.";
+    ctaValue = recommendation?.railValue || "Move to next-step options";
+    ctaCopy = recommendation?.railCopy || "The diagnostic has enough signal to support advisory follow-up if you want help turning the read into action.";
+    ctaLinkText = recommendation?.primaryCtaLabel || "Open next-step options";
   }
 
   return {
@@ -1537,8 +1658,390 @@ function deriveInsightRailModel() {
     showCta,
     showCtaLink,
     ctaValue,
-    ctaCopy
+    ctaCopy,
+    ctaLinkText
   };
+}
+
+function deriveRecommendedNextStepModel() {
+  if (!state.findings) return null;
+
+  const findings = state.findings && typeof state.findings === "object" ? state.findings : {};
+  const extracted = state.extracted || {};
+  const intelligence = state.intelligenceRecord || buildStructuredSessionRecord();
+  const display = intelligence?.display || {};
+  const normalized = intelligence?.normalized_features || {};
+  const recommendations = getRecommendationEntriesForNextStep(intelligence, normalized.recommendation_ids || []);
+  const symptomTags = Array.isArray(normalized.symptom_tags) ? normalized.symptom_tags : [];
+  const causeTags = Array.isArray(normalized.inferred_cause_tags) ? normalized.inferred_cause_tags : [];
+  const signals = normalizeSignalLabels(
+    display.symptom_labels,
+    display.cause_labels,
+    extracted.pain_points,
+    extracted.symptoms,
+    extracted.symptom_tags,
+    extracted.cause_tags,
+    findings.symptom_tags,
+    findings.cause_tags
+  );
+  const businessTypeLabel = cleanSummaryValue(firstMeaningful([
+    display.business_type,
+    display.secondary_business_type,
+    extracted.primary_business_type,
+    extracted.business_type,
+    findings.business_type
+  ]) || "Business");
+  const priorityLabel = cleanSummaryValue(firstMeaningful([
+    findings.first_priority,
+    findings.first_focus,
+    findings.what_to_do_first,
+    findings.next_step,
+    findings.priority,
+    display.recommendation_titles?.[0],
+    display.primary_problem
+  ]) || "Stabilize the first operating issue");
+  const theme = deriveRecommendationTheme(symptomTags, causeTags, recommendations);
+  const packageType = selectRecommendationPackageType({
+    normalized,
+    symptomTags,
+    causeTags,
+    recommendations,
+    theme
+  });
+  const basePackage = packageType === "review"
+    ? "Diagnostic Review"
+    : packageType === "advisory"
+      ? "Ongoing Advisory"
+      : "Operations Sprint";
+  const title = theme.focusTitle || theme.title;
+  const packageNote = packageType === "review"
+    ? "Best when the pattern is clear, but you want to confirm the first move before committing to implementation."
+    : packageType === "advisory"
+      ? "Best when the issue crosses ownership, cadence, and follow-through and needs support over more than one cycle."
+      : "Best when the issue is clear enough to move into a focused setup around the first fix.";
+  const transitionCopy = packageType === "review"
+    ? `The findings point to a real issue. If you want help acting on it, the next useful move is a short review before building around ${theme.scopeLabel}.`
+    : packageType === "advisory"
+      ? `The findings point to a broader operating pattern. If you want help acting on it, the next useful move is ongoing support around ${theme.scopeLabel}.`
+      : `The findings are specific enough to move from diagnosis into a focused setup around ${theme.scopeLabel}.`;
+  const workstreams = recommendations.slice(0, 2).map((entry) => entry.title);
+  const scopeCopy = workstreams.length
+    ? `Likely first scope: ${joinWithAnd(workstreams)}.`
+    : `Likely first scope: ${theme.scopeLabel}.`;
+  const deliverables = buildRecommendedDeliverables({
+    packageType,
+    theme,
+    priorityLabel
+  });
+  const railCopy = packageType === "review"
+    ? `Best fit if you want to confirm the read and lock the first move before building around ${theme.scopeLabel}.`
+    : packageType === "advisory"
+      ? `Best fit if this needs recurring support around ${theme.scopeLabel}, not a one-off setup.`
+      : `Best fit if you want hands-on help tightening ${theme.scopeLabel}.`;
+  const contactPackageValue = `${basePackage} - ${theme.title}`;
+  const contactMessage = [
+    `I want help with the recommended next step: ${basePackage} for ${title}.`,
+    `Priority to address first: ${priorityLabel}.`,
+    `Business type: ${businessTypeLabel}.`,
+    signals.length ? `Detected signals: ${signals.slice(0, 4).join(", ")}.` : null,
+    workstreams.length ? `Suggested workstreams: ${joinWithAnd(workstreams)}.` : null
+  ].filter(Boolean).join(" ");
+
+  return {
+    title,
+    packageLabel: basePackage,
+    basePackage,
+    packageType,
+    transitionCopy,
+    packageNote,
+    businessTypeLabel,
+    priorityLabel,
+    signals,
+    scopeCopy,
+    deliverables,
+    railCopy,
+    railValue: basePackage,
+    primaryCtaLabel: "Request next-step help",
+    contactPackageValue,
+    contactMessage
+  };
+}
+
+function getRecommendationEntriesForNextStep(intelligence, recommendationIds) {
+  const ids = Array.isArray(recommendationIds) ? recommendationIds : [];
+  const library = Array.isArray(intelligence?.taxonomy?.recommendation_library)
+    ? intelligence.taxonomy.recommendation_library
+    : Array.isArray(window.OperationalClarityIntelligence?.TAXONOMY?.recommendationLibrary)
+      ? window.OperationalClarityIntelligence.TAXONOMY.recommendationLibrary
+      : [];
+  const byId = new Map(library.map((item) => [item.id, item]));
+  return ids.map((id) => byId.get(id)).filter(Boolean);
+}
+
+function deriveRecommendationTheme(symptomTags, causeTags, recommendations) {
+  const hasRecommendationCategory = (category) => recommendations.some((entry) => entry?.category === category);
+  const hasSignal = (slug) => symptomTags.includes(slug) || causeTags.includes(slug);
+
+  if (hasSignal("cash_flow_pressure") || hasSignal("slow_collections") || hasSignal("weak_cash_collection_process") || hasRecommendationCategory("cash")) {
+    return {
+      key: "cash",
+      title: "Collections cadence",
+      focusTitle: "Collections cadence and cash visibility",
+      scopeLabel: "invoice follow-through and cash visibility",
+      scopeCopy: "Initial scope would center on billing follow-through, ownership, and aging thresholds.",
+      deliverables: {
+        review: [
+          "A focused read on where billing and collections are slowing down.",
+          "A short decision list for invoice ownership, escalation points, and cash visibility.",
+          "A practical first-move plan before deeper implementation."
+        ],
+        sprint: [
+          "A working collections cadence with named ownership and aging thresholds.",
+          "A simple cash follow-up tracker the team can actually keep current.",
+          "A weekly review rhythm tied to receivables and billing progress.",
+          "A handoff plan so the routine holds after setup."
+        ],
+        advisory: [
+          "A tighter weekly cash review cadence across billing, follow-up, and exceptions.",
+          "Owner and team rules for escalations, overdue accounts, and visibility gaps.",
+          "Ongoing implementation help until the collections rhythm holds."
+        ]
+      }
+    };
+  }
+
+  if (hasSignal("busy_but_unprofitable") || hasSignal("underpriced_work") || hasSignal("margin_leak") || hasSignal("pricing_visibility_gap") || hasSignal("poor_job_costing") || hasRecommendationCategory("margin")) {
+    return {
+      key: "margin",
+      title: "Margin control",
+      focusTitle: "Margin control and job costing",
+      scopeLabel: "pricing discipline and job-level margin visibility",
+      scopeCopy: "Initial scope would center on pricing guardrails, costing visibility, and a tighter margin review loop.",
+      deliverables: {
+        review: [
+          "A practical read on where pricing, estimating, or costing is breaking down.",
+          "A job-level validation checklist to confirm the real source of margin leakage.",
+          "A prioritized first-step plan before committing to a buildout."
+        ],
+        sprint: [
+          "Working pricing guardrails tied to margin floors and change-order triggers.",
+          "A live review cadence for estimate-versus-actual performance.",
+          "A short margin dashboard the owner can use without rebuilding the whole system.",
+          "Clear ownership for who updates, reviews, and acts on the numbers."
+        ],
+        advisory: [
+          "An ongoing margin review cadence across estimating, delivery, and closeout.",
+          "Support tightening pricing decisions as new jobs move through the pipeline.",
+          "Ongoing implementation help to make the controls stick."
+        ]
+      }
+    };
+  }
+
+  if (hasSignal("owner_bottleneck") || hasSignal("team_dependency") || hasSignal("owner_centralized_decisions") || hasSignal("unclear_roles") || hasRecommendationCategory("leadership") || hasRecommendationCategory("management")) {
+    return {
+      key: "owner_handoff",
+      title: "Owner handoff",
+      focusTitle: "Owner handoff and role clarity",
+      scopeLabel: "decision ownership and operating follow-through",
+      scopeCopy: "Initial scope would center on decision rights, role clarity, and a tighter operating cadence.",
+      deliverables: {
+        review: [
+          "A focused read on what still routes through the owner and why.",
+          "A shortlist of decisions that should move, stay, or escalate.",
+          "A first-step handoff plan before broader implementation."
+        ],
+        sprint: [
+          "A clear owner handoff lane with decision rules and escalation points.",
+          "Role scoreboards for the few positions that need cleaner accountability.",
+          "A weekly review rhythm that reduces the need for constant owner rescue.",
+          "A handoff plan so the team can carry the lane after setup."
+        ],
+        advisory: [
+          "A recurring operating cadence around ownership, accountability, and follow-through.",
+          "Support coaching the first handoffs until they hold under real workload.",
+          "Ongoing help tightening role clarity and escalation rules over time."
+        ]
+      }
+    };
+  }
+
+  if (hasSignal("weak_handoff") || hasSignal("scope_creep") || hasSignal("rework") || hasSignal("weak_scope_alignment") || hasSignal("inconsistent_process_adherence") || hasRecommendationCategory("delivery")) {
+    return {
+      key: "handoff",
+      title: "Scope handoff",
+      focusTitle: "Scope handoff and clean job starts",
+      scopeLabel: "scope clarity, handoffs, and cleaner job starts",
+      scopeCopy: "Initial scope would center on scope capture, handoff rules, and a tighter closeout loop.",
+      deliverables: {
+        review: [
+          "A practical read on where scope or handoffs are breaking down.",
+          "A short validation pass on what should be standardized first.",
+          "A first-move plan before implementation work starts."
+        ],
+        sprint: [
+          "A working scope or handoff packet the team can use on every new job.",
+          "A simple closeout or exception checklist tied to the same workflow.",
+          "Clear ownership at each handoff point so fewer details fall through.",
+          "A short review cadence to catch misses before they turn into rework."
+        ],
+        advisory: [
+          "An ongoing review cadence across quoting, handoff, delivery, and closeout.",
+          "Support tightening workflow discipline as the team uses the new process.",
+          "Ongoing help removing repeat misses instead of patching them case by case."
+        ]
+      }
+    };
+  }
+
+  if (hasSignal("scheduling_chaos") || hasSignal("dispatch_noise") || hasSignal("capacity_constraint") || hasSignal("backlog_instability") || hasSignal("no_capacity_planning") || hasSignal("weak_dispatch_system") || hasRecommendationCategory("operations")) {
+    return {
+      key: "execution",
+      title: "Execution stability",
+      focusTitle: "Execution stability and capacity control",
+      scopeLabel: "dispatch, scheduling, and weekly capacity control",
+      scopeCopy: "Initial scope would center on schedule control, crew loading, and fewer reactive reschedules.",
+      deliverables: {
+        review: [
+          "A focused read on what is driving schedule churn or reactive dispatch.",
+          "A short decision list for what should be planned weekly versus handled daily.",
+          "A clear first-step plan before committing to a build."
+        ],
+        sprint: [
+          "A shared dispatch or capacity board built around the current workflow.",
+          "A weekly planning cadence for schedule load, exceptions, and next-week visibility.",
+          "Named ownership for updates, escalations, and day-of changes.",
+          "A simple scoreboard so the team can see whether the board is actually reducing chaos."
+        ],
+        advisory: [
+          "A recurring operating rhythm around planning, reschedules, and capacity tradeoffs.",
+          "Support tuning the dispatch or capacity process as demand shifts.",
+          "Ongoing help keeping the operating rhythm in place once the first build is live."
+        ]
+      }
+    };
+  }
+
+  if (hasSignal("low_visibility") || hasSignal("no_kpi_discipline") || hasSignal("weak_metric_discipline") || hasSignal("fragmented_tooling") || hasRecommendationCategory("visibility")) {
+    return {
+      key: "visibility",
+      title: "Visibility and scorecard",
+      focusTitle: "Visibility and weekly scorecard",
+      scopeLabel: "faster operating visibility and better review discipline",
+      scopeCopy: "Initial scope would center on a short scorecard, clearer definitions, and a review cadence the team actually uses.",
+      deliverables: {
+        review: [
+          "A practical read on which numbers matter and where the current visibility breaks down.",
+          "A short list of metrics to define before building a scorecard.",
+          "A first-step plan that avoids overbuilding reporting."
+        ],
+        sprint: [
+          "A short scorecard for the handful of numbers needed to run the week.",
+          "Clear definitions for who updates each number and when.",
+          "A review cadence that turns the scorecard into decisions instead of dead reporting.",
+          "A handoff plan so the scorecard survives after setup."
+        ],
+        advisory: [
+          "A recurring operating review around the scorecard and the decisions tied to it.",
+          "Support refining the numbers as the team starts using them in real time.",
+          "Ongoing help keeping visibility tied to action, not just reporting."
+        ]
+      }
+    };
+  }
+
+  if (hasSignal("low_win_rate") || hasSignal("sales_pipeline_gap") || hasSignal("demand_uncertainty") || hasSignal("poor_bid_selection") || hasSignal("weak_sales_qualification") || hasRecommendationCategory("sales") || hasRecommendationCategory("strategy")) {
+    return {
+      key: "pipeline",
+      title: "Pipeline quality",
+      focusTitle: "Pipeline quality and qualification",
+      scopeLabel: "qualification, targeting, and cleaner growth decisions",
+      scopeCopy: "Initial scope would center on fit rules, pipeline visibility, and fewer low-fit pursuits.",
+      deliverables: {
+        review: [
+          "A practical read on what is weakening hit rate or demand quality.",
+          "A short validation pass on fit, qualification, and target work type.",
+          "A first-step plan before implementation starts."
+        ],
+        sprint: [
+          "A working qualification rule or fit filter the team can use immediately.",
+          "A short tracking rhythm for hit rate, customer fit, or bid quality.",
+          "Clear ownership for what gets pursued, declined, or reviewed.",
+          "A handoff plan so the sales discipline holds after setup."
+        ],
+        advisory: [
+          "A recurring growth review around fit, hit rate, and backlog quality.",
+          "Support tightening pursuit decisions as real opportunities move through the pipeline.",
+          "Ongoing help aligning growth decisions with delivery capacity and margin."
+        ]
+      }
+    };
+  }
+
+  return {
+    key: "general",
+    title: "Operating rhythm",
+    focusTitle: "Operating rhythm and first-fix follow-through",
+    scopeLabel: "the first operating fix and the cadence behind it",
+    scopeCopy: "Initial scope would center on the first fix, clear ownership, and a review rhythm that keeps it moving.",
+    deliverables: {
+      review: [
+        "A focused read on the first issue that actually needs action.",
+        "A short validation checklist before implementation starts.",
+        "A practical first-step plan tied to ownership and review."
+      ],
+      sprint: [
+        "A focused build around the first operating fix surfaced by the diagnostic.",
+        "A simple weekly review cadence and clear ownership for the new process.",
+        "A short scoreboard or checklist so the fix keeps running after setup.",
+        "A handoff plan the team can carry without constant rescue."
+      ],
+      advisory: [
+        "A recurring cadence around the first operating priorities surfaced in the review.",
+        "Support implementing the first process changes and holding accountability over time.",
+        "Ongoing help keeping the business out of reaction mode."
+      ]
+    }
+  };
+}
+
+function selectRecommendationPackageType({ normalized = {}, symptomTags = [], causeTags = [], recommendations = [], theme = null }) {
+  const clarity = normalized.clarity_level || "medium";
+  const complexity = normalized.operational_complexity || "medium";
+  const confidence = Number(normalized.classification_confidence || 0);
+  const signalCount = symptomTags.length + causeTags.length;
+  const ownerPattern = symptomTags.includes("owner_bottleneck") || causeTags.includes("owner_centralized_decisions");
+  const visibilityPattern = symptomTags.includes("low_visibility") || symptomTags.includes("no_kpi_discipline") || causeTags.includes("weak_metric_discipline");
+  const lowClarity = clarity === "low" || (confidence > 0 && confidence < 0.58);
+  const broadChangePattern = complexity === "high" || signalCount >= 5 || (ownerPattern && visibilityPattern) || theme?.key === "owner_handoff";
+
+  if (lowClarity && theme?.key !== "cash") return "review";
+  if (broadChangePattern && recommendations.length >= 2) return "advisory";
+  return "sprint";
+}
+
+function buildRecommendedDeliverables({ packageType, theme, priorityLabel }) {
+  const libraryDeliverables = theme?.deliverables || {};
+  const selected = packageType === "review"
+    ? libraryDeliverables.review
+    : packageType === "advisory"
+      ? libraryDeliverables.advisory
+      : libraryDeliverables.sprint;
+  const items = Array.isArray(selected) ? [...selected] : [];
+  if (items.length) return items;
+
+  return [
+    `A working plan tied to ${priorityLabel}.`,
+    "Clear ownership for the first move.",
+    "A practical review cadence so the change holds."
+  ];
+}
+
+function joinWithAnd(values) {
+  const items = values.filter(Boolean);
+  if (items.length <= 1) return items[0] || "";
+  if (items.length === 2) return `${items[0]} and ${items[1]}`;
+  return `${items.slice(0, -1).join(", ")}, and ${items[items.length - 1]}`;
 }
 
 function renderSignalChips(values) {
@@ -1759,11 +2262,14 @@ function renderFindings() {
   if (!findings) {
     el.findingsSection.classList.add("is-hidden");
     el.findingsGrid.innerHTML = "";
+    el.recommendedNextStep?.classList.add("is-hidden");
     return;
   }
 
   el.findingsSection.classList.remove("is-hidden");
   el.findingsGrid.innerHTML = "";
+  el.findingsTitle.textContent = deriveFindingsTitle(findings);
+  el.findingsSummary.textContent = deriveFindingsSummary(findings);
 
   const brief = composeDiagnosticBrief(findings, state.intelligenceRecord || buildStructuredSessionRecord(), state.extracted || {});
   brief.sections.forEach((entry) => {
@@ -1799,6 +2305,47 @@ function renderFindings() {
 
     el.findingsGrid.appendChild(card);
   });
+
+  renderRecommendedNextStep();
+}
+
+function renderRecommendedNextStep() {
+  if (!el.recommendedNextStep) return;
+
+  const recommendation = deriveRecommendedNextStepModel();
+  if (!recommendation) {
+    el.recommendedNextStep.classList.add("is-hidden");
+    return;
+  }
+
+  el.recommendedNextStep.classList.remove("is-hidden");
+  if (el.recommendedBridge) el.recommendedBridge.textContent = recommendation.transitionCopy;
+  if (el.recommendedPackageType) el.recommendedPackageType.textContent = recommendation.packageLabel;
+  if (el.recommendedPackageTitle) el.recommendedPackageTitle.textContent = recommendation.title;
+  if (el.recommendedPackageNote) el.recommendedPackageNote.textContent = recommendation.packageNote;
+  if (el.recommendedBusinessType) el.recommendedBusinessType.textContent = recommendation.businessTypeLabel;
+  if (el.recommendedPriority) el.recommendedPriority.textContent = recommendation.priorityLabel;
+  if (el.recommendedSignals) {
+    el.recommendedSignals.textContent = recommendation.signals.length
+      ? recommendation.signals.slice(0, 4).join(", ")
+      : "Signal pattern is still being normalized.";
+  }
+  if (el.recommendedScope) el.recommendedScope.textContent = recommendation.scopeCopy;
+  renderPanelList(el.recommendedDeliverables, recommendation.deliverables);
+
+  if (el.recommendedPrimaryCta) {
+    el.recommendedPrimaryCta.textContent = state.contactSubmitted
+      ? "Request submitted"
+      : state.contactOpen
+        ? "Continue request"
+        : recommendation.primaryCtaLabel;
+  }
+
+  if (el.recommendedFollowupCta) {
+    const remaining = Math.max(0, CONFIG.freeFollowupLimit - state.freeFollowupsUsed);
+    el.recommendedFollowupCta.disabled = remaining <= 0;
+    el.recommendedFollowupCta.textContent = remaining > 0 ? "Ask one follow-up first" : "Free follow-ups used";
+  }
 }
 
 function renderContact() {
@@ -1809,6 +2356,7 @@ function renderContact() {
     state.followUpConsentAccepted = false;
     el.contactForm?.classList.add("is-hidden");
     renderFollowUpConsentState();
+    renderRecommendedNextStep();
     return;
   }
   if (state.contactOpen) {
@@ -1821,11 +2369,13 @@ function renderContact() {
     el.contactToggle.setAttribute("aria-expanded", String(Boolean(state.contactOpen)));
   }
   renderFollowUpConsentState();
+  renderRecommendedNextStep();
 }
 
 function openContactForm() {
   state.contactOpen = true;
   renderContact();
+  renderDashboardSummary();
   renderFollowUpConsentState();
   scrollToSection("contact");
   refreshStructuredSessionIntelligence({ sync: false });
@@ -1891,7 +2441,10 @@ async function handleContactSubmit(event) {
     state.followUpConsentAccepted = false;
     el.contactForm.reset();
     el.leadMessage.value = deriveLeadPrompt(state.findings);
+    renderContact();
+    renderDashboardSummary();
     renderFollowUpConsentState();
+    persistSession();
   } catch (error) {
     showNotice(el.contactMessage, error instanceof Error ? error.message : "Lead capture failed.", "warning");
   }
