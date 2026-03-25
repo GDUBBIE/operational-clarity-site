@@ -3253,7 +3253,8 @@ body.app-shell .workspace-side .dashboard-card {
 body.app-shell .mobile-console-actions,
 body.app-shell .mobile-panel-trigger,
 body.app-shell .mobile-panel-close,
-body.app-shell .mobile-panel-scrim {
+body.app-shell .mobile-panel-scrim,
+body.app-shell .mobile-flow-note {
   display: none;
 }
 
@@ -3886,6 +3887,56 @@ body.app-shell .panel-list li::before {
   body.app-shell .input-guidance summary,
   body.app-shell .command-helper {
     font-size: 0.76rem;
+  }
+
+  body.app-shell .mobile-flow-note {
+    display: grid;
+    gap: 5px;
+    margin-top: 9px;
+    padding-top: 9px;
+    border-top: 1px solid rgba(19, 33, 45, 0.08);
+  }
+
+  body.app-shell .mobile-flow-note-lead {
+    margin: 0;
+    color: rgba(16, 37, 52, 0.88);
+    font-size: 0.79rem;
+    font-weight: 700;
+    line-height: 1.38;
+  }
+
+  body.app-shell .mobile-flow-note-copy {
+    margin: 0;
+    color: rgba(74, 90, 105, 0.9);
+    font-size: 0.74rem;
+    line-height: 1.38;
+  }
+
+  body.app-shell .mobile-flow-note-list {
+    display: grid;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  body.app-shell .mobile-flow-note-list li {
+    position: relative;
+    padding-left: 14px;
+    color: rgba(95, 107, 119, 0.92);
+    font-size: 0.74rem;
+    line-height: 1.38;
+  }
+
+  body.app-shell .mobile-flow-note-list li::before {
+    content: "";
+    position: absolute;
+    top: 0.56em;
+    left: 0;
+    width: 5px;
+    height: 5px;
+    border-radius: 999px;
+    background: rgba(29, 86, 116, 0.34);
   }
 
   body.app-shell .workspace-side .insight-rail {
