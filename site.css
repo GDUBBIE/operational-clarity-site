@@ -1622,6 +1622,8 @@ body.subpage-shell .stack {
 }
 
 body.subpage-shell .card {
+  display: grid;
+  gap: 16px;
   padding: 24px;
 }
 
@@ -1639,17 +1641,68 @@ body.subpage-shell .hero-copy {
   max-width: 60ch;
 }
 
+body.subpage-shell .card-intro,
+body.subpage-shell .subpage-note {
+  margin: 0;
+  max-width: 68ch;
+  color: var(--muted);
+}
+
+body.subpage-shell .subpage-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+body.subpage-shell .subpage-grid.columns-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+body.subpage-shell .info-block {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--surface-muted);
+}
+
+body.subpage-shell .info-block h3 {
+  margin: 0;
+  font-size: 1.08rem;
+  letter-spacing: -0.03em;
+}
+
+body.subpage-shell .info-block p,
+body.subpage-shell .info-block ul,
+body.subpage-shell .info-block ol,
+body.subpage-shell .card > h2 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 body.subpage-shell .hero-actions {
   margin-top: 8px;
 }
 
+body.subpage-shell ol,
 body.subpage-shell ul {
   margin: 0;
   padding-left: 1.2rem;
 }
 
+body.subpage-shell .notice {
+  margin-top: 0;
+}
+
 body.subpage-shell li + li {
   margin-top: 8px;
+}
+
+@media (max-width: 900px) {
+  body.subpage-shell .subpage-grid.columns-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 body.internal-shell .container {
@@ -1941,6 +1994,11 @@ body.internal-shell .muted {
   body.app-shell .contact-card,
   body.app-shell .modal-card {
     padding: 20px;
+  }
+
+  body.subpage-shell .subpage-grid,
+  body.subpage-shell .subpage-grid.columns-3 {
+    grid-template-columns: 1fr;
   }
 
   body.app-shell .modal-overlay {
