@@ -5237,6 +5237,10 @@ body.app-shell .conversation-head > div {
 
 body.app-shell .transcript-viewport {
   gap: 18px;
+  min-height: 0;
+  min-block-size: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
   padding: 16px 10px calc(88px + env(safe-area-inset-bottom)) 0;
   scroll-padding-bottom: calc(100px + env(safe-area-inset-bottom));
 }
@@ -5519,6 +5523,7 @@ body.app-shell .workspace-side .dashboard-card {
   }
 
   body.app-shell .conversation-card {
+    grid-template-rows: auto minmax(0, 1fr) auto;
     row-gap: 16px;
   }
 
@@ -5532,6 +5537,10 @@ body.app-shell .workspace-side .dashboard-card {
   }
 
   body.app-shell .transcript-viewport {
+    min-height: 0;
+    min-block-size: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
     padding-bottom: calc(140px + env(safe-area-inset-bottom));
     scroll-padding-bottom: calc(156px + env(safe-area-inset-bottom));
   }
