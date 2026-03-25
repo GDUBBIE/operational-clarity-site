@@ -4,69 +4,50 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact | Operational Clarity</title>
-  <meta name="description" content="Contact page placeholder for Operational Clarity." />
-  <style>
-:root {
-  --bg: #f4f6f8;
-  --panel: #ffffff;
-  --ink: #17212b;
-  --text: #334155;
-  --muted: #66758a;
-  --line: rgba(15, 23, 42, 0.10);
-  --accent: #1f4f82;
-  --shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
-  --radius: 18px;
-  --container: 780px;
-  --font: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-* { box-sizing: border-box; }
-body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--ink); font-family: var(--font); }
-a { color: var(--accent); text-decoration: none; }
-a:focus-visible { outline: 3px solid rgba(31, 79, 130, 0.22); outline-offset: 2px; }
-h1, h2, p, li { margin-top: 0; }
-.container { width: min(calc(100% - 2rem), var(--container)); margin: 0 auto; }
-.topbar, .footer-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
-.topbar { padding: 24px 0 16px; }
-.footer-row { padding: 20px 0 32px; border-top: 1px solid var(--line); }
-.brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; }
-.brand::before { content: ""; width: 10px; height: 10px; border-radius: 999px; background: var(--accent); }
-.brand-meta, .eyebrow, .small-text { color: var(--muted); }
-.eyebrow { font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; }
-h1 { margin-bottom: 12px; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.04; letter-spacing: -0.04em; }
-.hero-copy, p, li { color: var(--text); line-height: 1.65; }
-.card { padding: 22px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); box-shadow: var(--shadow); }
-.stack { display: grid; gap: 16px; padding-bottom: 28px; }
-.footer-links { display: flex; gap: 16px; flex-wrap: wrap; }
-@media (max-width: 720px) {
-  .topbar, .footer-row { flex-direction: column; }
-}
-  </style>
+  <meta name="description" content="Current public contact path for Operational Clarity." />
+  <link rel="stylesheet" href="../site.css" />
 </head>
-<body>
+<body class="subpage-shell">
   <main class="container">
     <header class="topbar">
-      <div>
+      <div class="brand-block">
         <a class="brand" href="../index.html">Operational Clarity</a>
-        <p class="brand-meta">Operational Clarity is a product developed by EHI Studio, a division of EHI Group.</p>
+        <p class="brand-architecture">Developed by EHI Studio, a division of EHI Group.</p>
       </div>
-      <nav class="footer-links" aria-label="Secondary">
-        <a href="../privacy-policy/">Privacy Policy</a>
-        <a href="../terms-of-use/">Terms of Use</a>
-      </nav>
+      <div class="topbar-meta">
+        <span class="topbar-note">Public contact route</span>
+        <nav class="topbar-links" aria-label="Secondary">
+          <a href="../privacy-policy/">Privacy Policy</a>
+          <a href="../terms-of-use/">Terms of Use</a>
+        </nav>
+      </div>
     </header>
 
     <section class="stack">
-      <div class="card">
-        <p class="eyebrow">Contact</p>
-        <h1>Contact page placeholder</h1>
-        <p class="hero-copy">This route is in place for launch readiness. Replace this page with your live contact form, scheduling link, or public inbox before launch. If a user requests next-step help, follow-up may include human advisory review from EHI Studio, a division of EHI Group, in addition to AI-assisted diagnostic guidance.</p>
+      <div class="card subpage-hero">
+        <p class="kicker">Contact</p>
+        <h1>Current public contact path</h1>
+        <p class="hero-copy">The live next-step flow currently runs inside the diagnostic review. Start on the homepage, complete the review, and submit follow-up details there if you want human help from EHI Studio.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="../index.html">Start the review</a>
+          <a class="btn btn-secondary" href="../privacy-policy/">Review privacy details</a>
+        </div>
       </div>
 
       <div class="card">
-        <h2>Recommended launch replacement</h2>
-        <p>Publish one clear contact path here. For example:</p>
+        <h2>Best current path</h2>
         <ul>
-          <li>a contact form tied to your production CRM or inbox</li>
+          <li>Use the homepage diagnostic to generate findings first.</li>
+          <li>If you want next-step help, open the in-flow contact form after findings appear.</li>
+          <li>That preserves the review context so the follow-up request includes the relevant operating signal.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Launch replacement for this route</h2>
+        <p>This page is in place for launch readiness. When you are ready for a standalone public contact page, publish one clear path here.</p>
+        <ul>
+          <li>a production contact form tied to your CRM or inbox</li>
           <li>a published email address for EHI Studio</li>
           <li>a scheduling link for paid follow-up conversations</li>
         </ul>

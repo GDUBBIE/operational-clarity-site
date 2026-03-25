@@ -4,62 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Terms of Use | Operational Clarity</title>
-  <meta name="description" content="Terms of Use placeholder for Operational Clarity." />
-  <style>
-:root {
-  --bg: #f4f6f8;
-  --panel: #ffffff;
-  --ink: #17212b;
-  --text: #334155;
-  --muted: #66758a;
-  --line: rgba(15, 23, 42, 0.10);
-  --accent: #1f4f82;
-  --shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
-  --radius: 18px;
-  --container: 880px;
-  --font: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-* { box-sizing: border-box; }
-body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--ink); font-family: var(--font); }
-a { color: var(--accent); text-decoration: none; }
-a:focus-visible { outline: 3px solid rgba(31, 79, 130, 0.22); outline-offset: 2px; }
-h1, h2, p, li { margin-top: 0; }
-.container { width: min(calc(100% - 2rem), var(--container)); margin: 0 auto; }
-.topbar, .footer-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
-.topbar { padding: 24px 0 16px; }
-.footer-row { padding: 20px 0 32px; border-top: 1px solid var(--line); }
-.brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; }
-.brand::before { content: ""; width: 10px; height: 10px; border-radius: 999px; background: var(--accent); }
-.brand-meta, .eyebrow, .small-text { color: var(--muted); }
-.eyebrow { font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; }
-h1 { margin-bottom: 12px; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.04; letter-spacing: -0.04em; }
-.hero-copy, p, li { color: var(--text); line-height: 1.65; }
-.card { padding: 22px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); box-shadow: var(--shadow); }
-.stack { display: grid; gap: 16px; padding-bottom: 28px; }
-ul { margin: 0; padding-left: 1.2rem; }
-li + li { margin-top: 8px; }
-.footer-links { display: flex; gap: 16px; flex-wrap: wrap; }
-@media (max-width: 720px) {
-  .topbar, .footer-row { flex-direction: column; }
-}
-  </style>
+  <meta name="description" content="Terms of Use for Operational Clarity." />
+  <link rel="stylesheet" href="../site.css" />
 </head>
-<body>
+<body class="subpage-shell">
   <main class="container">
     <header class="topbar">
-      <div>
+      <div class="brand-block">
         <a class="brand" href="../index.html">Operational Clarity</a>
-        <p class="brand-meta">Operational Clarity is a product developed by EHI Studio, a division of EHI Group.</p>
+        <p class="brand-architecture">Developed by EHI Studio, a division of EHI Group.</p>
       </div>
-      <nav class="footer-links" aria-label="Secondary">
-        <a href="../privacy-policy/">Privacy Policy</a>
-        <a href="../contact/">Contact</a>
-      </nav>
+      <div class="topbar-meta">
+        <span class="topbar-note">Legal</span>
+        <nav class="topbar-links" aria-label="Secondary">
+          <a href="../privacy-policy/">Privacy Policy</a>
+          <a href="../contact/">Contact</a>
+        </nav>
+      </div>
     </header>
 
     <section class="stack">
-      <div class="card">
-        <p class="eyebrow">Legal</p>
+      <div class="card subpage-hero">
+        <p class="kicker">Legal</p>
         <h1>Terms of Use</h1>
         <p class="hero-copy">These terms summarize the current launch flow for Operational Clarity. Replace this placeholder page with final counsel-reviewed terms before public launch.</p>
       </div>
