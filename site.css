@@ -7966,7 +7966,40 @@ body.app-shell .finding-meter-stack {
   grid-column: auto;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px 12px;
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
+}
+
+body.app-shell .finding-meter-row,
+body.app-shell .finding-signal-notes {
+  width: 100%;
+  min-width: 0;
+}
+
+body.app-shell .finding-meter-row {
+  box-sizing: border-box;
+}
+
+body.app-shell .finding-meter-copy {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: start;
+  gap: 4px;
+  min-width: 0;
+}
+
+body.app-shell .finding-meter-copy > * {
+  min-width: 0;
+}
+
+body.app-shell .finding-meter-copy span,
+body.app-shell .finding-meter-copy strong {
+  display: block;
+}
+
+body.app-shell .finding-meter-copy strong {
+  line-height: 1.2;
 }
 
 body.app-shell .finding-signal-notes {
