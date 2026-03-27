@@ -442,57 +442,33 @@
               <div id="recommended-next-step" class="recommended-next-step is-hidden">
                 <div class="recommended-next-step-head">
                   <p class="kicker">What to fix next</p>
-                  <h3>Tighten the next operating constraint.</h3>
+                  <h3 id="recommended-package-title" class="recommended-package-title">The next operating adjustment appears here.</h3>
                   <p id="recommended-bridge" class="section-copy">The clearest next move appears here after the diagnostic is ready.</p>
                 </div>
 
                 <div class="recommended-next-step-grid">
-                  <div class="recommended-package-panel">
+                  <div class="recommended-main-shell">
                     <div class="recommended-directive-block">
                       <p class="muted-label">What needs to change now</p>
-                      <p id="recommended-package-type" class="recommended-package-type">Operational priority</p>
-                      <h4 id="recommended-package-title" class="recommended-package-title">The next operating adjustment appears here.</h4>
+                      <p id="recommended-package-type" class="recommended-package-type">Direct action</p>
                       <p id="recommended-package-note" class="section-copy">The operational guidance will adapt to the business type, priority, and signal pattern.</p>
                     </div>
 
-                    <div class="recommended-detail-grid">
+                    <div class="recommended-core-grid">
                       <div class="recommended-why-block">
                         <p class="muted-label">Why this matters</p>
                         <p id="recommended-why" class="section-copy">The reasoning behind this path appears after the diagnostic is ready.</p>
                       </div>
 
-                      <div class="recommended-meta-shell">
-                        <div class="recommended-meta-grid">
-                          <div class="recommended-meta-item">
-                            <span class="recommended-meta-label">Business type</span>
-                            <strong id="recommended-business-type" class="recommended-meta-value">Appears with findings</strong>
-                          </div>
-                          <div class="recommended-meta-item">
-                            <span class="recommended-meta-label">First priority</span>
-                            <strong id="recommended-priority" class="recommended-meta-value">Appears with findings</strong>
-                          </div>
-                          <div class="recommended-meta-item">
-                            <span class="recommended-meta-label">Near-term risk</span>
-                            <p id="recommended-best-fit" class="recommended-meta-value recommended-meta-copy">Appears with findings</p>
-                          </div>
-                          <div class="recommended-meta-item recommended-meta-item-wide">
-                            <span class="recommended-meta-label">Signals behind this path</span>
-                            <p id="recommended-signals" class="recommended-meta-value recommended-meta-copy">Appears with findings</p>
-                          </div>
-                        </div>
-
-                        <p id="recommended-scope" class="finding-note">A scope guardrail appears after the diagnostic is ready.</p>
+                      <div class="recommended-steps-block">
+                        <p class="muted-label">First steps</p>
+                        <ul id="recommended-deliverables" class="offer-list"></ul>
                       </div>
                     </div>
                   </div>
 
-                  <div class="recommended-deliverables-panel">
+                  <div class="recommended-side-shell">
                     <div class="recommended-support-shell">
-                      <div class="recommended-support-block">
-                        <p class="muted-label">Immediate actions</p>
-                        <ul id="recommended-deliverables" class="offer-list"></ul>
-                      </div>
-
                       <div class="recommended-support-block recommended-next-note">
                         <p class="muted-label">Risks if not addressed</p>
                         <p id="recommended-next-step-note" class="section-copy">The operating risks appear after the diagnostic is ready.</p>
@@ -504,6 +480,29 @@
                       <div class="recommended-secondary-actions">
                         <a class="text-button" href="#diagnostic">Continue diagnostic</a>
                       </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="recommended-meta-shell">
+                  <p id="recommended-scope" class="finding-note">A scope guardrail appears after the diagnostic is ready.</p>
+
+                  <div class="recommended-meta-grid">
+                    <div class="recommended-meta-item">
+                      <span class="recommended-meta-label">Business type</span>
+                      <strong id="recommended-business-type" class="recommended-meta-value">Appears with findings</strong>
+                    </div>
+                    <div class="recommended-meta-item">
+                      <span class="recommended-meta-label">First priority</span>
+                      <strong id="recommended-priority" class="recommended-meta-value">Appears with findings</strong>
+                    </div>
+                    <div class="recommended-meta-item">
+                      <span class="recommended-meta-label">Near-term risk</span>
+                      <p id="recommended-best-fit" class="recommended-meta-value recommended-meta-copy">Appears with findings</p>
+                    </div>
+                    <div class="recommended-meta-item recommended-meta-item-wide">
+                      <span class="recommended-meta-label">Signals behind this path</span>
+                      <p id="recommended-signals" class="recommended-meta-value recommended-meta-copy">Appears with findings</p>
                     </div>
                   </div>
                 </div>
@@ -2306,7 +2305,9 @@ function deriveRecommendedNextStepModel() {
       ? "Ongoing Advisory"
       : "Operations Sprint";
   const title = theme.focusTitle || theme.title;
-  const transitionCopy = `The clearest next move is to tighten ${theme.scopeLabel} before widening the work or adding more demand.`;
+  const actionHeadline = deriveRecommendationDirective(theme.key, theme.scopeLabel, priorityLabel);
+  const actionSummary = buildRecommendationActionSummary(theme.scopeLabel, priorityLabel);
+  const transitionCopy = `Act on ${theme.scopeLabel} before widening the work or adding more demand.`;
   const workstreams = recommendations.slice(0, 2).map((entry) => entry.title);
   const scopeCopy = workstreams.length
     ? `Keep the scope tight around ${joinWithAnd(workstreams)} before widening the work.`
@@ -2334,12 +2335,14 @@ function deriveRecommendedNextStepModel() {
 
   return {
     title,
-    packageLabel: "Operational priority",
+    actionHeadline,
+    actionSummary,
+    packageLabel: "Direct action",
     basePackage,
     packageType,
     themeKey: theme.key,
     transitionCopy,
-    packageNote: `Start with ${priorityLabel}, supported by clear ownership and a repeatable review rhythm around ${theme.scopeLabel}.`,
+    packageNote: actionSummary,
     whyPath,
     bestForCopy,
     nextStepCopy,
@@ -2356,6 +2359,26 @@ function deriveRecommendedNextStepModel() {
     contactPackageValue,
     contactMessage
   };
+}
+
+function deriveRecommendationDirective(themeKey = "general", scopeLabel = "", priorityLabel = "") {
+  const subject = scopeLabel || priorityLabel || "the first operating fix";
+  const catalog = {
+    cash: "Build a weekly collections cadence with clear ownership and escalation rules.",
+    margin: "Build pricing guardrails and a weekly margin review.",
+    owner_handoff: "Define owner-free handoffs for routine decisions and escalations.",
+    handoff: "Standardize scope handoffs and closeout rules across every job.",
+    execution: "Install a weekly scheduling and task-control system.",
+    visibility: "Build a simple scorecard with named owners and a weekly review.",
+    pipeline: "Define qualification rules and review pipeline quality every week.",
+    general: `Define one owner, one lane, and one weekly review around ${subject}.`
+  };
+  return catalog[themeKey] || catalog.general;
+}
+
+function buildRecommendationActionSummary(scopeLabel = "", priorityLabel = "") {
+  const subject = scopeLabel || priorityLabel || "the first operating fix";
+  return `Focus only on ${subject} first. Put one owner, one review cadence, and one escalation path around this lane before widening the work.`;
 }
 
 function getRecommendationEntriesForNextStep(intelligence, recommendationIds) {
@@ -3240,8 +3263,8 @@ function renderRecommendedNextStep() {
   el.recommendedNextStep.classList.remove("is-hidden");
   if (el.recommendedBridge) el.recommendedBridge.textContent = recommendation.transitionCopy;
   if (el.recommendedPackageType) el.recommendedPackageType.textContent = recommendation.packageLabel;
-  if (el.recommendedPackageTitle) el.recommendedPackageTitle.textContent = recommendation.title;
-  if (el.recommendedPackageNote) el.recommendedPackageNote.textContent = recommendation.packageNote;
+  if (el.recommendedPackageTitle) el.recommendedPackageTitle.textContent = recommendation.actionHeadline || recommendation.title;
+  if (el.recommendedPackageNote) el.recommendedPackageNote.textContent = recommendation.actionSummary || recommendation.packageNote;
   if (el.recommendedWhy) el.recommendedWhy.textContent = recommendation.whyPath;
   if (el.recommendedBusinessType) el.recommendedBusinessType.textContent = recommendation.businessTypeLabel;
   if (el.recommendedPriority) el.recommendedPriority.textContent = recommendation.priorityLabel;
