@@ -72,7 +72,7 @@
             <span class="brand">Operational Clarity</span>
             <p class="brand-architecture">by EHI Studio</p>
           </div>
-          <p class="topbar-statement">Decision support system for operational diagnosis, structured findings, and next-step advisory intake.</p>
+          <p class="topbar-statement">Operational diagnostic workspace for structured findings, clear recommendations, and scoped next-step requests.</p>
         </div>
 
         <div class="topbar-utility">
@@ -98,7 +98,8 @@
           </nav>
 
           <div class="mobile-console-actions" aria-label="Mobile workspace panels">
-            <a class="mobile-panel-trigger" href="#system-panel">System panel</a>
+            <a class="mobile-panel-trigger" href="#diagnostic">Diagnostic chat</a>
+            <a class="mobile-panel-trigger" href="#findings">Diagnostic brief</a>
             <a class="mobile-panel-trigger" href="#insights-panel">View insights</a>
           </div>
         </div>
@@ -106,102 +107,68 @@
     </div>
 
     <section class="workspace console-workspace">
-      <div class="container workspace-shell">
-        <aside id="system-panel" class="workspace-utility">
-          <a class="mobile-panel-scrim" href="#diagnostic" aria-label="Close system panel"></a>
-          <div class="utility-stack">
-            <div class="card utility-card">
-              <div class="utility-section utility-panel-head">
-                <div>
-                  <p class="kicker">System panel</p>
-                  <h2>Session map</h2>
-                </div>
-                <a class="mobile-panel-close text-button" href="#diagnostic">Close</a>
-              </div>
+      <div class="container workspace-pages">
+        <nav class="workspace-view-nav" aria-label="Workspace pages">
+          <a id="chat-view-link" class="workspace-view-link" href="#diagnostic">Diagnostic chat</a>
+          <a id="findings-view-link" class="workspace-view-link" href="#findings">Diagnostic brief</a>
+        </nav>
 
-              <div class="utility-section">
-                <p class="muted-label">Sections</p>
-                <nav class="utility-nav" aria-label="Workspace sections">
-                  <a href="#diagnostic">Conversation</a>
-                  <a href="#findings">Findings</a>
-                  <a href="#contact">Next step</a>
-                </nav>
-              </div>
-
-              <div class="utility-section">
-                <p class="muted-label">Workflow</p>
-                <ol class="utility-steps">
-                  <li>State the main pressure point.</li>
-                  <li>Answer focused follow-up questions.</li>
-                  <li>Review issue, cause, and first priority.</li>
-                  <li>Choose whether to move into next-step help.</li>
-                </ol>
-              </div>
-
-              <div class="utility-section">
-                <p class="muted-label">System looks for</p>
-                <ul class="utility-list">
-                  <li>Repeated bottlenecks or handoff failures</li>
-                  <li>Owner dependency and control drag</li>
-                  <li>Margin, cash, or pricing leakage</li>
-                  <li>Visibility gaps and unclear operating rhythm</li>
-                </ul>
-              </div>
-
-              <div class="utility-section utility-section-compact">
-                <p class="muted-label">Operating notes</p>
-                <p class="utility-note">Keep answers concrete. Use one example. Leave out highly sensitive information.</p>
-              </div>
-            </div>
-          </div>
-        </aside>
-
-        <div class="workspace-main">
-          <section id="diagnostic" class="workspace-block primary-start conversation-stage">
-            <div class="card transcript-card conversation-card">
-              <div id="transcript" class="transcript-head conversation-head">
-                <div>
-                  <p class="kicker">Live advisor conversation</p>
-                  <h2>Operational diagnostic</h2>
-                  <p class="header-copy">The conversation and the input now stay in one working thread. Read the latest response, then reply directly below it.</p>
-                </div>
-              </div>
-
-              <div id="transcript-viewport" class="transcript-viewport">
-                <div id="chat-empty-state" class="chat-empty-state transcript-empty-state">
-                  <div class="empty-state-head">
-                    <p class="empty-state-title">Start the conversation.</p>
-                    <p class="empty-state-copy">Share the main pressure point below. The advisor's responses, follow-up questions, and read all appear here in the same thread.</p>
+        <section id="chat-page" class="workspace-page workspace-page-chat" aria-labelledby="chat-page-title">
+          <div class="chat-page-shell">
+            <section id="diagnostic" class="workspace-block primary-start conversation-stage">
+              <div class="card transcript-card conversation-card">
+                <div class="conversation-shell-head">
+                  <div id="transcript" class="transcript-head conversation-head">
+                    <div>
+                      <p class="kicker">Live advisor conversation</p>
+                      <h2 id="chat-page-title">Operational diagnostic</h2>
+                      <p class="header-copy">Ask or answer in one working thread. The transcript is the main workspace, and findings move into a dedicated brief once the read is ready.</p>
+                    </div>
                   </div>
                 </div>
 
-                <div id="message-list" class="message-list" aria-live="polite"></div>
+                <div id="transcript-viewport" class="transcript-viewport">
+                  <div id="chat-empty-state" class="chat-empty-state transcript-empty-state">
+                    <div class="empty-state-head">
+                      <p class="empty-state-title">Start the conversation.</p>
+                      <p class="empty-state-copy">Share the main pressure point below. The advisor's responses, follow-up questions, and read all appear here in the same thread.</p>
+                    </div>
+                  </div>
 
-                <div id="typing-row" class="typing-row is-hidden">
-                  <span class="typing-dot"></span>
-                  <span class="typing-dot"></span>
-                  <span class="typing-dot"></span>
-                  <span>Working...</span>
+                  <div id="message-list" class="message-list" aria-live="polite"></div>
+
+                  <div id="typing-row" class="message assistant typing-row is-hidden" role="status" aria-live="polite" aria-label="Advisor is working on the next reply">
+                    <p class="message-meta">Advisor</p>
+                    <div class="typing-row-body">
+                      <div class="typing-indicator" aria-hidden="true">
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                      </div>
+                      <span class="typing-label">Working on the next reply</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
 
-              <form id="chat-form" class="conversation-composer chat-form" aria-labelledby="chat-input-label" aria-describedby="chat-note sensitive-info-note">
-                <div class="sr-only" aria-hidden="true">
-                  <span id="stage-badge" class="badge">discover</span>
-                  <span id="limit-badge" class="badge">0% ready</span>
-                </div>
+                <form id="chat-form" class="conversation-composer chat-form" aria-labelledby="chat-input-label" aria-describedby="chat-note sensitive-info-note">
+                  <div class="sr-only" aria-hidden="true">
+                    <span id="stage-badge" class="badge">discover</span>
+                    <span id="limit-badge" class="badge">0% ready</span>
+                  </div>
 
-                <div class="composer-intro">
-                  <label id="chat-input-label" class="composer-title" for="chat-input">Reply with the next detail or answer.</label>
-                  <p id="chat-note" class="command-helper">One concrete example or direct answer is enough to keep the read moving.</p>
-                  <p id="sensitive-info-note" class="sr-only">Do not submit passwords, bank details, employee personal data, or other highly sensitive confidential information.</p>
-                </div>
+                  <div class="composer-intro">
+                    <label id="chat-input-label" class="composer-title" for="chat-input">Reply with the next detail or answer.</label>
+                    <p id="chat-note" class="command-helper">One concrete example or direct answer is enough to keep the read moving.</p>
+                    <p id="sensitive-info-note" class="sr-only">Do not submit passwords, bank details, employee personal data, or other highly sensitive confidential information.</p>
+                  </div>
 
-                <div class="input-shell composer-shell">
-                  <textarea id="chat-input" rows="4" placeholder="Example: We stay busy, but jobs still bottleneck through me and margins are inconsistent."></textarea>
+                  <div class="input-shell composer-shell">
+                    <div class="composer-input-row">
+                      <textarea id="chat-input" rows="4" placeholder="Example: We stay busy, but jobs still bottleneck through me and margins are inconsistent."></textarea>
+                      <button id="send-button" type="submit" class="btn btn-primary composer-send">Start conversation</button>
+                    </div>
 
-                  <div class="composer-footer">
-                    <div class="composer-footer-main">
+                    <div class="composer-footer">
                       <div id="prompt-chip-list" class="prompt-chips" aria-label="Example prompts">
                         <button type="button" class="prompt-chip" data-prompt-chip="Everything still depends on me">Owner is the bottleneck</button>
                         <button type="button" class="prompt-chip" data-prompt-chip="Cash is tight">Cash is tight</button>
@@ -218,14 +185,163 @@
                         </details>
                       </div>
                     </div>
-                    <button id="send-button" type="submit" class="btn btn-primary">Start conversation</button>
+                  </div>
+
+                  <div id="chat-error" class="notice is-hidden"></div>
+                </form>
+              </div>
+            </section>
+
+            <aside id="insights-panel" class="workspace-side chat-insight-rail">
+              <a class="mobile-panel-scrim" href="#diagnostic" aria-label="Close insights panel"></a>
+              <div class="card dashboard-card insight-rail">
+                <div class="dashboard-header insight-header">
+                  <div>
+                    <p class="kicker">Live insight rail</p>
+                    <h2>Session snapshot</h2>
+                    <p class="header-copy">Readiness, current signal, and the next-step read stay visible while the diagnostic runs.</p>
+                  </div>
+                  <div class="insight-header-actions">
+                    <button id="reset-session" type="button" class="text-button">Reset review</button>
+                    <a class="mobile-panel-close text-button" href="#diagnostic">Close</a>
                   </div>
                 </div>
 
-                <div id="chat-error" class="notice is-hidden"></div>
-              </form>
+                <div class="dashboard-grid">
+                  <div class="panel panel-wide rail-status-panel">
+                    <div class="meter-head">
+                      <span class="signal-label">Readiness</span>
+                      <strong id="context-score-label" class="metric-value">0%</strong>
+                    </div>
+                    <div class="meter-track" aria-hidden="true">
+                      <div id="context-meter-fill" class="meter-fill"></div>
+                    </div>
+                    <div class="signal-meta">
+                      <p id="context-meter-copy" class="panel-copy">Waiting for the first signal.</p>
+                      <p id="free-questions-label" class="signal-support">3 follow-up questions available after findings.</p>
+                    </div>
+                    <div class="status-stack">
+                      <div class="status-line">
+                        <span class="signal-label">Status</span>
+                        <strong id="status-label" class="metric-value">Waiting</strong>
+                      </div>
+                      <div class="status-line">
+                        <span class="signal-label">Confidence</span>
+                        <strong id="confidence-value" class="metric-value">Pending</strong>
+                      </div>
+                      <div id="assessment-score-row" class="status-line is-hidden">
+                        <span class="signal-label">Assessment score</span>
+                        <strong id="assessment-score-value" class="metric-value">Pending</strong>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="current-pattern-panel" class="panel is-hidden">
+                    <h3>Business type</h3>
+                    <p id="business-type-value" class="panel-value">Appears after the first response</p>
+                    <p class="panel-copy">The segment and operating pattern the system is identifying so far.</p>
+                  </div>
+
+                  <div id="signal-panel" class="panel is-hidden">
+                    <h3>Detected signals</h3>
+                    <div id="signal-chip-list" class="signal-chip-list"></div>
+                    <p class="panel-copy">Pain points and extracted signals normalized from the conversation.</p>
+                  </div>
+
+                  <div id="likely-issue-panel" class="panel is-hidden">
+                    <h3>Likely issue</h3>
+                    <p id="main-issue-value" class="panel-value">Appears after the first response</p>
+                    <p class="panel-copy">The clearest source of friction seen so far.</p>
+                  </div>
+
+                  <div id="likely-cause-panel" class="panel is-hidden">
+                    <h3>Likely cause</h3>
+                    <p id="likely-cause-value" class="panel-value">Appears after the first response</p>
+                    <p class="panel-copy">The system's current read on what is driving the issue.</p>
+                  </div>
+
+                  <div id="first-focus-panel" class="panel is-hidden">
+                    <h3>First priority</h3>
+                    <p id="first-focus-value" class="panel-value">Appears after the first response</p>
+                    <p class="panel-copy">Where attention should go first if the pattern holds.</p>
+                  </div>
+
+                  <div id="next-actions-panel" class="panel is-hidden">
+                    <h3>Next actions</h3>
+                    <ol id="next-actions-list" class="panel-list"></ol>
+                  </div>
+
+                  <div id="comparison-panel" class="panel is-hidden">
+                    <h3>Benchmark signal</h3>
+                    <p id="comparison-value" class="panel-value">Available after findings and enough saved anonymous sessions.</p>
+                    <p class="panel-copy">How this session compares with saved anonymous reviews in the same segment.</p>
+                  </div>
+
+                  <div id="cta-panel" class="panel is-hidden">
+                    <h3>Current recommendation</h3>
+                    <p id="cta-value" class="panel-value">Next-step guidance will appear when the diagnostic is ready.</p>
+                    <p id="cta-copy" class="panel-copy">Use the conversation to gather enough signal first.</p>
+                    <a id="cta-link" class="text-button is-hidden" href="#contact">Review package options</a>
+                  </div>
+
+                  <div id="internal-intelligence-panel" class="panel panel-wide internal-panel is-hidden">
+                    <div class="meter-head">
+                      <span class="signal-label">Internal intelligence snapshot</span>
+                      <strong id="internal-sync-status" class="metric-value">Local only</strong>
+                    </div>
+                    <p class="panel-copy">Visible only with <code>?internal=1</code>. This is the structured session record used for taxonomy, benchmarking, and learning.</p>
+                    <pre id="internal-intelligence-json" class="internal-json"></pre>
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="findings-page" class="workspace-page workspace-page-findings is-hidden" aria-labelledby="findings-page-title">
+          <div class="findings-page-shell">
+            <div class="card findings-page-hero">
+              <div>
+                <p class="kicker">Diagnostic brief</p>
+                <h2 id="findings-page-title">Review the diagnosis and choose the right next step.</h2>
+                <p class="section-copy">Use the brief below to understand the issue, compare tailored service options, and request scoped help when ready.</p>
+              </div>
+              <div class="findings-page-actions">
+                <a class="btn btn-secondary" href="#diagnostic">Back to conversation</a>
+                <a class="btn btn-primary" href="#contact">View service options</a>
+              </div>
             </div>
-          </section>
+
+            <section id="mobile-session-summary" class="workspace-block mobile-session-summary is-hidden" aria-labelledby="mobile-summary-title">
+              <div class="card mobile-summary-card">
+                <div class="mobile-summary-head">
+                  <div>
+                    <p class="kicker">Session snapshot</p>
+                    <h2 id="mobile-summary-title">Current read</h2>
+                  </div>
+                  <a class="text-button" href="#diagnostic">Return to chat</a>
+                </div>
+
+                <div class="mobile-summary-grid">
+                  <div class="mobile-summary-stat">
+                    <span class="mobile-summary-label">Readiness</span>
+                    <strong id="mobile-summary-readiness" class="mobile-summary-value">0%</strong>
+                  </div>
+                  <div class="mobile-summary-stat">
+                    <span class="mobile-summary-label">Confidence</span>
+                    <strong id="mobile-summary-confidence" class="mobile-summary-value">Pending</strong>
+                  </div>
+                  <div class="mobile-summary-stat mobile-summary-stat-wide">
+                    <span class="mobile-summary-label">Business type</span>
+                    <strong id="mobile-summary-business-type" class="mobile-summary-value">Still identifying the pattern</strong>
+                  </div>
+                  <div class="mobile-summary-stat mobile-summary-stat-wide mobile-summary-stat-accent">
+                    <span class="mobile-summary-label">Recommendation</span>
+                    <strong id="mobile-summary-recommendation" class="mobile-summary-value">Use the conversation to build enough signal.</strong>
+                  </div>
+                </div>
+              </div>
+            </section>
 
           <section id="findings" class="workspace-block is-hidden">
             <div class="card findings-stage">
@@ -267,51 +383,56 @@
                       <p id="findings-pressure-score" class="finding-score-value">0 / 100</p>
                     </div>
 
-                    <div class="finding-meter-stack">
-                      <div class="finding-meter-row">
-                        <div class="finding-meter-copy">
-                          <span>Operating pressure</span>
-                          <strong id="findings-pressure-label">Building</strong>
+                    <div class="finding-visual-snapshot">
+                      <div class="finding-meter-stack">
+                        <div class="finding-meter-row">
+                          <div class="finding-meter-copy">
+                            <span>Operating pressure</span>
+                            <strong id="findings-pressure-label">Building</strong>
+                          </div>
+                          <div class="meter-track" aria-hidden="true">
+                            <div id="findings-pressure-fill" class="meter-fill"></div>
+                          </div>
                         </div>
-                        <div class="meter-track" aria-hidden="true">
-                          <div id="findings-pressure-fill" class="meter-fill"></div>
+
+                        <div class="finding-meter-row">
+                          <div class="finding-meter-copy">
+                            <span>Signal clarity</span>
+                            <strong id="findings-clarity-score">0 / 100</strong>
+                          </div>
+                          <div class="meter-track" aria-hidden="true">
+                            <div id="findings-clarity-fill" class="meter-fill meter-fill-secondary"></div>
+                          </div>
                         </div>
                       </div>
 
-                      <div class="finding-meter-row">
-                        <div class="finding-meter-copy">
-                          <span>Signal clarity</span>
-                          <strong id="findings-clarity-score">0 / 100</strong>
-                        </div>
-                        <div class="meter-track" aria-hidden="true">
-                          <div id="findings-clarity-fill" class="meter-fill meter-fill-secondary"></div>
-                        </div>
+                      <div class="finding-signal-notes">
+                        <p id="findings-confidence-note" class="panel-copy">Confidence and signal note appear after the diagnostic is ready.</p>
+                        <p id="findings-benchmark-note" class="small-text">Benchmark comparison appears here when enough saved sessions exist.</p>
                       </div>
                     </div>
 
-                    <p id="findings-confidence-note" class="panel-copy">Confidence and signal note appear after the diagnostic is ready.</p>
-                    <p id="findings-benchmark-note" class="small-text">Benchmark comparison appears here when enough saved sessions exist.</p>
+                    <div class="finding-pattern-block">
+                      <p class="muted-label">Operating pattern</p>
+                      <div class="pattern-flow">
+                        <div class="pattern-step">
+                          <span>Problem</span>
+                          <strong id="pattern-problem">Appears with findings</strong>
+                        </div>
+                        <div class="pattern-arrow" aria-hidden="true">&rarr;</div>
+                        <div class="pattern-step">
+                          <span>Cause</span>
+                          <strong id="pattern-cause">Appears with findings</strong>
+                        </div>
+                        <div class="pattern-arrow" aria-hidden="true">&rarr;</div>
+                        <div class="pattern-step pattern-step-accent">
+                          <span>First priority</span>
+                          <strong id="pattern-priority">Appears with findings</strong>
+                        </div>
+                      </div>
 
-                    <div class="finding-visual-divider"></div>
-                    <p class="muted-label">Operating pattern</p>
-                    <div class="pattern-flow">
-                      <div class="pattern-step">
-                        <span>Problem</span>
-                        <strong id="pattern-problem">Appears with findings</strong>
-                      </div>
-                      <div class="pattern-arrow" aria-hidden="true">&rarr;</div>
-                      <div class="pattern-step">
-                        <span>Cause</span>
-                        <strong id="pattern-cause">Appears with findings</strong>
-                      </div>
-                      <div class="pattern-arrow" aria-hidden="true">&rarr;</div>
-                      <div class="pattern-step pattern-step-accent">
-                        <span>First priority</span>
-                        <strong id="pattern-priority">Appears with findings</strong>
-                      </div>
+                      <div id="findings-signal-summary" class="signal-chip-list"></div>
                     </div>
-
-                    <div id="findings-signal-summary" class="signal-chip-list"></div>
                   </div>
                 </div>
               </div>
@@ -320,56 +441,66 @@
 
               <div id="recommended-next-step" class="recommended-next-step is-hidden">
                 <div class="recommended-next-step-head">
-                  <p class="kicker">Recommended next step</p>
-                  <h3>How to act on this diagnostic</h3>
-                  <p id="recommended-bridge" class="section-copy">Action guidance appears after the diagnostic is ready.</p>
+                  <p class="kicker">What to fix next</p>
+                  <h3>Tighten the next operating constraint.</h3>
+                  <p id="recommended-bridge" class="section-copy">The clearest next move appears here after the diagnostic is ready.</p>
                 </div>
 
                 <div class="recommended-next-step-grid">
                   <div class="recommended-package-panel">
-                    <p class="muted-label">Best-fit path</p>
-                    <p id="recommended-package-type" class="recommended-package-type">Recommended package appears here</p>
-                    <h4 id="recommended-package-title" class="recommended-package-title">Recommended package appears here</h4>
-                    <p id="recommended-package-note" class="section-copy">The package recommendation will adapt to the business type, priority, and signal pattern.</p>
-
-                    <div class="recommended-why-block">
-                      <p class="muted-label">Why this path</p>
-                      <p id="recommended-why" class="section-copy">The reasoning behind this path appears after the diagnostic is ready.</p>
+                    <div class="recommended-directive-block">
+                      <p class="muted-label">What needs to change now</p>
+                      <p id="recommended-package-type" class="recommended-package-type">Operational priority</p>
+                      <h4 id="recommended-package-title" class="recommended-package-title">The next operating adjustment appears here.</h4>
+                      <p id="recommended-package-note" class="section-copy">The operational guidance will adapt to the business type, priority, and signal pattern.</p>
                     </div>
 
-                    <div class="recommended-meta-grid">
-                      <div class="recommended-meta-item">
-                        <span class="recommended-meta-label">Business type</span>
-                        <strong id="recommended-business-type" class="recommended-meta-value">Appears with findings</strong>
+                    <div class="recommended-detail-grid">
+                      <div class="recommended-why-block">
+                        <p class="muted-label">Why this matters</p>
+                        <p id="recommended-why" class="section-copy">The reasoning behind this path appears after the diagnostic is ready.</p>
                       </div>
-                      <div class="recommended-meta-item">
-                        <span class="recommended-meta-label">First priority</span>
-                        <strong id="recommended-priority" class="recommended-meta-value">Appears with findings</strong>
-                      </div>
-                      <div class="recommended-meta-item">
-                        <span class="recommended-meta-label">Best for</span>
-                        <p id="recommended-best-fit" class="recommended-meta-value recommended-meta-copy">Appears with findings</p>
-                      </div>
-                      <div class="recommended-meta-item recommended-meta-item-wide">
-                        <span class="recommended-meta-label">Signals behind this path</span>
-                        <p id="recommended-signals" class="recommended-meta-value recommended-meta-copy">Appears with findings</p>
+
+                      <div class="recommended-meta-shell">
+                        <div class="recommended-meta-grid">
+                          <div class="recommended-meta-item">
+                            <span class="recommended-meta-label">Business type</span>
+                            <strong id="recommended-business-type" class="recommended-meta-value">Appears with findings</strong>
+                          </div>
+                          <div class="recommended-meta-item">
+                            <span class="recommended-meta-label">First priority</span>
+                            <strong id="recommended-priority" class="recommended-meta-value">Appears with findings</strong>
+                          </div>
+                          <div class="recommended-meta-item">
+                            <span class="recommended-meta-label">Near-term risk</span>
+                            <p id="recommended-best-fit" class="recommended-meta-value recommended-meta-copy">Appears with findings</p>
+                          </div>
+                          <div class="recommended-meta-item recommended-meta-item-wide">
+                            <span class="recommended-meta-label">Signals behind this path</span>
+                            <p id="recommended-signals" class="recommended-meta-value recommended-meta-copy">Appears with findings</p>
+                          </div>
+                        </div>
+
+                        <p id="recommended-scope" class="finding-note">A scope guardrail appears after the diagnostic is ready.</p>
                       </div>
                     </div>
-
-                    <p id="recommended-scope" class="finding-note">Likely first scope appears after the diagnostic is ready.</p>
                   </div>
 
                   <div class="recommended-deliverables-panel">
-                    <p class="muted-label">What we would provide</p>
-                    <ul id="recommended-deliverables" class="offer-list"></ul>
+                    <div class="recommended-support-shell">
+                      <div class="recommended-support-block">
+                        <p class="muted-label">Immediate actions</p>
+                        <ul id="recommended-deliverables" class="offer-list"></ul>
+                      </div>
 
-                    <div class="recommended-next-note">
-                      <p class="muted-label">What happens next</p>
-                      <p id="recommended-next-step-note" class="section-copy">The next-step process appears after the diagnostic is ready.</p>
+                      <div class="recommended-support-block recommended-next-note">
+                        <p class="muted-label">Risks if not addressed</p>
+                        <p id="recommended-next-step-note" class="section-copy">The operating risks appear after the diagnostic is ready.</p>
+                      </div>
                     </div>
 
                     <div class="recommended-action-stack">
-                      <button id="recommended-primary-cta" type="button" class="btn btn-primary">Request next-step help</button>
+                      <button id="recommended-primary-cta" type="button" class="btn btn-secondary">Review package options</button>
                       <div class="recommended-secondary-actions">
                         <a class="text-button" href="#diagnostic">Continue diagnostic</a>
                       </div>
@@ -386,12 +517,12 @@
                 <div class="offer-intro offer-intro-grid">
                   <div>
                     <p class="kicker">Tailored service options</p>
-                    <h2>Choose the level of help that fits this diagnostic.</h2>
+                    <h2>Choose the right starting package.</h2>
                     <p id="offer-summary" class="section-copy">Pricing, fit, and next-step guidance appear after the diagnostic is ready.</p>
                   </div>
 
                   <div class="pricing-banner">
-                    <p class="muted-label">Pricing note</p>
+                    <p class="muted-label">Review credit</p>
                     <p id="pricing-banner-title" class="pricing-banner-title">Diagnostic Review credit</p>
                     <p id="pricing-banner-copy" class="panel-copy">If you start with a paid Diagnostic Review and move into a Sprint or Advisory within 14 days, the review fee is applied to the next package.</p>
                   </div>
@@ -413,9 +544,9 @@
 
                   <div class="contact-shell">
                     <div class="contact-shell-head">
-                      <div>
+                      <div class="contact-shell-intro">
                         <p class="kicker">Request help</p>
-                        <h3>Move this diagnostic into a scoped next step.</h3>
+                        <h3>Move this into a scoped next step.</h3>
                         <p id="contact-shell-copy" class="section-copy">Open the form below to request a human review of the diagnostic and the package path that fits it best.</p>
                         <p id="contact-shell-note" class="small-text">Operational Clarity provides AI-assisted diagnostic guidance. If you request next-step help, your review may also be assessed by a human advisor from EHI Studio.</p>
                       </div>
@@ -423,38 +554,58 @@
                       <button id="contact-toggle" type="button" class="btn btn-primary">Open request form</button>
                     </div>
 
-                    <form id="contact-form" class="contact-form is-hidden">
-                      <div class="field-grid">
-                        <div class="field">
-                          <label for="lead-name">Name</label>
-                          <input id="lead-name" name="name" type="text" required />
+                    <form id="contact-form" class="contact-form is-hidden" novalidate>
+                      <div class="contact-form-head">
+                        <p class="muted-label">Request details</p>
+                        <p class="small-text">Confirm the package, add contact details, and tell us what you want help with first.</p>
+                      </div>
+
+                      <div id="selected-package-panel" class="selected-package-panel">
+                        <div class="selected-package-head">
+                          <div>
+                            <div class="selected-package-meta">
+                              <p class="muted-label">Selected package</p>
+                              <span id="selected-package-status" class="selected-package-status is-hidden">Recommended</span>
+                            </div>
+                            <p id="selected-package-name" class="selected-package-name">Choose a package above.</p>
+                          </div>
+                          <button id="change-package-button" type="button" class="text-button">Change package</button>
                         </div>
-                        <div class="field">
-                          <label for="lead-email">Email</label>
-                          <input id="lead-email" name="email" type="email" required />
-                        </div>
-                        <div class="field">
-                          <label for="lead-company">Company</label>
-                          <input id="lead-company" name="company" type="text" required />
-                        </div>
-                        <div class="field">
-                          <label for="lead-phone">Phone</label>
-                          <input id="lead-phone" name="phone" type="tel" placeholder="Optional" />
+                        <p id="selected-package-helper" class="field-helper">This request is tied to the package you select above.</p>
+                        <input id="lead-package" name="package" type="hidden" />
+                      </div>
+
+                      <div class="form-block">
+                        <p class="muted-label">Contact details</p>
+                        <div class="field-grid">
+                          <div class="field">
+                            <label for="lead-name">Name</label>
+                            <input id="lead-name" name="name" type="text" required />
+                          </div>
+                          <div class="field">
+                            <label for="lead-email">Email</label>
+                            <input id="lead-email" name="email" type="email" required />
+                          </div>
+                          <div class="field">
+                            <label for="lead-company">Company</label>
+                            <input id="lead-company" name="company" type="text" required />
+                          </div>
+                          <div class="field">
+                            <label for="lead-phone">Phone</label>
+                            <input id="lead-phone" name="phone" type="tel" placeholder="Optional" />
+                          </div>
                         </div>
                       </div>
 
-                      <div class="field is-full">
-                        <label for="lead-package">Package</label>
-                        <input id="lead-package" name="package" type="text" placeholder="Diagnostic Review / Operations Sprint / Ongoing Advisory" />
-                        <p class="field-helper">Pick a package above to prefill this field, or type your own preferred starting point.</p>
+                      <div class="form-block">
+                        <p class="muted-label">Scope note</p>
+                        <div class="field is-full">
+                          <label for="lead-message">What do you want help with first?</label>
+                          <textarea id="lead-message" name="message" rows="4" placeholder="Tell us the first issue you want addressed." required></textarea>
+                        </div>
                       </div>
 
-                      <div class="field is-full">
-                        <label for="lead-message">What do you want help with first?</label>
-                        <textarea id="lead-message" name="message" rows="4" placeholder="Tell us the main issue you want to work on first." required></textarea>
-                      </div>
-
-                      <div class="consent-block">
+                      <div class="form-block consent-block">
                         <div class="consent-row consent-surface">
                           <input id="follow-up-consent-checkbox" name="follow_up_consent" type="checkbox" />
                           <div class="consent-copy">
@@ -465,8 +616,8 @@
                       </div>
 
                       <div class="contact-actions">
-                        <p class="small-text">We review fit first, then confirm scope, timing, and whether the package is the right starting point.</p>
-                        <button id="contact-submit-button" type="submit" class="btn btn-primary">Send request</button>
+                        <p class="small-text">We review fit, scope, timing, and whether this is the right starting package before anything is booked.</p>
+                        <button id="contact-submit-button" type="submit" class="btn btn-primary">Request scoped next step</button>
                       </div>
                     </form>
 
@@ -477,110 +628,6 @@
             </div>
           </section>
         </div>
-
-        <aside id="insights-panel" class="workspace-side">
-          <a class="mobile-panel-scrim" href="#diagnostic" aria-label="Close insights panel"></a>
-          <div class="card dashboard-card insight-rail">
-          <div class="dashboard-header insight-header">
-            <div>
-              <p class="kicker">Live insight rail</p>
-              <h2>Session snapshot</h2>
-              <p class="header-copy">Readiness, current signal, and the next-step read stay visible while the diagnostic runs.</p>
-            </div>
-            <div class="insight-header-actions">
-              <button id="reset-session" type="button" class="text-button">Reset review</button>
-              <a class="mobile-panel-close text-button" href="#diagnostic">Close</a>
-            </div>
-          </div>
-
-          <div class="dashboard-grid">
-            <div class="panel panel-wide rail-status-panel">
-              <div class="meter-head">
-                <span class="signal-label">Readiness</span>
-                <strong id="context-score-label" class="metric-value">0%</strong>
-              </div>
-              <div class="meter-track" aria-hidden="true">
-                <div id="context-meter-fill" class="meter-fill"></div>
-              </div>
-              <div class="signal-meta">
-                <p id="context-meter-copy" class="panel-copy">Waiting for the first signal.</p>
-                <p id="free-questions-label" class="signal-support">3 follow-up questions available after findings.</p>
-              </div>
-              <div class="status-stack">
-                <div class="status-line">
-                  <span class="signal-label">Status</span>
-                  <strong id="status-label" class="metric-value">Waiting</strong>
-                </div>
-                <div class="status-line">
-                  <span class="signal-label">Confidence</span>
-                  <strong id="confidence-value" class="metric-value">Pending</strong>
-                </div>
-                <div id="assessment-score-row" class="status-line is-hidden">
-                  <span class="signal-label">Assessment score</span>
-                  <strong id="assessment-score-value" class="metric-value">Pending</strong>
-                </div>
-              </div>
-            </div>
-
-            <div id="current-pattern-panel" class="panel is-hidden">
-              <h3>Business type</h3>
-              <p id="business-type-value" class="panel-value">Appears after the first response</p>
-              <p class="panel-copy">The segment and operating pattern the system is identifying so far.</p>
-            </div>
-
-            <div id="signal-panel" class="panel is-hidden">
-              <h3>Detected signals</h3>
-              <div id="signal-chip-list" class="signal-chip-list"></div>
-              <p class="panel-copy">Pain points and extracted signals normalized from the conversation.</p>
-            </div>
-
-            <div id="likely-issue-panel" class="panel is-hidden">
-              <h3>Likely issue</h3>
-              <p id="main-issue-value" class="panel-value">Appears after the first response</p>
-              <p class="panel-copy">The clearest source of friction seen so far.</p>
-            </div>
-
-            <div id="likely-cause-panel" class="panel is-hidden">
-              <h3>Likely cause</h3>
-              <p id="likely-cause-value" class="panel-value">Appears after the first response</p>
-              <p class="panel-copy">The system's current read on what is driving the issue.</p>
-            </div>
-
-            <div id="first-focus-panel" class="panel is-hidden">
-              <h3>First priority</h3>
-              <p id="first-focus-value" class="panel-value">Appears after the first response</p>
-              <p class="panel-copy">Where attention should go first if the pattern holds.</p>
-            </div>
-
-            <div id="next-actions-panel" class="panel is-hidden">
-              <h3>Next actions</h3>
-              <ol id="next-actions-list" class="panel-list"></ol>
-            </div>
-
-            <div id="comparison-panel" class="panel is-hidden">
-              <h3>Benchmark signal</h3>
-              <p id="comparison-value" class="panel-value">Available after findings and enough saved anonymous sessions.</p>
-              <p class="panel-copy">How this session compares with saved anonymous reviews in the same segment.</p>
-            </div>
-
-            <div id="cta-panel" class="panel is-hidden">
-              <h3>Current recommendation</h3>
-              <p id="cta-value" class="panel-value">Next-step guidance will appear when the diagnostic is ready.</p>
-              <p id="cta-copy" class="panel-copy">Use the conversation to gather enough signal first.</p>
-              <a id="cta-link" class="text-button is-hidden" href="#contact">Open next-step options</a>
-            </div>
-
-            <div id="internal-intelligence-panel" class="panel panel-wide internal-panel is-hidden">
-              <div class="meter-head">
-                <span class="signal-label">Internal intelligence snapshot</span>
-                <strong id="internal-sync-status" class="metric-value">Local only</strong>
-              </div>
-              <p class="panel-copy">Visible only with <code>?internal=1</code>. This is the structured session record used for taxonomy, benchmarking, and learning.</p>
-              <pre id="internal-intelligence-json" class="internal-json"></pre>
-            </div>
-          </div>
-          </div>
-        </aside>
       </div>
     </section>
   </main>
@@ -620,6 +667,7 @@ const state = {
   conversation: [],
   stage: "discover",
   stageHistory: ["discover"],
+  currentView: "chat",
   enoughContext: false,
   findings: null,
   extracted: null,
@@ -634,7 +682,12 @@ const state = {
   contextScore: 0,
   contactOpen: false,
   contactSubmitted: false,
+  contactSubmitting: false,
   followUpConsentAccepted: false,
+  selectedPackageKey: null,
+  selectedPackageName: "",
+  selectedPackageValue: "",
+  selectedPackageMessage: "",
   reviewConsentDetailsOpen: false,
   contactDetails: null,
   pendingNotificationEvents: [],
@@ -653,7 +706,10 @@ const state = {
 const el = {};
 const STORAGE_BUILD_KEY = "oc_build_version";
 const INTERNAL_VIEW_ENABLED = new URLSearchParams(window.location.search).get("internal") === "1";
+const FINDINGS_PAGE_TARGETS = new Set(["findings", "contact"]);
+const CHAT_PAGE_TARGETS = new Set(["diagnostic", "insights-panel", ""]);
 let intelligenceSyncChain = Promise.resolve();
+let recommendationFocusTimer = 0;
 
 function clearStaleBuildState() {
   try {
@@ -727,12 +783,18 @@ document.addEventListener("DOMContentLoaded", () => {
 function captureDom() {
   el.trustModal = document.getElementById("trust-modal");
   el.trustModalAccept = document.getElementById("trust-modal-accept");
+  el.chatPage = document.getElementById("chat-page");
+  el.findingsPage = document.getElementById("findings-page");
+  el.chatViewLink = document.getElementById("chat-view-link");
+  el.findingsViewLink = document.getElementById("findings-view-link");
   el.sessionStateLabel = document.getElementById("session-state-label");
   el.sessionStageLabel = document.getElementById("session-stage-label");
   el.sessionModeLabel = document.getElementById("session-mode-label");
   el.messageList = document.getElementById("message-list");
   el.transcriptViewport = document.getElementById("transcript-viewport");
   el.chatEmptyState = document.getElementById("chat-empty-state");
+  el.conversationReadyBanner = document.getElementById("conversation-ready-banner");
+  el.conversationReadyCopy = document.getElementById("conversation-ready-copy");
   el.chatForm = document.getElementById("chat-form");
   el.chatInput = document.getElementById("chat-input");
   el.chatError = document.getElementById("chat-error");
@@ -755,6 +817,11 @@ function captureDom() {
   el.findingsSection = document.getElementById("findings");
   el.findingsTitle = document.getElementById("findings-title");
   el.findingsSummary = document.getElementById("findings-summary");
+  el.mobileSessionSummary = document.getElementById("mobile-session-summary");
+  el.mobileSummaryReadiness = document.getElementById("mobile-summary-readiness");
+  el.mobileSummaryConfidence = document.getElementById("mobile-summary-confidence");
+  el.mobileSummaryBusinessType = document.getElementById("mobile-summary-business-type");
+  el.mobileSummaryRecommendation = document.getElementById("mobile-summary-recommendation");
   el.findingsCoreProblem = document.getElementById("findings-core-problem");
   el.findingsWhyItMatters = document.getElementById("findings-why-it-matters");
   el.findingsLikelyCause = document.getElementById("findings-likely-cause");
@@ -797,8 +864,17 @@ function captureDom() {
   el.contactForm = document.getElementById("contact-form");
   el.contactMessage = document.getElementById("contact-message");
   el.contactSubmitButton = document.getElementById("contact-submit-button");
+  el.selectedPackagePanel = document.getElementById("selected-package-panel");
+  el.selectedPackageStatus = document.getElementById("selected-package-status");
+  el.selectedPackageName = document.getElementById("selected-package-name");
+  el.selectedPackageHelper = document.getElementById("selected-package-helper");
+  el.changePackageButton = document.getElementById("change-package-button");
   el.followUpConsentCheckbox = document.getElementById("follow-up-consent-checkbox");
   el.followUpConsentHelper = document.getElementById("follow-up-consent-helper");
+  el.leadName = document.getElementById("lead-name");
+  el.leadEmail = document.getElementById("lead-email");
+  el.leadCompany = document.getElementById("lead-company");
+  el.leadPhone = document.getElementById("lead-phone");
   el.leadPackage = document.getElementById("lead-package");
   el.leadMessage = document.getElementById("lead-message");
   el.mainIssueValue = document.getElementById("main-issue-value");
@@ -822,6 +898,7 @@ function captureDom() {
   el.ctaCopy = document.getElementById("cta-copy");
   el.ctaLink = document.getElementById("cta-link");
   el.confidenceValue = document.getElementById("confidence-value");
+  el.insightRail = document.querySelector(".insight-rail");
   el.internalIntelligencePanel = document.getElementById("internal-intelligence-panel");
   el.internalIntelligenceJson = document.getElementById("internal-intelligence-json");
   el.internalSyncStatus = document.getElementById("internal-sync-status");
@@ -831,11 +908,15 @@ function captureDom() {
 function bindEvents() {
   el.chatForm?.addEventListener("submit", handleChatSubmit);
   el.transcriptViewport?.addEventListener("scroll", handleTranscriptScroll, { passive: true });
+  window.addEventListener("resize", queueInsightRailModeSync);
+  window.addEventListener("hashchange", handleHashRouteChange);
   el.resetSession?.addEventListener("click", resetSession);
   el.contactToggle?.addEventListener("click", () => openContactForm());
   el.contactForm?.addEventListener("submit", handleContactSubmit);
+  el.contactForm?.addEventListener("input", handleContactFormInput);
   el.promptChips?.forEach((chip) => chip.addEventListener("click", handlePromptChipClick));
   el.offerGrid?.addEventListener("click", handlePackageSelect);
+  el.changePackageButton?.addEventListener("click", handleChangePackageClick);
   el.ctaLink?.addEventListener("click", handleCtaLinkClick);
   el.reviewConsentCheckbox?.addEventListener("change", handleReviewConsentChange);
   el.trustModalAccept?.addEventListener("click", handleTrustModalAccept);
@@ -859,34 +940,211 @@ function handleTranscriptScroll() {
   state.stickConversationToBottom = isConversationNearBottom();
 }
 
-function handlePackageSelect(event) {
-  const button = event?.target?.closest?.("[data-package-select]");
-  const packageName = String(button?.dataset?.packageSelect || "").trim();
-  if (!packageName) return;
+let insightRailSyncFrame = 0;
 
-  applyPackageSelection(packageName, {
-    message: String(button?.dataset?.packageMessage || "").trim(),
-    overwriteMessage: Boolean(String(button?.dataset?.packageMessage || "").trim()),
-    focusField: "package"
+function queueInsightRailModeSync() {
+  if (insightRailSyncFrame) {
+    window.cancelAnimationFrame(insightRailSyncFrame);
+  }
+  insightRailSyncFrame = window.requestAnimationFrame(() => {
+    insightRailSyncFrame = 0;
+    syncInsightRailMode();
   });
 }
 
-function applyPackageSelection(packageName, options = {}) {
+function syncInsightRailMode() {
+  if (!el.insightRail) return;
+  const railHeight = el.insightRail.scrollHeight || el.insightRail.getBoundingClientRect().height || 0;
+  const availableHeight = Math.max(window.innerHeight - 96, 0);
+  const shouldRelax = window.innerWidth <= 1080 || (availableHeight > 0 && railHeight > availableHeight);
+  el.insightRail.classList.toggle("is-relaxed", shouldRelax);
+}
+
+function setTypingRowPlacement(isActive) {
+  if (!el.typingRow || !el.messageList || !el.transcriptViewport) return;
+
+  if (isActive) {
+    if (el.typingRow.parentElement !== el.messageList) {
+      el.messageList.appendChild(el.typingRow);
+    }
+    return;
+  }
+
+  if (el.typingRow.parentElement !== el.transcriptViewport) {
+    el.transcriptViewport.appendChild(el.typingRow);
+  }
+}
+
+function clearRecommendationFocusTimer() {
+  if (!recommendationFocusTimer) return;
+  window.clearTimeout(recommendationFocusTimer);
+  recommendationFocusTimer = 0;
+}
+
+function inferPackageKey(packageName) {
+  const normalized = String(packageName || "").trim().toLowerCase();
+  if (normalized.includes("advisory")) return "advisory";
+  if (normalized.includes("sprint")) return "sprint";
+  if (normalized.includes("review")) return "review";
+  return "";
+}
+
+function getHashTargetId() {
+  return String(window.location.hash || "")
+    .replace(/^#/, "")
+    .trim();
+}
+
+function hasFindingsPageAvailable() {
+  return hasRecommendationHandoffAvailable();
+}
+
+function resolveWorkspaceView(targetId = getHashTargetId()) {
+  if (FINDINGS_PAGE_TARGETS.has(targetId)) {
+    return hasFindingsPageAvailable() ? "findings" : "chat";
+  }
+  if (CHAT_PAGE_TARGETS.has(targetId)) {
+    return "chat";
+  }
+  return "chat";
+}
+
+function renderWorkspaceView(options = {}) {
+  const targetId = typeof options.targetId === "string" ? options.targetId : getHashTargetId();
+  const nextView = options.view || resolveWorkspaceView(targetId);
+  state.currentView = nextView;
+
+  document.body.dataset.workspaceView = nextView;
+  el.chatPage?.classList.toggle("is-hidden", nextView !== "chat");
+  el.findingsPage?.classList.toggle("is-hidden", nextView !== "findings");
+
+  const findingsAvailable = hasFindingsPageAvailable();
+  if (el.chatViewLink) {
+    el.chatViewLink.setAttribute("aria-current", nextView === "chat" ? "page" : "false");
+  }
+  if (el.findingsViewLink) {
+    el.findingsViewLink.setAttribute("aria-current", nextView === "findings" ? "page" : "false");
+    el.findingsViewLink.setAttribute("aria-disabled", String(!findingsAvailable));
+    el.findingsViewLink.classList.toggle("is-disabled", !findingsAvailable);
+  }
+
+  queueInsightRailModeSync();
+}
+
+function syncWorkspaceRoute({ scroll = false } = {}) {
+  const rawTarget = getHashTargetId();
+  const targetId = rawTarget || "diagnostic";
+  const resolvedTarget = FINDINGS_PAGE_TARGETS.has(targetId) && !hasFindingsPageAvailable()
+    ? "diagnostic"
+    : targetId;
+
+  renderWorkspaceView({ targetId: resolvedTarget });
+
+  if (resolvedTarget !== rawTarget && resolvedTarget) {
+    updateLocationHash(`#${resolvedTarget}`, { skipRender: true });
+  } else if (!rawTarget) {
+    updateLocationHash("#diagnostic", { skipRender: true });
+  }
+
+  if (scroll && resolvedTarget && !CHAT_PAGE_TARGETS.has(resolvedTarget)) {
+    scrollToSection(resolvedTarget, { behavior: "auto", view: "findings" });
+  } else if (scroll && resolvedTarget === "diagnostic") {
+    scrollToSection("diagnostic", { behavior: "auto", view: "chat" });
+  }
+}
+
+function handleHashRouteChange() {
+  syncWorkspaceRoute({ scroll: true });
+}
+
+function setPackageSelection(packageName, options = {}) {
   const {
+    packageKey = inferPackageKey(packageName),
+    packageValue = packageName,
     message = "",
-    overwriteMessage = false,
-    focusField = "package"
+    overwriteMessage = false
   } = options;
 
+  state.selectedPackageKey = packageKey || "";
+  state.selectedPackageName = packageName || "";
+  state.selectedPackageValue = packageValue || packageName || "";
+  state.selectedPackageMessage = message || state.selectedPackageMessage || "";
+  el.selectedPackagePanel?.classList.remove("is-invalid");
+
   if (el.leadPackage) {
-    el.leadPackage.value = packageName;
+    el.leadPackage.value = state.selectedPackageValue;
   }
 
   if (el.leadMessage && (overwriteMessage || !el.leadMessage.value.trim())) {
     el.leadMessage.value = message || deriveLeadPrompt(state.findings);
   }
+}
 
-  openContactForm({ focusField });
+function ensureRecommendedPackageSelection(options = {}) {
+  if (state.selectedPackageValue) return true;
+  const recommendation = deriveRecommendedNextStepModel();
+  if (!recommendation) return false;
+
+  setPackageSelection(recommendation.basePackage, {
+    packageKey: recommendation.packageType,
+    packageValue: recommendation.contactPackageValue,
+    message: recommendation.contactMessage,
+    overwriteMessage: Boolean(options.overwriteMessage)
+  });
+  return true;
+}
+
+function revealContactOptions() {
+  el.contactSection?.classList.remove("is-hidden");
+  renderContact();
+  renderDashboardSummary();
+  updateLocationHash("#contact");
+  window.requestAnimationFrame(() => {
+    scrollToSection("contact");
+  });
+  refreshStructuredSessionIntelligence({ sync: false });
+  persistSession();
+}
+
+function handlePackageSelect(event) {
+  clearRecommendationFocusTimer();
+  const button = event?.target?.closest?.("[data-package-select]");
+  const packageName = String(button?.dataset?.packageSelect || "").trim();
+  if (!packageName) return;
+
+  applyPackageSelection(packageName, {
+    packageKey: String(button?.dataset?.packageKey || "").trim(),
+    packageValue: String(button?.dataset?.packageValue || packageName).trim() || packageName,
+    message: String(button?.dataset?.packageMessage || "").trim(),
+    overwriteMessage: Boolean(String(button?.dataset?.packageMessage || "").trim()),
+    focusField: "message",
+    openForm: true
+  });
+}
+
+function applyPackageSelection(packageName, options = {}) {
+  const {
+    packageKey = inferPackageKey(packageName),
+    packageValue = packageName,
+    message = "",
+    overwriteMessage = false,
+    focusField = "message",
+    openForm = true
+  } = options;
+
+  setPackageSelection(packageName, {
+    packageKey,
+    packageValue,
+    message,
+    overwriteMessage
+  });
+
+  if (openForm) {
+    openContactForm({ focusField });
+    return;
+  }
+
+  revealContactOptions();
 }
 
 function hasRecommendationHandoffAvailable() {
@@ -894,39 +1152,33 @@ function hasRecommendationHandoffAvailable() {
 }
 
 function handleRecommendedSetupHelp() {
-  if (state.contactSubmitted) {
-    scrollToSection("contact");
-    return;
-  }
-
   const recommendation = deriveRecommendedNextStepModel();
-  if (!recommendation) {
-    if (hasRecommendationHandoffAvailable()) openContactForm();
-    return;
-  }
+  if (!hasRecommendationHandoffAvailable()) return;
 
-  applyPackageSelection(recommendation.contactPackageValue, {
-    message: recommendation.contactMessage,
-    overwriteMessage: true,
-    focusField: state.contactOpen ? "message" : "package"
-  });
+  clearRecommendationFocusTimer();
+  scrollToSection("contact");
+  recommendationFocusTimer = window.setTimeout(() => {
+    recommendationFocusTimer = 0;
+    const target = recommendation
+      ? el.offerGrid?.querySelector(`[data-package-select][data-package-key="${recommendation.packageType}"]`)
+      : el.offerGrid?.querySelector("[data-package-select]");
+    target?.focus();
+  }, 180);
 }
 
 function handleCtaLinkClick(event) {
   event.preventDefault();
-  if (state.contactSubmitted) return;
+  handleRecommendedSetupHelp();
+}
 
-  const recommendation = deriveRecommendedNextStepModel();
-  if (!recommendation) {
-    if (hasRecommendationHandoffAvailable()) openContactForm({ focusField: "package" });
-    return;
-  }
-
-  applyPackageSelection(recommendation.contactPackageValue, {
-    message: recommendation.contactMessage,
-    overwriteMessage: true,
-    focusField: state.contactOpen ? "message" : "package"
-  });
+function handleChangePackageClick() {
+  clearNotice(el.contactMessage);
+  revealContactOptions();
+  window.setTimeout(() => {
+    const selectedButton = el.offerGrid?.querySelector(`[data-package-select][data-package-key="${state.selectedPackageKey}"]`);
+    const fallbackButton = el.offerGrid?.querySelector("[data-package-select]");
+    (selectedButton || fallbackButton)?.focus();
+  }, 120);
 }
 
 function updateMessageListVisibility() {
@@ -965,16 +1217,129 @@ function renderReviewConsentState() {
 }
 
 function renderFollowUpConsentState() {
+  const hasPackageSelected = Boolean(state.selectedPackageValue);
   if (el.followUpConsentCheckbox) {
     el.followUpConsentCheckbox.checked = Boolean(state.followUpConsentAccepted);
   }
   if (el.followUpConsentHelper) {
-    el.followUpConsentHelper.textContent = state.followUpConsentAccepted
-      ? "Contact consent recorded for this request."
-      : "Required before sending a contact request.";
+    el.followUpConsentHelper.textContent = state.contactSubmitted
+      ? "Request submitted."
+      : state.followUpConsentAccepted
+        ? "Contact consent recorded for this request."
+        : "Required before sending a contact request.";
   }
   if (el.contactSubmitButton) {
-    el.contactSubmitButton.disabled = !state.followUpConsentAccepted;
+    el.contactSubmitButton.disabled = Boolean(
+      state.contactSubmitting
+      || state.contactSubmitted
+      || !state.followUpConsentAccepted
+      || !hasPackageSelected
+    );
+  }
+}
+
+function getContactFieldDefinitions() {
+  return [
+    { input: el.leadName, label: "Name", key: "name" },
+    { input: el.leadEmail, label: "Email", key: "email" },
+    { input: el.leadCompany, label: "Company", key: "company" },
+    { input: el.leadMessage, label: "Scope note", key: "message" }
+  ].filter((entry) => entry.input);
+}
+
+function ensureFieldErrorNode(field) {
+  let node = field?.querySelector(".field-error");
+  if (node) return node;
+  node = document.createElement("p");
+  node.className = "field-error";
+  field?.appendChild(node);
+  return node;
+}
+
+function clearContactFieldErrors() {
+  getContactFieldDefinitions().forEach(({ input }) => {
+    input.removeAttribute("aria-invalid");
+    input.closest(".field")?.classList.remove("is-invalid");
+  });
+  el.contactForm?.querySelectorAll(".field-error").forEach((node) => {
+    node.textContent = "";
+  });
+  el.selectedPackagePanel?.classList.remove("is-invalid");
+  el.followUpConsentCheckbox?.closest(".consent-surface")?.classList.remove("is-invalid");
+}
+
+function setContactFieldError(input, message) {
+  const field = input?.closest(".field");
+  if (!field || !input) return;
+  field.classList.add("is-invalid");
+  input.setAttribute("aria-invalid", "true");
+  ensureFieldErrorNode(field).textContent = message;
+}
+
+function validateContactPayload(payload) {
+  clearContactFieldErrors();
+  const missing = [];
+
+  if (!payload.name) {
+    setContactFieldError(el.leadName, "Enter your name.");
+    missing.push("name");
+  }
+  if (!payload.email) {
+    setContactFieldError(el.leadEmail, "Enter your email.");
+    missing.push("email");
+  } else if (el.leadEmail && !el.leadEmail.checkValidity()) {
+    setContactFieldError(el.leadEmail, "Enter a valid email address.");
+    missing.push("email");
+  }
+  if (!payload.company) {
+    setContactFieldError(el.leadCompany, "Enter your company.");
+    missing.push("company");
+  }
+  if (!payload.message) {
+    setContactFieldError(el.leadMessage, "Tell us what you want help with first.");
+    missing.push("message");
+  }
+  if (!payload.package) {
+    el.selectedPackagePanel?.classList.add("is-invalid");
+    missing.push("package");
+  }
+  if (!payload.follow_up_consent) {
+    el.followUpConsentCheckbox?.closest(".consent-surface")?.classList.add("is-invalid");
+    missing.push("consent");
+  }
+
+  return missing;
+}
+
+function focusFirstContactError() {
+  clearRecommendationFocusTimer();
+  const invalidInput = el.contactForm?.querySelector("[aria-invalid='true']");
+  if (invalidInput instanceof HTMLElement) {
+    invalidInput.focus();
+    return;
+  }
+  if (el.selectedPackagePanel?.classList.contains("is-invalid")) {
+    el.changePackageButton?.focus();
+    return;
+  }
+  if (el.followUpConsentCheckbox?.closest(".consent-surface")?.classList.contains("is-invalid")) {
+    el.followUpConsentCheckbox?.focus();
+  }
+}
+
+function handleContactFormInput(event) {
+  const target = event?.target;
+  if (!(target instanceof HTMLElement)) return;
+
+  if (target.matches("input, textarea")) {
+    target.removeAttribute("aria-invalid");
+    target.closest(".field")?.classList.remove("is-invalid");
+    const helper = target.closest(".field")?.querySelector(".field-error");
+    if (helper) helper.textContent = "";
+  }
+
+  if (target === el.leadName || target === el.leadEmail || target === el.leadCompany || target === el.leadMessage) {
+    clearNotice(el.contactMessage);
   }
 }
 
@@ -1011,11 +1376,15 @@ function handleReviewConsentDetailsToggle() {
 
 function handleFollowUpConsentChange(event) {
   state.followUpConsentAccepted = Boolean(event?.currentTarget?.checked);
+  el.followUpConsentCheckbox?.closest(".consent-surface")?.classList.remove("is-invalid");
+  clearNotice(el.contactMessage);
   renderFollowUpConsentState();
   persistSession();
 }
 
 function renderInitialState() {
+  setTypingRowPlacement(false);
+  el.typingRow?.classList.add("is-hidden");
   if (state.conversation.length === 0) {
     el.messageList.innerHTML = "";
   } else {
@@ -1034,6 +1403,7 @@ function renderInitialState() {
   renderContact();
   renderInternalIntelligence();
   renderComposerAction();
+  syncWorkspaceRoute({ scroll: Boolean(getHashTargetId()) });
   state.stickConversationToBottom = true;
   updateConversationStickiness();
 }
@@ -1126,6 +1496,8 @@ function applyAgentResponse(data) {
       : state.extractionConfidence;
   state.contextScore = Math.max(state.contextScore || 0, deriveContextScore(data));
 
+  setTypingRowPlacement(false);
+  el.typingRow?.classList.add("is-hidden");
   state.conversation.push({ role: "assistant", content: assistantText });
   addVisualMessage("assistant", assistantText);
 
@@ -1158,6 +1530,7 @@ function applyAgentResponse(data) {
 }
 
 function renderAwaiting(isAwaiting) {
+  setTypingRowPlacement(isAwaiting);
   el.typingRow.classList.toggle("is-hidden", !isAwaiting);
   el.chatInput.disabled = isAwaiting;
   renderComposerAction();
@@ -1173,28 +1546,118 @@ function renderAwaiting(isAwaiting) {
 
 function renderConversation() {
   el.messageList.innerHTML = "";
-  state.conversation.filter((m) => m.role !== "system").forEach((m) => addVisualMessage(m.role, m.content));
+  const visibleConversation = state.conversation.filter((m) => m.role !== "system");
+  const transcriptDensity = visibleConversation.reduce((total, entry) => {
+    return total + String(entry?.content || "").trim().length;
+  }, 0);
+  const shouldCollapseHistory = visibleConversation.length > 14 || transcriptDensity > 900;
+  const visibleMessageCount = visibleConversation.length > 10 ? 10 : 4;
+  const archivedMessages = shouldCollapseHistory ? visibleConversation.slice(0, -visibleMessageCount) : [];
+  const activeMessages = shouldCollapseHistory ? visibleConversation.slice(-visibleMessageCount) : visibleConversation;
+
+  if (archivedMessages.length) {
+    const history = document.createElement("details");
+    history.className = "conversation-history";
+
+    const summary = document.createElement("summary");
+    summary.className = "conversation-history-summary";
+    summary.textContent = `Earlier conversation (${archivedMessages.length} ${archivedMessages.length === 1 ? "message" : "messages"})`;
+    history.appendChild(summary);
+
+    const historyList = document.createElement("div");
+    historyList.className = "conversation-history-list";
+    archivedMessages.forEach((entry) => {
+      historyList.appendChild(buildVisualMessage(entry.role, entry.content, { archived: true }));
+    });
+    history.appendChild(historyList);
+    el.messageList.appendChild(history);
+  }
+
+  activeMessages.forEach((entry) => {
+    el.messageList.appendChild(buildVisualMessage(entry.role, entry.content));
+  });
+
+  if (state.findings) {
+    el.messageList.appendChild(buildConversationReadyMessage());
+  }
+
+  markLatestAssistantMessage();
+  if (state.awaiting) {
+    setTypingRowPlacement(true);
+    el.typingRow?.classList.remove("is-hidden");
+  }
   updateMessageListVisibility();
   scrollConversationToEnd(true);
 }
 
-function addVisualMessage(role, content) {
+function buildVisualMessage(role, content, options = {}) {
   const div = document.createElement("div");
   div.className = `message ${role}`;
+  if (options.archived) div.classList.add("is-archived");
+  div.dataset.role = role;
+
+  const meta = document.createElement("p");
+  meta.className = "message-meta";
+  meta.textContent = role === "assistant" ? "Advisor" : "Your reply";
+  div.appendChild(meta);
 
   if (role === "assistant") {
-    el.messageList?.querySelectorAll(".message.assistant.is-latest-assistant").forEach((node) => {
-      node.classList.remove("is-latest-assistant");
-    });
-    div.classList.add("is-latest-assistant");
     renderAssistantMessage(div, normalizeAssistantText(content));
   } else {
-    div.textContent = content;
+    const body = document.createElement("p");
+    body.className = "message-body";
+    body.textContent = content;
+    div.appendChild(body);
   }
 
-  el.messageList.appendChild(div);
-  updateMessageListVisibility();
-  scrollConversationToEnd(role === "user" || state.stickConversationToBottom);
+  return div;
+}
+
+function buildConversationReadyMessage() {
+  const div = document.createElement("div");
+  div.className = "message system conversation-ready-message";
+  div.dataset.role = "system";
+
+  const meta = document.createElement("p");
+  meta.className = "message-meta";
+  meta.textContent = "System";
+  div.appendChild(meta);
+
+  const body = document.createElement("p");
+  body.className = "message-body conversation-ready-copy";
+  body.textContent = "Findings ready. Review the diagnostic brief or continue to findings.";
+  div.appendChild(body);
+
+  const actions = document.createElement("div");
+  actions.className = "conversation-ready-actions";
+
+  const briefLink = document.createElement("a");
+  briefLink.className = "text-button";
+  briefLink.href = "#findings";
+  briefLink.textContent = "View diagnostic brief";
+  actions.appendChild(briefLink);
+
+  const findingsLink = document.createElement("a");
+  findingsLink.className = "text-button";
+  findingsLink.href = "#contact";
+  findingsLink.textContent = "Continue to findings";
+  actions.appendChild(findingsLink);
+
+  div.appendChild(actions);
+  return div;
+}
+
+function markLatestAssistantMessage() {
+  el.messageList?.querySelectorAll(".message.assistant.is-latest-assistant").forEach((node) => {
+    node.classList.remove("is-latest-assistant");
+  });
+  const assistants = el.messageList ? Array.from(el.messageList.querySelectorAll(".message.assistant")) : [];
+  const latestAssistant = assistants[assistants.length - 1];
+  latestAssistant?.classList.add("is-latest-assistant");
+}
+
+function addVisualMessage() {
+  renderConversation();
 }
 
 function renderComposerAction() {
@@ -1319,6 +1782,8 @@ function renderStatus() {
   const descriptor = describeReadiness(score);
   const hasConversation = state.conversation.some((entry) => entry?.role === "user");
 
+  syncShellStateClasses();
+
   el.statusLabel.textContent = descriptor.phase;
   el.contextScoreLabel.textContent = `${score}%`;
   el.contextMeterFill.style.width = `${score}%`;
@@ -1334,10 +1799,23 @@ function renderStatus() {
   el.limitBadge.dataset.stage = state.findings ? "ready" : descriptor.badge;
   renderSessionContext(descriptor);
 
+  if (el.conversationReadyBanner) {
+    const showReadyBanner = Boolean(state.findings);
+    el.conversationReadyBanner.classList.toggle("is-hidden", !showReadyBanner);
+    if (el.conversationReadyCopy) {
+      el.conversationReadyCopy.textContent = state.contactSubmitted
+        ? "Findings are ready and the request has been sent. Return to the chat if you want to use any remaining follow-up questions."
+        : state.contactOpen
+          ? "Findings are ready and the request form is open in the brief view. Review the diagnosis, confirm the package, and send when ready."
+          : "Findings are ready. Open the diagnostic brief to review the read, compare service options, or come back here for follow-up questions.";
+    }
+  }
+
   if (state.findings) {
     el.chatNote.textContent = remaining > 0
-      ? "Use a follow-up to test the findings, or move to contact."
+      ? "Use a follow-up to test the read, or open the diagnostic brief."
       : "Free follow-ups are used up for this review.";
+    renderWorkspaceView();
     return;
   }
 
@@ -1358,6 +1836,7 @@ function renderStatus() {
   } else {
     el.chatNote.textContent = "Stay concrete about what breaks, slows, or still depends on you.";
   }
+  renderWorkspaceView();
 }
 
 function renderSessionContext(descriptor) {
@@ -1381,6 +1860,25 @@ function renderSessionContext(descriptor) {
   if (el.sessionStateLabel) el.sessionStateLabel.textContent = statusValue;
   if (el.sessionStageLabel) el.sessionStageLabel.textContent = stageValue;
   if (el.sessionModeLabel) el.sessionModeLabel.textContent = modeValue;
+
+  el.sessionStateLabel?.closest(".context-chip")?.setAttribute("data-state", slugifyLabel(statusValue));
+  el.sessionStageLabel?.closest(".context-chip")?.setAttribute("data-state", slugifyLabel(stageValue));
+  el.sessionModeLabel?.closest(".context-chip")?.setAttribute("data-state", slugifyLabel(modeValue));
+}
+
+function syncShellStateClasses() {
+  document.body.classList.toggle("has-findings", Boolean(state.findings));
+  document.body.classList.toggle("contact-open", Boolean(state.contactOpen));
+  document.body.classList.toggle("contact-submitted", Boolean(state.contactSubmitted));
+  document.body.classList.toggle("package-selected", Boolean(state.selectedPackageValue));
+}
+
+function slugifyLabel(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 
@@ -1582,6 +2080,7 @@ function hasDashboardContext() {
 function renderDashboardSummary() {
   const summary = deriveDashboardSummary();
   const insightRail = deriveInsightRailModel();
+  const recommendation = state.findings ? deriveRecommendedNextStepModel() : null;
   const showDetailedRailPanels = !state.findings;
   const showComparison = Boolean(
     state.findings
@@ -1598,7 +2097,7 @@ function renderDashboardSummary() {
   if (el.confidenceValue) el.confidenceValue.textContent = summary.confidence;
   if (el.ctaValue) el.ctaValue.textContent = insightRail.ctaValue;
   if (el.ctaCopy) el.ctaCopy.textContent = insightRail.ctaCopy;
-  if (el.ctaLink) el.ctaLink.textContent = insightRail.ctaLinkText || "Open next-step options";
+  if (el.ctaLink) el.ctaLink.textContent = insightRail.ctaLinkText || "Review package options";
   renderSignalChips(insightRail.signals);
   renderPanelList(el.nextActionsList, insightRail.nextActions);
   el.assessmentScoreRow?.classList.toggle("is-hidden", !state.findings);
@@ -1611,6 +2110,25 @@ function renderDashboardSummary() {
   el.comparisonPanel?.classList.toggle("is-hidden", !showComparison);
   el.ctaPanel?.classList.toggle("is-hidden", !insightRail.showCta);
   el.ctaLink?.classList.toggle("is-hidden", !insightRail.showCtaLink);
+
+  if (el.mobileSessionSummary) {
+    const hasSummaryContext = hasDashboardContext();
+    el.mobileSessionSummary.classList.toggle("is-hidden", !hasSummaryContext);
+    if (el.mobileSummaryReadiness) el.mobileSummaryReadiness.textContent = `${state.contextScore || 0}%`;
+    if (el.mobileSummaryConfidence) el.mobileSummaryConfidence.textContent = summary.confidence;
+    if (el.mobileSummaryBusinessType) el.mobileSummaryBusinessType.textContent = summary.businessType;
+    if (el.mobileSummaryRecommendation) {
+      el.mobileSummaryRecommendation.textContent = state.contactSubmitted
+        ? "Request submitted"
+        : recommendation
+          ? recommendation.railValue
+          : insightRail.showCta
+            ? insightRail.ctaValue
+            : "Use the conversation to build enough signal.";
+    }
+  }
+
+  queueInsightRailModeSync();
 }
 
 function deriveInsightRailModel() {
@@ -1624,11 +2142,11 @@ function deriveInsightRailModel() {
   const findBriefSection = (title) => briefSections.find((section) => section?.title === title);
 
   const businessTypeRaw = firstMeaningful([
+    extracted.business_type,
+    findings.business_type,
     display.business_type,
     display.secondary_business_type,
-    extracted.primary_business_type,
-    extracted.business_type,
-    findings.business_type
+    extracted.primary_business_type
   ]);
 
   const mainIssueRaw = firstMeaningful([
@@ -1695,7 +2213,7 @@ function deriveInsightRailModel() {
   let ctaCopy = "";
   let showCta = false;
   let showCtaLink = false;
-  let ctaLinkText = "Open next-step options";
+  let ctaLinkText = "Review package options";
 
   if (state.contactSubmitted) {
     showCta = true;
@@ -1704,17 +2222,17 @@ function deriveInsightRailModel() {
   } else if (state.contactOpen) {
     showCta = true;
     showCtaLink = true;
-    ctaValue = recommendation?.railValue || "Complete contact request";
-    ctaCopy = recommendation
-      ? "Contact form is open with this recommended path prefilled."
-      : "Submit the handoff form when you want a human advisor to review this diagnostic.";
+    ctaValue = state.selectedPackageName ? `${state.selectedPackageName} selected` : "Request form open";
+    ctaCopy = state.selectedPackageName
+      ? "The request form is open for the selected package."
+      : "Choose a package below when you want help acting on the diagnostic.";
     ctaLinkText = "Complete contact request";
   } else if (state.ctaReady || recommendation) {
     showCta = true;
     showCtaLink = true;
-    ctaValue = recommendation?.railValue || "Move to next-step options";
-    ctaCopy = recommendation?.railCopy || "The diagnostic has enough signal to support advisory follow-up if you want help turning the read into action.";
-    ctaLinkText = recommendation?.primaryCtaLabel || "Open next-step options";
+    ctaValue = recommendation?.railValue || "What to fix next";
+    ctaCopy = recommendation?.railCopy || "The diagnostic is clear enough to show the next operating constraint to tighten.";
+    ctaLinkText = "Review package options";
   }
 
   return {
@@ -1758,11 +2276,11 @@ function deriveRecommendedNextStepModel() {
     findings.cause_tags
   );
   const businessTypeLabel = cleanSummaryValue(firstMeaningful([
+    extracted.business_type,
+    findings.business_type,
     display.business_type,
     display.secondary_business_type,
-    extracted.primary_business_type,
-    extracted.business_type,
-    findings.business_type
+    extracted.primary_business_type
   ]) || "Business");
   const priorityLabel = cleanSummaryValue(firstMeaningful([
     findings.first_priority,
@@ -1787,41 +2305,23 @@ function deriveRecommendedNextStepModel() {
       ? "Ongoing Advisory"
       : "Operations Sprint";
   const title = theme.focusTitle || theme.title;
-  const packageNote = packageType === "review"
-    ? "Best when the pattern is clear, but you want to confirm the first move before committing to implementation."
-    : packageType === "advisory"
-      ? "Best when the issue crosses ownership, cadence, and follow-through and needs support over more than one cycle."
-      : "Best when the issue is clear enough to move into a focused setup around the first fix.";
-  const transitionCopy = packageType === "review"
-    ? `The findings point to a real issue. If you want help acting on it, the next useful move is a short review before building around ${theme.scopeLabel}.`
-    : packageType === "advisory"
-      ? `The findings point to a broader operating pattern. If you want help acting on it, the next useful move is ongoing support around ${theme.scopeLabel}.`
-      : `The findings are specific enough to move from diagnosis into a focused setup around ${theme.scopeLabel}.`;
+  const transitionCopy = `The clearest next move is to tighten ${theme.scopeLabel} before widening the work or adding more demand.`;
   const workstreams = recommendations.slice(0, 2).map((entry) => entry.title);
   const scopeCopy = workstreams.length
-    ? `Likely first scope: ${joinWithAnd(workstreams)}.`
-    : `Likely first scope: ${theme.scopeLabel}.`;
-  const deliverables = buildRecommendedDeliverables({
-    packageType,
-    theme,
-    priorityLabel
+    ? `Keep the scope tight around ${joinWithAnd(workstreams)} before widening the work.`
+    : `Keep the scope tight around ${theme.scopeLabel} before widening the work.`;
+  const immediateActions = buildRecommendedImmediateActions({
+    themeKey: theme.key,
+    priorityLabel,
+    scopeLabel: theme.scopeLabel,
+    findings,
+    display
   });
-  const railCopy = packageType === "review"
-    ? `Best fit if you want to confirm the read and lock the first move before building around ${theme.scopeLabel}.`
-    : packageType === "advisory"
-      ? `Best fit if this needs recurring support around ${theme.scopeLabel}, not a one-off setup.`
-      : `Best fit if you want hands-on help tightening ${theme.scopeLabel}.`;
-  const whyPath = packageType === "review"
-    ? `The issue is visible, but the first move should be pressure-tested before implementation work starts around ${theme.scopeLabel}.`
-    : packageType === "advisory"
-      ? `The signal pattern cuts across ownership, cadence, and follow-through, so recurring support is a better fit than a one-off setup around ${theme.scopeLabel}.`
-      : `The issue is clear enough to move into hands-on implementation guidance around ${theme.scopeLabel} without widening the scope too early.`;
-  const bestForCopy = packageType === "review"
-    ? "Best for teams that want a human operator read, a tighter first move, and a clear decision on whether deeper work is warranted."
-    : packageType === "advisory"
-      ? "Best for owners who need recurring prioritization, accountability, and review support across more than one operating cycle."
-      : "Best for teams with one clear operating problem that is ready for structure, cadence, and implementation guidance.";
-  const nextStepCopy = "If you request help, we review this diagnostic, confirm fit and scope, and reply with the right starting package before anything is booked.";
+  const consequences = deriveOperatingConsequences(theme.key);
+  const railCopy = "The diagnostic is clear enough to show the next operating lane to tighten. Review package options below if you want help executing it.";
+  const whyPath = describeWhyThisMatters(theme.key, theme.scopeLabel, priorityLabel);
+  const bestForCopy = consequences[0] || "The issue will stay reactive longer than it should if the first lane is not controlled.";
+  const nextStepCopy = consequences.slice(0, 2).join(" ") || "The issue is likely to stay reactive until the first operating lane is controlled.";
   const contactPackageValue = `${basePackage} - ${theme.title}`;
   const contactMessage = [
     `I want help with the recommended next step: ${basePackage} for ${title}.`,
@@ -1833,12 +2333,12 @@ function deriveRecommendedNextStepModel() {
 
   return {
     title,
-    packageLabel: basePackage,
+    packageLabel: "Operational priority",
     basePackage,
     packageType,
     themeKey: theme.key,
     transitionCopy,
-    packageNote,
+    packageNote: `Start with ${priorityLabel}, supported by clear ownership and a repeatable review rhythm around ${theme.scopeLabel}.`,
     whyPath,
     bestForCopy,
     nextStepCopy,
@@ -1847,11 +2347,11 @@ function deriveRecommendedNextStepModel() {
     signals,
     scopeLabel: theme.scopeLabel,
     scopeCopy,
-    deliverables,
+    immediateActions,
     deliverableLibrary: theme.deliverables,
     railCopy,
-    railValue: basePackage,
-    primaryCtaLabel: "Request next-step help",
+    railValue: title,
+    primaryCtaLabel: "Review package options",
     contactPackageValue,
     contactMessage
   };
@@ -2127,6 +2627,80 @@ function buildRecommendedDeliverables({ packageType, theme, priorityLabel }) {
   ];
 }
 
+function buildRecommendedImmediateActions({ themeKey = "general", priorityLabel = "", scopeLabel = "", findings = {}, display = {} }) {
+  const extractedActions = dedupeList(
+    normalizeActionList([
+      findings.next_actions,
+      findings.first_moves,
+      findings.recommendations,
+      findings.diy_vs_help,
+      findings.next_step,
+      display.recommendation_titles
+    ])
+  ).slice(0, 4);
+
+  if (extractedActions.length) return extractedActions;
+
+  const catalog = {
+    cash: [
+      "Assign one owner for invoicing follow-through and overdue escalation.",
+      "Set a weekly receivables review with aging thresholds and next actions.",
+      "Separate billing completion from owner rescue so follow-up happens on time."
+    ],
+    margin: [
+      "Set pricing guardrails before the next round of quotes goes out.",
+      "Review estimate-versus-actual results on a weekly cadence.",
+      "Name who owns cost visibility before jobs are closed."
+    ],
+    owner_handoff: [
+      "Move a short list of recurring decisions out of the owner queue now.",
+      "Define what gets delegated, what escalates, and who reviews exceptions.",
+      "Run one weekly operating review that reduces day-to-day rescue work."
+    ],
+    handoff: [
+      "Tighten the handoff points that keep creating clarification or rework.",
+      "Define one shared checklist for starts, exceptions, and closeout.",
+      "Name ownership at each handoff so details stop relying on memory."
+    ],
+    execution: [
+      "Set one weekly planning cadence for schedule load and exceptions.",
+      "Separate weekly capacity decisions from day-of firefighting.",
+      "Name who updates the board and who owns escalation decisions."
+    ],
+    visibility: [
+      "Define the few numbers needed to run the week before building more reporting.",
+      "Assign ownership for updating each number on a clear cadence.",
+      "Use one review rhythm that turns the scorecard into decisions."
+    ],
+    pipeline: [
+      "Tighten qualification rules before adding more top-of-funnel activity.",
+      "Review fit, margin, and capacity together before approving more work.",
+      "Remove the deal patterns that keep creating weak backlog."
+    ],
+    general: [
+      `Stabilize ${scopeLabel || priorityLabel || "the first operating fix"} before widening the work.`,
+      "Assign one owner for the first move and one review cadence to track it.",
+      "Keep exceptions out of ad hoc rescue mode until the lane is holding."
+    ]
+  };
+
+  return (catalog[themeKey] || catalog.general).slice(0, 4);
+}
+
+function describeWhyThisMatters(themeKey = "general", scopeLabel = "", priorityLabel = "") {
+  const catalog = {
+    cash: `Cash pressure usually stays elevated until ${scopeLabel} is stable enough to stop overdue drift and owner rescue.`,
+    margin: `Margin rarely improves consistently until ${scopeLabel} is disciplined enough to catch leakage before work is closed.`,
+    owner_handoff: `The team will keep waiting on the owner until ${scopeLabel} is clear enough to move routine decisions out of the rescue queue.`,
+    handoff: `Rework and misses stay expensive until ${scopeLabel} is stable enough to survive real workload without memory-based fixes.`,
+    execution: `Schedule noise usually stays high until ${scopeLabel} is controlled through a repeatable weekly rhythm instead of constant reprioritization.`,
+    visibility: `Weekly decisions stay reactive until ${scopeLabel} is clear enough to show what is happening before the week gets away from the team.`,
+    pipeline: `Demand quality stays noisy until ${scopeLabel} is tight enough to keep weak-fit work from filling the backlog.`,
+    general: `The business will keep burning effort on the same issue until ${scopeLabel || priorityLabel || "the first priority"} is controlled with clear ownership and review.`
+  };
+  return catalog[themeKey] || catalog.general;
+}
+
 function joinWithAnd(values) {
   const items = values.filter(Boolean);
   if (items.length <= 1) return items[0] || "";
@@ -2315,14 +2889,16 @@ function buildPackageOptionsModel(recommendation = null) {
     {
       key: "review",
       name: "Diagnostic Review",
+      eyebrow: "Clarify before you build",
       price: "$600",
-      billingNote: "One-time review",
-      discountLabel: "Credit eligible",
-      discount: "Applied to a Sprint or Advisory if you move forward within 14 days."
+      billingNote: "One-time operator review",
+      discountLabel: "Review credit",
+      discount: "If you move into a Sprint or Advisory within 14 days, the $600 review fee is applied forward."
     },
     {
       key: "sprint",
       name: "Operations Sprint",
+      eyebrow: "Hands-on first fix",
       price: "$2,800",
       billingNote: "Focused setup package",
       discountLabel: "Review credit",
@@ -2331,6 +2907,7 @@ function buildPackageOptionsModel(recommendation = null) {
     {
       key: "advisory",
       name: "Ongoing Advisory",
+      eyebrow: "Recurring operating support",
       price: "$1,650 / month",
       billingNote: "Monthly cadence support",
       discountLabel: "Review credit",
@@ -2340,16 +2917,19 @@ function buildPackageOptionsModel(recommendation = null) {
 
   return catalog.map((entry) => {
     const isRecommended = activeRecommendation.packageType === entry.key;
+    const isSelected = state.selectedPackageKey === entry.key;
     const items = buildRecommendedDeliverables({
       packageType: entry.key,
       theme: { deliverables: deliverableLibrary },
       priorityLabel: activeRecommendation.priorityLabel || "the first operating issue"
-    }).slice(0, 2);
+    }).slice(0, 3);
 
     return {
       ...entry,
       isRecommended,
+      isSelected,
       recommendedLabel: isRecommended ? "Recommended for this diagnostic" : "",
+      selectedLabel: isSelected ? "Selected package" : "",
       fitCopy: derivePackageFitCopy(entry.key, activeRecommendation),
       items,
       packageValue: isRecommended
@@ -2357,7 +2937,12 @@ function buildPackageOptionsModel(recommendation = null) {
         : entry.name,
       packageMessage: isRecommended
         ? activeRecommendation.contactMessage || buildPackageMessageForOption(entry.key, activeRecommendation)
-        : buildPackageMessageForOption(entry.key, activeRecommendation)
+        : buildPackageMessageForOption(entry.key, activeRecommendation),
+      buttonLabel: isSelected
+        ? "Selected"
+        : isRecommended
+          ? "Select recommended package"
+          : `Select ${entry.name}`
     };
   });
 }
@@ -2389,10 +2974,10 @@ function deriveDashboardSummary() {
   ]);
 
   const businessType = firstMeaningful([
-    intelligence?.display?.business_type,
-    intelligence?.display?.secondary_business_type,
     extracted.business_type,
     findings && typeof findings === "object" ? findings.business_type : null,
+    intelligence?.display?.business_type,
+    intelligence?.display?.secondary_business_type,
     hasContext ? "Still identifying the pattern" : "Appears after the first response"
   ]);
 
@@ -2667,7 +3252,7 @@ function renderRecommendedNextStep() {
   }
   if (el.recommendedScope) el.recommendedScope.textContent = recommendation.scopeCopy;
   if (el.recommendedNextStepNote) el.recommendedNextStepNote.textContent = recommendation.nextStepCopy;
-  renderPanelList(el.recommendedDeliverables, recommendation.deliverables);
+  renderPanelList(el.recommendedDeliverables, recommendation.immediateActions || []);
 
   if (el.recommendedPrimaryCta) {
     el.recommendedPrimaryCta.onclick = handleRecommendedSetupHelp;
@@ -2689,13 +3274,31 @@ function renderOfferCards(recommendation) {
     const card = document.createElement("div");
     card.className = "offer-card";
     if (option.isRecommended) card.classList.add("featured");
+    if (option.isSelected) card.classList.add("selected");
+    card.dataset.packageKey = option.key;
+
+    const badges = document.createElement("div");
+    badges.className = "offer-badges";
+
+    const eyebrow = document.createElement("p");
+    eyebrow.className = "offer-eyebrow";
+    eyebrow.textContent = option.eyebrow;
+    badges.appendChild(eyebrow);
 
     if (option.isRecommended) {
       const badge = document.createElement("p");
       badge.className = "offer-badge";
       badge.textContent = option.recommendedLabel;
-      card.appendChild(badge);
+      badges.appendChild(badge);
     }
+
+    if (option.isSelected) {
+      const selectedBadge = document.createElement("p");
+      selectedBadge.className = "offer-selected-badge";
+      selectedBadge.textContent = option.selectedLabel;
+      badges.appendChild(selectedBadge);
+    }
+    card.appendChild(badges);
 
     const top = document.createElement("div");
     top.className = "offer-top";
@@ -2704,11 +3307,6 @@ function renderOfferCards(recommendation) {
     const heading = document.createElement("h3");
     heading.textContent = option.name;
     topCopy.appendChild(heading);
-
-    const note = document.createElement("p");
-    note.className = "offer-note";
-    note.textContent = option.fitCopy;
-    topCopy.appendChild(note);
 
     const pricing = document.createElement("div");
     pricing.className = "offer-pricing";
@@ -2726,6 +3324,20 @@ function renderOfferCards(recommendation) {
     top.appendChild(topCopy);
     top.appendChild(pricing);
     card.appendChild(top);
+
+    const fit = document.createElement("div");
+    fit.className = "offer-fit";
+
+    const fitLabel = document.createElement("span");
+    fitLabel.className = "offer-section-label";
+    fitLabel.textContent = "Ideal fit";
+    fit.appendChild(fitLabel);
+
+    const fitCopy = document.createElement("p");
+    fitCopy.className = "offer-note";
+    fitCopy.textContent = option.fitCopy;
+    fit.appendChild(fitCopy);
+    card.appendChild(fit);
 
     const list = document.createElement("ul");
     list.className = "offer-list";
@@ -2752,9 +3364,17 @@ function renderOfferCards(recommendation) {
     const button = document.createElement("button");
     button.type = "button";
     button.className = option.isRecommended ? "btn btn-primary offer-select" : "btn btn-secondary offer-select";
-    button.dataset.packageSelect = option.packageValue;
+    if (option.isSelected) {
+      button.className = "btn btn-primary offer-select";
+      button.setAttribute("aria-pressed", "true");
+    } else {
+      button.setAttribute("aria-pressed", "false");
+    }
+    button.dataset.packageKey = option.key;
+    button.dataset.packageSelect = option.name;
+    button.dataset.packageValue = option.packageValue;
     button.dataset.packageMessage = option.packageMessage;
-    button.textContent = `Choose ${option.name}`;
+    button.textContent = option.buttonLabel;
     card.appendChild(button);
 
     el.offerGrid.appendChild(card);
@@ -2762,6 +3382,7 @@ function renderOfferCards(recommendation) {
 }
 
 function renderContact() {
+  syncShellStateClasses();
   const shouldShow = hasRecommendationHandoffAvailable();
   el.contactSection.classList.toggle("is-hidden", !shouldShow);
   if (!shouldShow) {
@@ -2779,24 +3400,65 @@ function renderContact() {
 
   if (el.offerSummary) {
     el.offerSummary.textContent = recommendation
-      ? `The current diagnostic points to ${recommendation.basePackage} as the strongest starting point. Compare the packages below by fit, support level, and price before deciding how much help you want.`
-      : "Compare the packages below by fit, support level, and price before deciding how much help you want.";
+      ? `The current diagnostic points to ${recommendation.basePackage} as the strongest starting point. Compare the packages below by ideal fit, included support, and price before choosing how much help to bring in.`
+      : "Compare the packages below by ideal fit, included support, and price before choosing how much help to bring in.";
   }
   if (el.pricingBannerTitle) {
-    el.pricingBannerTitle.textContent = "Diagnostic Review credit";
+    el.pricingBannerTitle.textContent = "$600 Diagnostic Review credit";
   }
   if (el.pricingBannerCopy) {
-    el.pricingBannerCopy.textContent = "If you start with a paid Diagnostic Review and move into a Sprint or Advisory within 14 days, the review fee is applied to the starting package.";
+    el.pricingBannerCopy.textContent = "Start with a Diagnostic Review and move into a Sprint or Advisory within 14 days, and the review fee is applied to that starting package.";
   }
   if (el.contactShellCopy) {
     el.contactShellCopy.textContent = recommendation
-      ? `Open the form below if you want us to review this diagnostic, confirm whether ${recommendation.basePackage} is the right starting package, and reply with the next-step discussion or kickoff path.`
-      : "Open the form below if you want a human review of the diagnostic and the right starting package.";
+      ? `Open the request form when you want us to review this diagnostic, confirm whether ${recommendation.basePackage} is the right starting package, and reply with the next-step discussion or kickoff path.`
+      : "Open the request form if you want a human review of the diagnostic and the right starting package.";
   }
   if (el.contactShellNote) {
     el.contactShellNote.textContent = recommendation
-      ? `After submission, we review the diagnostic, confirm fit and scope, recommend the right starting package, and only then move into the next conversation or kickoff path.`
+      ? "After submission, we review the diagnostic, confirm fit and scope, recommend the right starting package, and only then move into the next conversation or kickoff path."
       : "We confirm fit, scope, and starting package first.";
+  }
+  if (el.leadPackage) {
+    el.leadPackage.value = state.selectedPackageValue || "";
+  }
+
+  if (el.selectedPackagePanel && el.selectedPackageName && el.selectedPackageHelper) {
+    const hasSelectedPackage = Boolean(state.selectedPackageName && state.selectedPackageValue);
+    const isRecommendedSelection = Boolean(recommendation && state.selectedPackageKey === recommendation.packageType);
+    el.selectedPackagePanel.classList.toggle("is-empty", !hasSelectedPackage);
+    el.selectedPackagePanel.dataset.packageState = hasSelectedPackage
+      ? (isRecommendedSelection ? "recommended" : "selected")
+      : "empty";
+    el.selectedPackageName.textContent = hasSelectedPackage
+      ? state.selectedPackageName
+      : recommendation
+        ? `${recommendation.basePackage} recommended`
+        : "Choose a package above.";
+    el.selectedPackageHelper.textContent = state.contactSubmitted && hasSelectedPackage
+      ? `Request received for ${state.selectedPackageName}. We review fit, scope, and next-step timing before anything is booked.`
+      : hasSelectedPackage
+        ? isRecommendedSelection
+          ? `This matches the recommended starting package for the current diagnostic.`
+          : `This request will be reviewed against ${state.selectedPackageName} as the starting package.`
+      : recommendation
+        ? `The current diagnostic points to ${recommendation.basePackage} as the best starting package. You can keep that recommendation or choose another option above.`
+        : "Choose a package above. This request is tied to the package you select.";
+    if (el.selectedPackageStatus) {
+      el.selectedPackageStatus.classList.toggle("is-hidden", !hasSelectedPackage);
+      el.selectedPackageStatus.textContent = state.contactSubmitted
+        ? "Requested"
+        : isRecommendedSelection
+          ? "Recommended"
+          : "Selected";
+    }
+    if (el.changePackageButton) {
+      el.changePackageButton.textContent = state.contactSubmitted
+        ? "Review packages"
+        : hasSelectedPackage
+          ? "Change package"
+          : "Choose package";
+    }
   }
 
   if (state.contactOpen) {
@@ -2805,19 +3467,39 @@ function renderContact() {
     el.contactForm?.classList.add("is-hidden");
   }
   if (el.contactToggle) {
-    el.contactToggle.textContent = state.contactOpen ? "Request form open" : "Open request form";
+    el.contactToggle.textContent = state.contactSubmitted
+      ? "Request submitted"
+      : state.contactSubmitting
+        ? "Submitting request..."
+        : state.contactOpen
+          ? "Request form open"
+          : state.selectedPackageName
+            ? `Continue with ${state.selectedPackageName}`
+            : "Open request form";
     el.contactToggle.setAttribute("aria-expanded", String(Boolean(state.contactOpen)));
+    el.contactToggle.disabled = Boolean(state.contactSubmitted || state.contactSubmitting);
+  }
+  if (el.contactSubmitButton) {
+    el.contactSubmitButton.textContent = state.contactSubmitted
+      ? "Request submitted"
+      : state.contactSubmitting
+        ? "Submitting request..."
+        : "Request scoped next step";
   }
   renderFollowUpConsentState();
   renderRecommendedNextStep();
+  renderWorkspaceView();
 }
 
-function updateLocationHash(hash) {
+function updateLocationHash(hash, options = {}) {
   if (!hash || typeof window === "undefined") return;
   try {
     window.history.replaceState(null, "", hash);
   } catch (error) {
     window.location.hash = hash;
+  }
+  if (!options.skipRender) {
+    renderWorkspaceView({ targetId: String(hash).replace(/^#/, "") });
   }
 }
 
@@ -2827,15 +3509,20 @@ function focusContactField(field) {
     return;
   }
   if (field === "package") {
-    el.leadPackage?.focus();
+    const selectedButton = el.offerGrid?.querySelector(`[data-package-select][data-package-key="${state.selectedPackageKey}"]`);
+    const fallbackButton = el.offerGrid?.querySelector("[data-package-select]");
+    (selectedButton || fallbackButton)?.focus();
   }
 }
 
 function openContactForm(options = {}) {
+  clearRecommendationFocusTimer();
   const focusField = options && typeof options === "object" && "focusField" in options
     ? options.focusField
     : null;
 
+  ensureRecommendedPackageSelection({ overwriteMessage: !el.leadMessage?.value.trim() });
+  clearContactFieldErrors();
   state.contactOpen = true;
   el.contactSection?.classList.remove("is-hidden");
   renderContact();
@@ -2855,6 +3542,7 @@ function openContactForm(options = {}) {
 
 async function handleContactSubmit(event) {
   event.preventDefault();
+  if (state.contactSubmitting || state.contactSubmitted) return;
   clearNotice(el.contactMessage);
 
   const formData = new FormData(el.contactForm);
@@ -2873,18 +3561,23 @@ async function handleContactSubmit(event) {
     submitted_at: new Date().toISOString()
   };
 
-  if (!payload.name || !payload.email || !payload.company || !payload.message) {
-    showNotice(el.contactMessage, "Complete the required fields before submitting.", "warning");
-    return;
-  }
-
-  if (!payload.follow_up_consent) {
-    showNotice(el.contactMessage, "Agree to follow-up contact before sending this request.", "warning");
-    el.followUpConsentCheckbox?.focus();
+  const issues = validateContactPayload(payload);
+  if (issues.length) {
+    const message = issues.includes("package")
+      ? "Choose a starting package and complete the required fields before sending this request."
+      : issues.includes("consent")
+        ? "Complete the required fields and agree to follow-up contact before sending this request."
+        : "Complete the required fields before sending this request.";
+    showNotice(el.contactMessage, message, "warning");
+    focusFirstContactError();
     return;
   }
 
   try {
+    state.contactSubmitting = true;
+    renderContact();
+    renderDashboardSummary();
+    persistSession();
     state.contactDetails = {
       name: payload.name,
       email: payload.email,
@@ -2904,6 +3597,7 @@ async function handleContactSubmit(event) {
     }
     markAnonymousAssessmentAsContacted();
     state.contactSubmitted = true;
+    state.contactOpen = false;
     if (!state.completedAt && state.findings) state.completedAt = new Date().toISOString();
     const record = refreshStructuredSessionIntelligence({ sync: false });
     if (!record) throw new Error("Unable to build session payload.");
@@ -2911,6 +3605,9 @@ async function handleContactSubmit(event) {
     showNotice(el.contactMessage, "Request sent successfully.", "success");
     state.followUpConsentAccepted = false;
     el.contactForm.reset();
+    if (el.leadPackage) {
+      el.leadPackage.value = state.selectedPackageValue || "";
+    }
     el.leadMessage.value = deriveLeadPrompt(state.findings);
     renderContact();
     renderDashboardSummary();
@@ -2918,6 +3615,12 @@ async function handleContactSubmit(event) {
     persistSession();
   } catch (error) {
     showNotice(el.contactMessage, error instanceof Error ? error.message : "Lead capture failed.", "warning");
+  } finally {
+    state.contactSubmitting = false;
+    renderContact();
+    renderDashboardSummary();
+    renderFollowUpConsentState();
+    persistSession();
   }
 }
 
@@ -3631,7 +4334,12 @@ function persistSession() {
     contextScore: state.contextScore,
     contactOpen: state.contactOpen,
     contactSubmitted: state.contactSubmitted,
+    contactSubmitting: state.contactSubmitting,
     followUpConsentAccepted: state.followUpConsentAccepted,
+    selectedPackageKey: state.selectedPackageKey,
+    selectedPackageName: state.selectedPackageName,
+    selectedPackageValue: state.selectedPackageValue,
+    selectedPackageMessage: state.selectedPackageMessage,
     contactDetails: state.contactDetails,
     pendingNotificationEvents: state.pendingNotificationEvents,
     assessmentLogged: state.assessmentLogged,
@@ -3666,7 +4374,12 @@ function restoreSession() {
     state.contextScore = Number(saved.contextScore || 0);
     state.contactOpen = Boolean(saved.contactOpen);
     state.contactSubmitted = Boolean(saved.contactSubmitted);
+    state.contactSubmitting = false;
     state.followUpConsentAccepted = Boolean(saved.followUpConsentAccepted);
+    state.selectedPackageKey = saved.selectedPackageKey || null;
+    state.selectedPackageName = saved.selectedPackageName || "";
+    state.selectedPackageValue = saved.selectedPackageValue || "";
+    state.selectedPackageMessage = saved.selectedPackageMessage || "";
     state.contactDetails = saved.contactDetails && typeof saved.contactDetails === "object" ? saved.contactDetails : null;
     state.pendingNotificationEvents = Array.isArray(saved.pendingNotificationEvents) ? saved.pendingNotificationEvents : [];
     state.assessmentLogged = Boolean(saved.assessmentLogged);
@@ -3700,7 +4413,12 @@ function resetSession() {
   state.contextScore = 0;
   state.contactOpen = false;
   state.contactSubmitted = false;
+  state.contactSubmitting = false;
   state.followUpConsentAccepted = false;
+  state.selectedPackageKey = null;
+  state.selectedPackageName = "";
+  state.selectedPackageValue = "";
+  state.selectedPackageMessage = "";
   state.contactDetails = null;
   state.pendingNotificationEvents = [];
   state.assessmentLogged = false;
@@ -3737,8 +4455,11 @@ function clearNotice(node) {
   node.className = "notice is-hidden";
 }
 
-function scrollToSection(id) {
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+function scrollToSection(id, options = {}) {
+  const targetId = FINDINGS_PAGE_TARGETS.has(id) && !hasFindingsPageAvailable() ? "diagnostic" : id;
+  const view = options.view || resolveWorkspaceView(targetId);
+  renderWorkspaceView({ view, targetId });
+  document.getElementById(targetId)?.scrollIntoView({ behavior: options.behavior || "smooth", block: "start" });
 }
   </script>
 </body>

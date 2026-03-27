@@ -5617,3 +5617,3201 @@ body.app-shell .workspace-side .dashboard-card {
     border-top: 1px solid rgba(19, 33, 45, 0.08);
   }
 }
+
+/* Findings page refinement layer */
+body.app-shell .container {
+  width: min(calc(100% - 2.5rem), 1460px);
+}
+
+body.app-shell .workspace {
+  padding: 0 0 34px;
+}
+
+body.app-shell .workspace-shell {
+  grid-template-columns: minmax(0, 1fr) 296px;
+  gap: 20px;
+}
+
+body.app-shell .workspace-main {
+  gap: 20px;
+}
+
+body.app-shell .workspace-block {
+  scroll-margin-top: 116px;
+}
+
+body.app-shell .topbar {
+  margin: 14px 0 16px;
+  padding: 18px 22px;
+  gap: 18px 24px;
+  align-items: flex-start;
+}
+
+body.app-shell .topbar-authority {
+  max-width: 60ch;
+  gap: 6px;
+}
+
+body.app-shell .topbar-statement {
+  max-width: 60ch;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+body.app-shell .topbar-utility {
+  gap: 10px;
+}
+
+body.app-shell .topbar-context {
+  gap: 8px;
+}
+
+body.app-shell .context-chip {
+  min-width: 106px;
+  gap: 5px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+}
+
+body.app-shell .context-chip[data-state="findings-ready"],
+body.app-shell .context-chip[data-state="contact-open"],
+body.app-shell .context-chip[data-state="request-sent"] {
+  border-color: rgba(212, 225, 234, 0.2);
+  background: rgba(143, 176, 197, 0.14);
+}
+
+body.app-shell .context-chip[data-state="request-sent"] {
+  background: rgba(77, 127, 103, 0.18);
+}
+
+body.app-shell .topbar-links {
+  gap: 14px;
+}
+
+body.app-shell .topbar-links a {
+  font-size: 0.84rem;
+}
+
+body.app-shell :is(
+  .context-value,
+  .findings-core-problem,
+  .recommended-package-title,
+  .recommended-meta-value,
+  .recommended-meta-copy,
+  .offer-card h3,
+  .offer-note,
+  .offer-list li,
+  .finding-card li,
+  .pattern-step strong,
+  .selected-package-name,
+  .selected-package-helper,
+  .mobile-summary-value,
+  .panel-value,
+  .section-copy,
+  .header-copy,
+  .small-text,
+  .field-helper
+) {
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+}
+
+body.app-shell :is(
+  .conversation-ready-actions,
+  .selected-package-head > div,
+  .offer-top > div,
+  .offer-pricing,
+  .recommended-next-step-grid > div,
+  .recommended-meta-item,
+  .mobile-summary-stat,
+  .insight-header > div
+) {
+  min-width: 0;
+}
+
+body.app-shell .conversation-card {
+  height: min(1020px, calc(100dvh - 56px));
+  min-height: 760px;
+  padding: 16px 20px 13px;
+  row-gap: 8px;
+}
+
+body.app-shell.has-findings .conversation-card {
+  height: min(860px, calc(100dvh - 98px));
+  min-height: 700px;
+}
+
+body.app-shell .conversation-head {
+  padding-bottom: 6px;
+}
+
+body.app-shell .conversation-head > div {
+  gap: 3px;
+}
+
+body.app-shell .transcript-head h2 {
+  font-size: clamp(1.45rem, 2.3vw, 1.82rem);
+}
+
+body.app-shell .transcript-head .header-copy {
+  max-width: 60ch;
+  font-size: 0.82rem;
+  line-height: 1.42;
+}
+
+body.app-shell .conversation-ready-banner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 13px;
+  border: 1px solid rgba(29, 86, 116, 0.1);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(236, 244, 248, 0.9) 0%, rgba(255, 255, 255, 0.98) 100%);
+}
+
+body.app-shell .conversation-ready-copy {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+body.app-shell .conversation-ready-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+body.app-shell .conversation-ready-actions .text-button {
+  white-space: nowrap;
+}
+
+body.app-shell .transcript-viewport {
+  gap: 18px;
+  min-height: 520px;
+  padding: 14px 10px calc(42px + env(safe-area-inset-bottom)) 0;
+  background: linear-gradient(180deg, rgba(248, 251, 253, 0.82) 0%, rgba(255, 255, 255, 0.3) 100%);
+  scroll-padding-bottom: calc(52px + env(safe-area-inset-bottom));
+}
+
+body.app-shell.has-findings .transcript-viewport {
+  padding-bottom: calc(34px + env(safe-area-inset-bottom));
+}
+
+body.app-shell .typing-row {
+  display: grid;
+  justify-self: start;
+  width: min(86%, 420px);
+  gap: 8px;
+  margin: 0;
+  padding: 16px 18px;
+  border: 1px solid rgba(29, 86, 116, 0.12);
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.99) 0%, rgba(247, 250, 252, 0.98) 100%);
+  color: var(--ink);
+  box-shadow: 0 10px 24px rgba(12, 23, 34, 0.05);
+}
+
+body.app-shell .typing-row .message-meta {
+  margin-bottom: 0;
+}
+
+body.app-shell .typing-row-body {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+body.app-shell .typing-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+body.app-shell .typing-label {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+body.app-shell .message {
+  max-width: min(90%, 760px);
+  padding: 18px 20px;
+  border-radius: 20px;
+  border-color: rgba(19, 33, 45, 0.08);
+  box-shadow: none;
+}
+
+body.app-shell .message.user {
+  max-width: min(78%, 680px);
+  background: linear-gradient(180deg, rgba(235, 243, 248, 0.98) 0%, rgba(226, 236, 244, 0.98) 100%);
+}
+
+body.app-shell .message.assistant {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.99) 0%, rgba(250, 252, 253, 0.98) 100%);
+}
+
+body.app-shell .message.assistant.is-latest-assistant {
+  border-color: rgba(29, 86, 116, 0.18);
+  box-shadow: 0 18px 32px rgba(12, 23, 34, 0.06);
+}
+
+body.app-shell .message.is-archived {
+  max-width: 100%;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.88);
+}
+
+body.app-shell .message-meta {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+body.app-shell .message-body {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.98rem;
+  line-height: 1.62;
+}
+
+body.app-shell .message.assistant .assistant-label {
+  margin-bottom: 8px;
+}
+
+body.app-shell .conversation-history {
+  display: grid;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid rgba(19, 33, 45, 0.08);
+  border-radius: 18px;
+  background: rgba(244, 248, 251, 0.92);
+}
+
+body.app-shell .conversation-history summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--accent-strong);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  list-style: none;
+}
+
+body.app-shell .conversation-history summary::-webkit-details-marker {
+  display: none;
+}
+
+body.app-shell .conversation-history summary::after {
+  content: "+";
+  flex: 0 0 auto;
+  color: rgba(20, 59, 83, 0.8);
+  font-size: 0.98rem;
+}
+
+body.app-shell .conversation-history[open] summary::after {
+  content: "-";
+}
+
+body.app-shell .conversation-history-list {
+  display: grid;
+  gap: 10px;
+}
+
+body.app-shell .conversation-composer {
+  position: static;
+  bottom: auto;
+  z-index: auto;
+  gap: 5px;
+  padding-top: 6px;
+  background: transparent;
+}
+
+body.app-shell .conversation-composer .composer-intro {
+  gap: 2px;
+}
+
+body.app-shell .conversation-composer .composer-title {
+  font-size: 1.02rem;
+}
+
+body.app-shell .conversation-composer .command-helper {
+  max-width: 54ch;
+  font-size: 0.74rem;
+  line-height: 1.36;
+}
+
+body.app-shell .conversation-composer textarea {
+  min-height: 74px;
+  max-height: 126px;
+  padding: 9px 14px;
+  border: 1px solid rgba(19, 33, 45, 0.12);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+body.app-shell .conversation-composer .composer-footer {
+  gap: 6px;
+}
+
+body.app-shell .conversation-composer .composer-footer .btn {
+  min-width: 184px;
+  min-height: 46px;
+}
+
+body.app-shell .prompt-chips {
+  gap: 8px;
+}
+
+body.app-shell .prompt-chip {
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(246, 249, 252, 0.94);
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 700;
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+}
+
+body.app-shell .prompt-chip:hover,
+body.app-shell .prompt-chip:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(29, 86, 116, 0.18);
+  background: #ffffff;
+  box-shadow: 0 10px 18px rgba(12, 23, 34, 0.05);
+}
+
+body.app-shell .mobile-session-summary {
+  display: none;
+}
+
+body.app-shell .findings-stage,
+body.app-shell .contact-card {
+  gap: 20px;
+  padding: 28px 30px;
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(248, 251, 253, 0.96) 0%, rgba(255, 255, 255, 0.99) 100%);
+  box-shadow: 0 16px 34px rgba(12, 23, 34, 0.04);
+}
+
+body.app-shell .findings-head {
+  display: grid;
+  gap: 8px;
+  max-width: 62ch;
+}
+
+body.app-shell .findings-head h2 {
+  margin: 0;
+  font-size: clamp(1.9rem, 3vw, 2.35rem);
+}
+
+body.app-shell .findings-head .section-copy {
+  line-height: 1.6;
+  max-width: 62ch;
+}
+
+body.app-shell .findings-overview-grid {
+  grid-template-columns: minmax(0, 1.58fr) minmax(320px, 0.82fr);
+  gap: 16px;
+}
+
+body.app-shell .findings-overview-main,
+body.app-shell .findings-overview-side {
+  gap: 12px;
+}
+
+body.app-shell .findings-overview-main {
+  padding: 24px 26px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(238, 245, 249, 0.9) 0%, rgba(255, 255, 255, 0.98) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.74);
+}
+
+body.app-shell .findings-primary-panel {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body.app-shell .findings-core-problem {
+  max-width: 12ch;
+  font-size: clamp(2.18rem, 3.55vw, 3rem);
+  line-height: 0.96;
+}
+
+body.app-shell .findings-focus-card,
+body.app-shell .finding-visual-card,
+body.app-shell .findings-grid-rich .finding-card {
+  border-color: rgba(19, 33, 45, 0.06);
+  box-shadow: none;
+}
+
+body.app-shell .findings-focus-card {
+  padding: 14px 0 0;
+  background: transparent;
+  border: 0;
+}
+
+body.app-shell .findings-focus-card .muted-label,
+body.app-shell .finding-visual-card .muted-label,
+body.app-shell .recommended-next-step .muted-label,
+body.app-shell .contact-card .muted-label {
+  font-size: 0.7rem;
+}
+
+body.app-shell .findings-focus-card-priority {
+  background: transparent;
+}
+
+body.app-shell .findings-focus-grid {
+  gap: 0;
+  margin-top: 4px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(19, 33, 45, 0.08);
+}
+
+body.app-shell .findings-focus-card + .findings-focus-card {
+  margin-left: 18px;
+  padding-left: 18px;
+  border-left: 1px solid rgba(19, 33, 45, 0.08);
+}
+
+body.app-shell .finding-visual-card {
+  gap: 12px;
+  padding: 18px 20px;
+  border-radius: 22px;
+  background: rgba(248, 251, 253, 0.94);
+}
+
+body.app-shell .finding-score-value {
+  font-size: 1.08rem;
+}
+
+body.app-shell .finding-meter-stack {
+  gap: 10px;
+}
+
+body.app-shell .finding-meter-row {
+  gap: 6px;
+}
+
+body.app-shell .finding-meter-copy span {
+  font-size: 0.8rem;
+}
+
+body.app-shell .finding-meter-copy strong {
+  font-size: 0.84rem;
+}
+
+body.app-shell .pattern-flow {
+  gap: 8px;
+}
+
+body.app-shell .pattern-step {
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 6px 14px;
+  padding: 12px 14px;
+  border: 0;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+body.app-shell .pattern-step strong {
+  font-size: 0.9rem;
+}
+
+body.app-shell .signal-chip {
+  min-height: 30px;
+  padding: 0 11px;
+  font-size: 0.78rem;
+}
+
+body.app-shell .findings-grid-rich {
+  gap: 12px;
+}
+
+body.app-shell .findings-grid-rich .finding-card {
+  padding: 18px 20px;
+  border-radius: 22px;
+  background: rgba(247, 250, 252, 0.92);
+}
+
+body.app-shell .recommended-next-step {
+  margin-top: 6px;
+  gap: 18px;
+  padding: 30px 32px;
+  border-radius: 28px;
+  border-color: rgba(29, 86, 116, 0.1);
+  background: linear-gradient(180deg, rgba(241, 246, 249, 0.94) 0%, rgba(255, 255, 255, 0.99) 100%);
+  box-shadow: none;
+}
+
+body.app-shell .recommended-next-step-grid {
+  grid-template-columns: minmax(0, 1.7fr) minmax(280px, 0.86fr);
+  gap: 24px;
+}
+
+body.app-shell .recommended-package-panel {
+  gap: 12px;
+  padding-right: 22px;
+}
+
+body.app-shell .recommended-package-type {
+  display: inline-flex;
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+body.app-shell .recommended-package-title {
+  max-width: 22ch;
+  text-wrap: balance;
+}
+
+body.app-shell .recommended-meta-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 18px;
+}
+
+body.app-shell .recommended-meta-item {
+  grid-template-columns: 1fr;
+  gap: 6px;
+  padding: 14px 0 0;
+  border: 0;
+}
+
+body.app-shell .recommended-meta-item-wide {
+  grid-column: 1 / -1;
+}
+
+body.app-shell .recommended-deliverables-panel {
+  padding: 15px 17px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(19, 33, 45, 0.015);
+  box-shadow: none;
+}
+
+body.app-shell .recommended-deliverables-panel .offer-list {
+  gap: 9px;
+}
+
+body.app-shell .recommended-deliverables-panel .offer-list li {
+  line-height: 1.62;
+}
+
+body.app-shell .recommended-action-stack .btn {
+  width: auto;
+  min-width: 196px;
+  min-height: 42px;
+}
+
+body.app-shell .recommended-action-stack {
+  justify-items: start;
+  gap: 9px;
+  padding-top: 12px;
+  border-top-color: rgba(19, 33, 45, 0.03);
+}
+
+body.app-shell .recommended-next-note {
+  gap: 5px;
+}
+
+body.app-shell .offer-shell {
+  gap: 20px;
+}
+
+body.app-shell .offer-intro-grid {
+  gap: 14px 18px;
+  align-items: start;
+}
+
+body.app-shell .offer-intro-grid > :first-child {
+  max-width: 60ch;
+}
+
+body.app-shell .pricing-banner {
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  max-width: 320px;
+  justify-self: end;
+  box-shadow: none;
+}
+
+body.app-shell .pricing-banner-title {
+  font-size: 1rem;
+}
+
+body.app-shell .offer-grid {
+  gap: 18px;
+  align-items: stretch;
+}
+
+body.app-shell .offer-card {
+  display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto auto;
+  position: relative;
+  gap: 12px;
+  padding: 19px 19px 17px;
+  border: 1px solid rgba(19, 33, 45, 0.08);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: none;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+body.app-shell .offer-top {
+  gap: 10px;
+}
+
+body.app-shell .offer-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  border-radius: 22px 22px 0 0;
+  background: transparent;
+}
+
+body.app-shell .offer-card:hover,
+body.app-shell .offer-card:focus-within {
+  transform: translateY(-2px);
+  border-color: rgba(19, 33, 45, 0.12);
+  box-shadow: 0 16px 28px rgba(12, 23, 34, 0.06);
+}
+
+body.app-shell .offer-card.featured {
+  border-color: rgba(29, 86, 116, 0.18);
+  background: linear-gradient(180deg, rgba(237, 244, 248, 0.94) 0%, rgba(255, 255, 255, 0.98) 100%);
+}
+
+body.app-shell .offer-card.featured::before {
+  background: linear-gradient(90deg, rgba(29, 86, 116, 0.85) 0%, rgba(90, 131, 155, 0.65) 100%);
+}
+
+body.app-shell .offer-card.selected {
+  border-color: rgba(20, 59, 83, 0.3);
+  background: linear-gradient(180deg, rgba(232, 241, 246, 0.98) 0%, rgba(255, 255, 255, 0.99) 100%);
+  box-shadow: 0 18px 32px rgba(12, 23, 34, 0.08);
+}
+
+body.app-shell .offer-card.selected::before {
+  background: linear-gradient(90deg, rgba(20, 59, 83, 0.95) 0%, rgba(29, 86, 116, 0.78) 100%);
+}
+
+body.app-shell .offer-badges {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+body.app-shell .offer-eyebrow,
+body.app-shell .offer-section-label {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+body.app-shell .offer-badge,
+body.app-shell .offer-selected-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border: 1px solid rgba(29, 86, 116, 0.12);
+  border-radius: 999px;
+  background: rgba(237, 244, 248, 0.9);
+  color: var(--accent-strong);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+body.app-shell .offer-selected-badge {
+  border-color: rgba(20, 59, 83, 0.12);
+  background: rgba(20, 59, 83, 0.09);
+}
+
+body.app-shell .offer-fit {
+  display: grid;
+  gap: 5px;
+  padding-top: 0;
+}
+
+body.app-shell .offer-card h3 {
+  margin-bottom: 2px;
+  font-size: 1.26rem;
+  line-height: 1.08;
+}
+
+body.app-shell .offer-pricing {
+  gap: 1px;
+}
+
+body.app-shell .offer-price {
+  font-size: 1.5rem;
+}
+
+body.app-shell .offer-price-note {
+  font-size: 0.76rem;
+}
+
+body.app-shell .offer-note {
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+body.app-shell .offer-list {
+  gap: 7px;
+}
+
+body.app-shell .offer-list li {
+  line-height: 1.55;
+}
+
+body.app-shell .offer-discount {
+  margin-top: auto;
+  padding: 11px 13px;
+  border-radius: 16px;
+  border-color: rgba(19, 33, 45, 0.06);
+  background: rgba(247, 250, 252, 0.92);
+}
+
+body.app-shell .offer-discount p {
+  font-size: 0.82rem;
+}
+
+body.app-shell .offer-select {
+  width: 100%;
+  min-height: 46px;
+}
+
+body.app-shell .offer-select[aria-pressed="true"] {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.26);
+}
+
+body.app-shell .contact-grid {
+  grid-template-columns: minmax(270px, 0.78fr) minmax(0, 1.22fr);
+  gap: 0;
+  border: 1px solid rgba(19, 33, 45, 0.07);
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(246, 249, 252, 0.92) 0%, rgba(255, 255, 255, 0.98) 100%);
+  overflow: hidden;
+}
+
+body.app-shell .steps-card,
+body.app-shell .contact-shell {
+  padding: 22px 24px;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+body.app-shell .steps-card {
+  border-right: 1px solid rgba(19, 33, 45, 0.07);
+}
+
+body.app-shell .contact-shell {
+  gap: 16px;
+}
+
+body.app-shell .contact-shell .section-copy {
+  max-width: 56ch;
+}
+
+body.app-shell .contact-shell-head {
+  gap: 14px;
+}
+
+body.app-shell .contact-shell-head .btn {
+  min-height: 46px;
+}
+
+body.app-shell .contact-shell-head .btn:disabled {
+  border-color: rgba(19, 33, 45, 0.1);
+  background: rgba(199, 210, 223, 0.82);
+  color: rgba(255, 255, 255, 0.92);
+}
+
+body.app-shell .contact-form {
+  gap: 18px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(19, 33, 45, 0.08);
+}
+
+body.app-shell .form-block {
+  display: grid;
+  gap: 12px;
+}
+
+body.app-shell .form-block + .form-block {
+  padding-top: 16px;
+  border-top: 1px solid rgba(19, 33, 45, 0.08);
+}
+
+body.app-shell .selected-package-panel {
+  display: grid;
+  gap: 10px;
+  padding: 16px 18px;
+  border: 1px solid rgba(29, 86, 116, 0.12);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(237, 244, 248, 0.92) 0%, rgba(255, 255, 255, 0.98) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+body.app-shell .selected-package-panel.is-empty {
+  border-style: dashed;
+  background: rgba(247, 250, 252, 0.88);
+}
+
+body.app-shell .selected-package-panel[data-package-state="recommended"] {
+  border-color: rgba(29, 86, 116, 0.18);
+}
+
+body.app-shell .selected-package-panel[data-package-state="selected"] {
+  border-color: rgba(20, 59, 83, 0.18);
+  box-shadow: 0 10px 20px rgba(12, 23, 34, 0.04);
+}
+
+body.app-shell .selected-package-panel[data-package-state="recommended"],
+body.app-shell.contact-submitted .selected-package-panel {
+  box-shadow: 0 12px 24px rgba(12, 23, 34, 0.04);
+}
+
+body.app-shell .selected-package-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+body.app-shell .selected-package-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+body.app-shell .selected-package-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 8px;
+  border: 1px solid rgba(29, 86, 116, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--accent-strong);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+body.app-shell .selected-package-name {
+  margin: 4px 0 0;
+  color: var(--ink);
+  font-size: 1.08rem;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+body.app-shell .selected-package-helper {
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+body.app-shell .field-grid {
+  gap: 12px 14px;
+}
+
+body.app-shell .field {
+  gap: 6px;
+}
+
+body.app-shell .field input,
+body.app-shell .field textarea {
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  border-color: rgba(19, 33, 45, 0.12);
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+body.app-shell .field input:focus,
+body.app-shell .field textarea:focus {
+  box-shadow: 0 0 0 4px rgba(29, 86, 116, 0.08);
+}
+
+body.app-shell .field textarea {
+  min-height: 110px;
+}
+
+body.app-shell .field.is-invalid input,
+body.app-shell .field.is-invalid textarea {
+  border-color: rgba(156, 98, 38, 0.42);
+  background: rgba(255, 251, 247, 0.98);
+  box-shadow: 0 0 0 4px rgba(156, 98, 38, 0.08);
+}
+
+body.app-shell .field-error {
+  margin: 0;
+  color: var(--warning);
+  font-size: 0.8rem;
+  line-height: 1.42;
+}
+
+body.app-shell .consent-block {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+body.app-shell .consent-surface {
+  padding: 13px 14px;
+  border-radius: 16px;
+  background: rgba(247, 250, 252, 0.9);
+}
+
+body.app-shell .selected-package-panel.is-invalid,
+body.app-shell .consent-surface.is-invalid {
+  border-color: rgba(156, 98, 38, 0.3);
+  box-shadow: 0 0 0 4px rgba(156, 98, 38, 0.08);
+}
+
+body.app-shell .contact-actions {
+  align-items: end;
+  padding-top: 8px;
+  border-top: 1px solid rgba(19, 33, 45, 0.08);
+}
+
+body.app-shell .contact-actions .small-text {
+  max-width: 48ch;
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+body.app-shell .contact-actions .btn {
+  min-width: 240px;
+  margin-left: auto;
+}
+
+body.app-shell .contact-actions .btn:disabled {
+  box-shadow: none;
+}
+
+body.app-shell .workspace-side .dashboard-card {
+  padding: 22px 20px 24px;
+  border-radius: 18px;
+  background: rgba(248, 251, 253, 0.92);
+}
+
+body.app-shell .insight-rail {
+  top: 20px;
+  max-height: none;
+  overflow: visible;
+}
+
+body.app-shell .insight-rail.is-relaxed {
+  position: static;
+  top: auto;
+}
+
+body.app-shell .insight-header {
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 15px;
+}
+
+body.app-shell .insight-header h2 {
+  font-size: 1.22rem;
+}
+
+body.app-shell .insight-header .header-copy {
+  font-size: 0.78rem;
+  max-width: 30ch;
+  line-height: 1.6;
+}
+
+body.app-shell .dashboard-grid {
+  gap: 16px;
+}
+
+body.app-shell .panel {
+  padding: 15px 0 0;
+  border: 0;
+  border-top: 1px solid rgba(19, 33, 45, 0.05);
+  border-radius: 0;
+  background: transparent;
+}
+
+body.app-shell .rail-status-panel {
+  padding: 17px 17px 15px;
+  border: 1px solid rgba(19, 33, 45, 0.06);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(234, 241, 246, 0.98) 0%, rgba(255, 255, 255, 0.98) 100%);
+}
+
+body.app-shell .dashboard-grid > .panel:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+body.app-shell .panel h3 {
+  margin-bottom: 3px;
+  font-size: 0.84rem;
+}
+
+body.app-shell .metric-value {
+  font-size: 1.02rem;
+  letter-spacing: -0.02em;
+}
+
+body.app-shell .panel-value {
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.48;
+}
+
+body.app-shell .panel-copy,
+body.app-shell .signal-support {
+  max-width: 29ch;
+  font-size: 0.75rem;
+  line-height: 1.68;
+}
+
+body.app-shell .signal-meta {
+  gap: 5px;
+}
+
+body.app-shell .status-stack {
+  gap: 11px;
+  margin-top: 13px;
+}
+
+@media (min-width: 1360px) {
+  body.app-shell .workspace-shell {
+    grid-template-columns: 188px minmax(0, 1fr) 296px;
+  }
+}
+
+@media (max-width: 1180px) {
+  body.app-shell .findings-overview-grid,
+  body.app-shell .offer-intro-grid,
+  body.app-shell .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.app-shell .recommended-next-step-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.app-shell .recommended-package-panel {
+    padding-right: 0;
+    padding-bottom: 20px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(19, 33, 45, 0.08);
+  }
+
+  body.app-shell .pricing-banner {
+    max-width: none;
+    justify-self: start;
+  }
+
+  body.app-shell .offer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1080px) {
+  body.app-shell .container {
+    width: min(calc(100% - 1.25rem), 1460px);
+  }
+
+  body.app-shell .workspace {
+    padding: 0 0 18px;
+  }
+
+  body.app-shell .workspace-main {
+    gap: 16px;
+  }
+
+  body.app-shell .conversation-card {
+    height: min(860px, calc(100dvh - 120px));
+    min-height: 620px;
+    padding: 18px 18px 14px;
+  }
+
+  body.app-shell.has-findings .conversation-card {
+    height: min(700px, calc(100dvh - 148px));
+    min-height: 560px;
+  }
+
+  body.app-shell .transcript-viewport {
+    min-height: 380px;
+  }
+
+  body.app-shell .mobile-session-summary {
+    display: block;
+  }
+
+  body.app-shell .mobile-summary-card {
+    display: grid;
+    gap: 16px;
+    padding: 18px 20px;
+    border-radius: 22px;
+    background: linear-gradient(180deg, rgba(246, 249, 252, 0.96) 0%, rgba(255, 255, 255, 0.99) 100%);
+    box-shadow: none;
+  }
+
+  body.app-shell .mobile-summary-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  body.app-shell .mobile-summary-head h2 {
+    margin: 0;
+    font-size: 1.12rem;
+    letter-spacing: -0.03em;
+  }
+
+  body.app-shell .mobile-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  body.app-shell .mobile-summary-stat {
+    display: grid;
+    gap: 5px;
+    padding: 12px 14px;
+    border: 1px solid rgba(19, 33, 45, 0.08);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.86);
+  }
+
+  body.app-shell .mobile-summary-stat-wide {
+    grid-column: 1 / -1;
+  }
+
+  body.app-shell .mobile-summary-stat-accent {
+    background: linear-gradient(180deg, rgba(237, 244, 248, 0.92) 0%, rgba(255, 255, 255, 0.98) 100%);
+  }
+
+  body.app-shell .mobile-summary-label {
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  body.app-shell .mobile-summary-value {
+    color: var(--ink);
+    font-size: 0.96rem;
+    line-height: 1.45;
+  }
+
+  body.app-shell .workspace-side .dashboard-card {
+    padding: 12px;
+  }
+
+  body.app-shell .steps-card {
+    order: 2;
+  }
+
+  body.app-shell .contact-shell {
+    order: 1;
+  }
+
+  body.app-shell .contact-grid {
+    gap: 0;
+  }
+
+  body.app-shell .steps-card {
+    border-right: 0;
+    border-top: 1px solid rgba(19, 33, 45, 0.07);
+  }
+}
+
+@media (max-width: 960px) {
+  body.app-shell .topbar {
+    gap: 12px;
+  }
+
+  body.app-shell .conversation-ready-banner {
+    flex-direction: column;
+  }
+
+  body.app-shell .message,
+  body.app-shell .message.user {
+    max-width: 100%;
+  }
+
+  body.app-shell .findings-stage,
+  body.app-shell .contact-card,
+  body.app-shell .recommended-next-step {
+    padding: 22px;
+  }
+
+  body.app-shell .findings-overview-grid,
+  body.app-shell .findings-focus-grid,
+  body.app-shell .findings-grid-rich,
+  body.app-shell .offer-grid,
+  body.app-shell .recommended-meta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.app-shell .findings-overview-main {
+    padding: 22px;
+  }
+
+  body.app-shell .findings-focus-card + .findings-focus-card {
+    margin-left: 0;
+    padding-left: 0;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-left: 0;
+    border-top: 1px solid rgba(19, 33, 45, 0.08);
+  }
+
+  body.app-shell .offer-card:hover,
+  body.app-shell .offer-card:focus-within {
+    transform: none;
+  }
+
+  body.app-shell .contact-grid {
+    gap: 16px;
+  }
+
+  body.app-shell .selected-package-head,
+  body.app-shell .contact-shell-head,
+  body.app-shell .offer-top {
+    flex-direction: column;
+  }
+
+  body.app-shell .offer-pricing {
+    justify-items: start;
+    text-align: left;
+  }
+
+  body.app-shell .contact-actions .btn {
+    width: 100%;
+    min-width: 0;
+    margin-left: 0;
+  }
+
+}
+
+@media (max-width: 768px) {
+  body.app-shell .container {
+    width: min(calc(100% - 0.875rem), 1460px);
+  }
+
+  body.app-shell .topbar {
+    margin: 6px 0 8px;
+    padding: max(11px, env(safe-area-inset-top)) 12px 10px;
+    border-radius: 18px;
+  }
+
+  body.app-shell .topbar-context {
+    gap: 6px;
+  }
+
+  body.app-shell .context-chip {
+    padding: 8px 9px;
+  }
+
+  body.app-shell .conversation-card {
+    padding: 14px 14px 12px;
+    min-height: 540px;
+  }
+
+  body.app-shell.has-findings .conversation-card {
+    height: min(560px, calc(100dvh - 132px));
+    min-height: 500px;
+  }
+
+  body.app-shell .transcript-viewport {
+    gap: 12px;
+    min-height: 320px;
+    padding-right: 2px;
+  }
+
+  body.app-shell .conversation-composer {
+    gap: 8px;
+    padding-top: 10px;
+  }
+
+  body.app-shell .conversation-composer textarea {
+    min-height: 88px;
+    padding: 13px 14px;
+  }
+
+  body.app-shell .conversation-composer .composer-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  body.app-shell .conversation-composer .composer-footer .btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  body.app-shell .mobile-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.app-shell .mobile-summary-stat-wide {
+    grid-column: auto;
+  }
+
+  body.app-shell .findings-stage,
+  body.app-shell .contact-card,
+  body.app-shell .recommended-next-step,
+  body.app-shell .mobile-summary-card {
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  body.app-shell .findings-core-problem {
+    max-width: none;
+    font-size: 1.75rem;
+  }
+
+  body.app-shell .findings-overview-main {
+    padding: 18px;
+  }
+
+  body.app-shell .offer-card,
+  body.app-shell .steps-card,
+  body.app-shell .contact-shell {
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  body.app-shell .typing-row {
+    width: 100%;
+    padding: 14px 16px;
+  }
+
+body.app-shell.contact-open:not(.contact-submitted) .selected-package-panel {
+    position: sticky;
+    top: calc(8px + env(safe-area-inset-top));
+    z-index: 1;
+  }
+}
+
+/* Final structural rebuild: conversation, findings cluster, advisory block, request module */
+body.app-shell .conversation-card {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: min(860px, calc(100dvh - 84px));
+  min-height: 700px;
+  padding: 20px 22px 18px;
+  row-gap: 12px;
+  overflow: hidden;
+}
+
+body.app-shell.has-findings .conversation-card {
+  height: min(800px, calc(100dvh - 110px));
+  min-height: 660px;
+}
+
+body.app-shell .conversation-shell-head {
+  display: grid;
+  gap: 12px;
+}
+
+body.app-shell .conversation-head {
+  padding-bottom: 0;
+}
+
+body.app-shell .conversation-head > div {
+  display: grid;
+  gap: 5px;
+}
+
+body.app-shell .transcript-head .header-copy {
+  max-width: 58ch;
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+body.app-shell .conversation-ready-banner {
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(238, 245, 249, 0.94) 0%, rgba(255, 255, 255, 0.98) 100%);
+}
+
+body.app-shell .conversation-ready-copy {
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+body.app-shell .transcript-viewport {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-height: 0;
+  padding: 18px 14px 14px;
+  border: 1px solid rgba(19, 33, 45, 0.08);
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(247, 250, 252, 0.96) 0%, rgba(255, 255, 255, 0.98) 100%);
+  overflow: auto;
+  overscroll-behavior: contain;
+  scroll-padding-bottom: 18px;
+}
+
+body.app-shell .transcript-empty-state {
+  padding: 18px 20px;
+  border: 1px dashed rgba(29, 86, 116, 0.14);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+body.app-shell .conversation-card .message-list {
+  display: grid;
+  gap: 14px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+body.app-shell .message {
+  width: auto;
+  max-width: min(84%, 720px);
+  padding: 16px 18px;
+  border-radius: 22px;
+  box-shadow: none;
+}
+
+body.app-shell .message.user {
+  justify-self: end;
+  max-width: min(78%, 620px);
+  background: linear-gradient(180deg, rgba(231, 239, 246, 0.98) 0%, rgba(220, 232, 241, 0.98) 100%);
+}
+
+body.app-shell .message.assistant {
+  justify-self: start;
+  max-width: min(84%, 720px);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.99) 0%, rgba(248, 251, 253, 0.98) 100%);
+  border-color: rgba(19, 33, 45, 0.08);
+}
+
+body.app-shell .message.assistant.is-latest-assistant {
+  border-color: rgba(29, 86, 116, 0.18);
+  box-shadow: 0 14px 28px rgba(12, 23, 34, 0.06);
+}
+
+body.app-shell .message.is-archived {
+  max-width: 100%;
+}
+
+body.app-shell .message-meta {
+  margin-bottom: 8px;
+}
+
+body.app-shell .message-body,
+body.app-shell .message.assistant .assistant-paragraph,
+body.app-shell .message.assistant .assistant-list li {
+  font-size: 0.97rem;
+  line-height: 1.62;
+}
+
+body.app-shell .typing-row {
+  width: auto;
+  max-width: min(78%, 420px);
+  gap: 8px;
+  padding: 15px 17px;
+  border-radius: 22px;
+}
+
+body.app-shell .conversation-composer {
+  position: static;
+  display: grid;
+  gap: 8px;
+  padding-top: 0;
+  border-top: 0;
+  background: transparent;
+}
+
+body.app-shell .conversation-composer .composer-intro {
+  display: grid;
+  gap: 4px;
+}
+
+body.app-shell .conversation-composer .composer-title {
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+body.app-shell .conversation-composer .command-helper {
+  max-width: 56ch;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+body.app-shell .conversation-composer .composer-shell {
+  display: grid;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body.app-shell .conversation-composer .input-shell {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body.app-shell .conversation-composer .input-shell:focus-within {
+  box-shadow: none;
+}
+
+body.app-shell .composer-input-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: end;
+  padding: 10px;
+  border: 1px solid rgba(19, 33, 45, 0.1);
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+body.app-shell .composer-input-row:focus-within {
+  border-color: rgba(29, 86, 116, 0.2);
+  box-shadow: 0 0 0 4px rgba(29, 86, 116, 0.08);
+}
+
+body.app-shell .conversation-composer textarea {
+  min-height: 108px;
+  max-height: 168px;
+  padding: 10px 10px 10px 12px;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  box-shadow: none;
+}
+
+body.app-shell .conversation-composer .composer-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px 12px;
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+body.app-shell .conversation-composer .composer-support {
+  justify-self: end;
+}
+
+body.app-shell .conversation-composer .input-guidance-inline {
+  display: block;
+}
+
+body.app-shell .conversation-composer .composer-footer .btn,
+body.app-shell .composer-input-row .btn {
+  min-width: 0;
+  min-height: 44px;
+  align-self: end;
+}
+
+body.app-shell .composer-send {
+  min-width: 144px;
+  padding: 0 14px;
+  border-radius: 14px;
+  font-size: 0.86rem;
+  align-self: stretch;
+}
+
+body.app-shell .prompt-chips {
+  gap: 6px;
+  flex-wrap: wrap;
+  overflow: visible;
+  padding-bottom: 0;
+}
+
+body.app-shell .prompt-chip {
+  min-height: 28px;
+  padding: 0 10px;
+  border-color: rgba(19, 33, 45, 0.08);
+  background: rgba(247, 250, 252, 0.62);
+  color: rgba(19, 33, 45, 0.8);
+  font-size: 0.75rem;
+}
+
+body.app-shell .findings-overview-grid {
+  grid-template-columns: minmax(0, 1.3fr) minmax(360px, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+body.app-shell .findings-overview-main {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  align-items: start;
+  padding: 22px 22px 20px;
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(238, 245, 249, 0.92) 0%, rgba(255, 255, 255, 0.99) 100%);
+}
+
+body.app-shell .findings-primary-panel {
+  display: grid;
+  gap: 10px;
+  padding: 4px 2px 4px 0;
+  max-width: 54ch;
+}
+
+body.app-shell .findings-core-problem {
+  max-width: 11.5ch;
+  font-size: clamp(2.25rem, 3.4vw, 3.05rem);
+  line-height: 0.95;
+}
+
+body.app-shell .findings-focus-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  gap: 12px;
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+body.app-shell .findings-focus-card,
+body.app-shell .findings-focus-card + .findings-focus-card {
+  margin: 0;
+  padding: 18px 18px;
+  border: 1px solid rgba(19, 33, 45, 0.06);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.7);
+  align-content: start;
+}
+
+body.app-shell .findings-focus-card + .findings-focus-card {
+  border-left: 1px solid rgba(19, 33, 45, 0.06);
+  padding-left: 18px;
+}
+
+body.app-shell .findings-focus-card-priority {
+  background: linear-gradient(180deg, rgba(243, 248, 251, 0.96) 0%, rgba(255, 255, 255, 0.98) 100%);
+}
+
+body.app-shell .findings-focus-value {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.56;
+  color: var(--ink);
+}
+
+body.app-shell .findings-focus-card .finding-note {
+  margin: 2px 0 0;
+}
+
+body.app-shell .findings-overview-side {
+  display: grid;
+}
+
+body.app-shell .finding-visual-card {
+  align-content: start;
+  height: auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 14px;
+  padding: 18px 20px;
+}
+
+body.app-shell .finding-visual-head,
+body.app-shell .finding-visual-card > .panel-copy,
+body.app-shell .finding-visual-card > .small-text,
+body.app-shell .finding-visual-divider,
+body.app-shell .finding-visual-card > .muted-label,
+body.app-shell .pattern-flow,
+body.app-shell .signal-chip-list {
+  grid-column: 1 / -1;
+}
+
+body.app-shell .finding-meter-stack {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+body.app-shell .finding-meter-row {
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid rgba(19, 33, 45, 0.06);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+body.app-shell .pattern-flow {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+}
+
+body.app-shell .pattern-arrow {
+  display: none;
+}
+
+body.app-shell .pattern-step {
+  grid-template-columns: 1fr;
+  gap: 6px;
+  min-height: 100%;
+}
+
+body.app-shell .recommended-next-step {
+  gap: 18px;
+  padding: 30px 32px 26px;
+}
+
+body.app-shell .recommended-next-step-head {
+  gap: 8px;
+  max-width: 62ch;
+}
+
+body.app-shell .recommended-next-step-grid {
+  grid-template-columns: minmax(0, 1.42fr) minmax(300px, 0.98fr);
+  gap: 18px;
+  align-items: start;
+}
+
+body.app-shell .recommended-package-panel {
+  display: grid;
+  gap: 14px;
+  padding: 22px 24px 18px;
+  border: 1px solid rgba(19, 33, 45, 0.07);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.52);
+}
+
+body.app-shell .recommended-directive-block {
+  display: grid;
+  gap: 10px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(19, 33, 45, 0.08);
+}
+
+body.app-shell .recommended-package-title {
+  max-width: 18ch;
+  font-size: clamp(1.45rem, 2.2vw, 1.95rem);
+  line-height: 1.04;
+}
+
+body.app-shell .recommended-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  gap: 14px;
+  align-items: start;
+  padding: 16px 18px;
+  border: 1px solid rgba(19, 33, 45, 0.06);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+body.app-shell .recommended-why-block,
+body.app-shell .recommended-meta-shell {
+  display: grid;
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+body.app-shell .recommended-meta-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 16px;
+}
+
+body.app-shell .recommended-meta-item {
+  padding: 0;
+}
+
+body.app-shell .recommended-meta-shell {
+  padding-top: 0;
+  padding-left: 16px;
+  border-top: 0;
+  border-left: 1px solid rgba(19, 33, 45, 0.08);
+}
+
+body.app-shell .recommended-deliverables-panel {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  padding: 4px 0 0 18px;
+  border: 0;
+  border-left: 1px solid rgba(19, 33, 45, 0.08);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body.app-shell .recommended-support-block {
+  display: grid;
+  gap: 10px;
+  padding: 0;
+}
+
+body.app-shell .recommended-support-block + .recommended-support-block {
+  padding-top: 16px;
+  border-top: 1px solid rgba(19, 33, 45, 0.06);
+}
+
+body.app-shell .recommended-deliverables-panel .offer-list {
+  gap: 10px;
+}
+
+body.app-shell .recommended-action-stack {
+  gap: 10px;
+  margin-top: 6px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(19, 33, 45, 0.05);
+}
+
+body.app-shell .recommended-action-stack .btn {
+  min-width: 0;
+  min-height: 44px;
+}
+
+body.app-shell .contact-grid {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.72fr) minmax(0, 1.28fr);
+  gap: 18px;
+  align-items: start;
+  padding: 22px 24px;
+  border: 1px solid rgba(19, 33, 45, 0.07);
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(246, 249, 252, 0.94) 0%, rgba(255, 255, 255, 0.99) 100%);
+  overflow: hidden;
+}
+
+body.app-shell .steps-card,
+body.app-shell .contact-shell {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body.app-shell .steps-card {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding-right: 18px;
+  border-right: 1px solid rgba(19, 33, 45, 0.07);
+}
+
+body.app-shell .contact-shell {
+  display: grid;
+  gap: 10px;
+  padding: 16px 18px;
+  border: 1px solid rgba(19, 33, 45, 0.06);
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(247, 250, 252, 0.94) 100%);
+  align-self: start;
+}
+
+body.app-shell .contact-shell-head {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  align-items: start;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(19, 33, 45, 0.08);
+}
+
+body.app-shell .contact-shell-intro {
+  display: grid;
+  gap: 8px;
+}
+
+body.app-shell .contact-shell-head h3 {
+  margin: 0;
+}
+
+body.app-shell .contact-shell-head .btn {
+  width: fit-content;
+  min-width: 200px;
+}
+
+body.app-shell .contact-form-head {
+  display: grid;
+  gap: 4px;
+}
+
+body.app-shell .contact-form {
+  gap: 14px;
+  padding-top: 0;
+  border-top: 0;
+}
+
+body.app-shell .form-block {
+  gap: 10px;
+}
+
+body.app-shell .form-block + .form-block {
+  padding-top: 14px;
+}
+
+body.app-shell .field-grid {
+  gap: 10px 12px;
+}
+
+body.app-shell .field {
+  gap: 5px;
+}
+
+body.app-shell .field textarea {
+  min-height: 96px;
+}
+
+body.app-shell .selected-package-panel {
+  gap: 8px;
+  padding: 14px 16px;
+}
+
+body.app-shell .selected-package-panel {
+  margin: 0;
+}
+
+body.app-shell .contact-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: start;
+  gap: 10px;
+  padding-top: 12px;
+}
+
+body.app-shell .contact-actions .btn {
+  justify-self: start;
+  min-width: 240px;
+  order: -1;
+  margin-left: 0;
+}
+
+body.app-shell #contact-message {
+  margin-top: 4px;
+}
+
+@media (max-width: 1180px) {
+  body.app-shell .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 22px;
+  }
+
+  body.app-shell .steps-card {
+    padding-right: 0;
+    padding-bottom: 18px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(19, 33, 45, 0.07);
+  }
+
+  body.app-shell .contact-shell {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 960px) {
+  body.app-shell .conversation-card {
+    height: min(720px, calc(100dvh - 108px));
+    min-height: 600px;
+    padding: 18px;
+    row-gap: 14px;
+  }
+
+  body.app-shell.has-findings .conversation-card {
+    height: min(680px, calc(100dvh - 132px));
+    min-height: 560px;
+  }
+
+  body.app-shell .transcript-viewport {
+    padding: 16px 12px;
+    border-radius: 22px;
+  }
+
+  body.app-shell .message,
+  body.app-shell .message.user,
+  body.app-shell .message.assistant,
+  body.app-shell .typing-row {
+    max-width: 100%;
+  }
+
+  body.app-shell .finding-visual-card,
+  body.app-shell .finding-meter-stack,
+  body.app-shell .pattern-flow {
+    grid-template-columns: 1fr;
+  }
+
+  body.app-shell .conversation-composer .composer-footer {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  body.app-shell .conversation-composer .composer-support {
+    justify-self: start;
+  }
+
+  body.app-shell .conversation-composer .composer-footer .btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  body.app-shell .findings-overview-grid,
+  body.app-shell .findings-overview-main,
+  body.app-shell .recommended-next-step-grid,
+  body.app-shell .recommended-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.app-shell .recommended-meta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.app-shell .recommended-meta-shell {
+    padding-left: 0;
+    padding-top: 14px;
+    border-left: 0;
+    border-top: 1px solid rgba(19, 33, 45, 0.08);
+  }
+
+  body.app-shell .findings-overview-main {
+    padding: 22px;
+  }
+
+  body.app-shell .findings-focus-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.app-shell .recommended-deliverables-panel {
+    padding: 18px 0 0;
+    border-left: 0;
+    border-top: 1px solid rgba(19, 33, 45, 0.08);
+  }
+
+  body.app-shell .contact-actions {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  body.app-shell .contact-actions .btn {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  body.app-shell .conversation-card {
+    height: min(640px, calc(100dvh - 98px));
+    min-height: 520px;
+    padding: 16px;
+    row-gap: 10px;
+  }
+
+  body.app-shell.has-findings .conversation-card {
+    height: min(600px, calc(100dvh - 118px));
+    min-height: 500px;
+  }
+
+  body.app-shell .transcript-viewport {
+    padding: 14px 10px;
+    border-radius: 20px;
+  }
+
+  body.app-shell .conversation-ready-banner {
+    align-items: flex-start;
+  }
+
+  body.app-shell .conversation-composer .composer-shell {
+    padding: 12px;
+    border-radius: 20px;
+  }
+
+  body.app-shell .composer-input-row {
+    gap: 8px;
+  }
+
+  body.app-shell .conversation-composer textarea {
+    min-height: 104px;
+  }
+
+  body.app-shell .findings-overview-main,
+  body.app-shell .recommended-next-step,
+  body.app-shell .contact-grid {
+    padding: 18px;
+  }
+
+  body.app-shell .findings-focus-card,
+  body.app-shell .findings-focus-card + .findings-focus-card,
+  body.app-shell .recommended-why-block,
+  body.app-shell .recommended-meta-shell {
+    padding: 14px 16px;
+  }
+
+  body.app-shell .contact-shell-head {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  body.app-shell .contact-shell-head .btn {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* Final layout correction pass: balance, readability, and interaction clarity */
+body.app-shell .workspace {
+  padding: 0 0 12px;
+}
+
+body.app-shell .workspace-main {
+  gap: 16px;
+}
+
+body.app-shell .topbar {
+  margin: 22px 0 30px;
+}
+
+body.app-shell .conversation-card {
+  grid-template-rows: auto minmax(700px, 1fr) auto;
+  height: min(1160px, calc(100dvh - 22px));
+  min-height: 960px;
+  padding: 18px 20px 20px;
+  row-gap: 6px;
+}
+
+body.app-shell.has-findings .conversation-card {
+  height: min(1100px, calc(100dvh - 34px));
+  min-height: 920px;
+}
+
+body.app-shell .conversation-shell-head {
+  gap: 8px;
+}
+
+body.app-shell .conversation-ready-banner {
+  padding: 8px 12px;
+}
+
+body.app-shell .transcript-viewport {
+  gap: 12px;
+  min-height: 700px;
+  padding: 18px 16px 12px;
+}
+
+body.app-shell.has-findings .transcript-viewport {
+  min-height: 660px;
+}
+
+body.app-shell .conversation-card .message-list {
+  gap: 14px;
+}
+
+body.app-shell .conversation-composer {
+  gap: 5px;
+  padding: 10px 12px 12px;
+  border-top: 1px solid rgba(19, 33, 45, 0.08);
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(246, 249, 252, 0.92) 0%, rgba(255, 255, 255, 0.98) 100%);
+}
+
+body.app-shell .conversation-composer .composer-intro {
+  gap: 3px;
+}
+
+body.app-shell .conversation-composer .command-helper {
+  font-size: 0.77rem;
+}
+
+body.app-shell .conversation-composer .composer-shell {
+  gap: 4px;
+}
+
+body.app-shell .composer-input-row {
+  gap: 10px;
+  align-items: stretch;
+  padding: 10px;
+  border-radius: 20px;
+}
+
+body.app-shell .conversation-composer textarea {
+  min-height: 140px;
+  max-height: 220px;
+  padding: 10px 10px 10px 12px;
+  line-height: 1.55;
+}
+
+body.app-shell .composer-send {
+  min-width: 88px;
+  min-height: 36px;
+  padding: 0 10px;
+  border-radius: 13px;
+  font-size: 0.78rem;
+  align-self: end;
+}
+
+body.app-shell .composer-send.btn-primary {
+  box-shadow: none;
+  opacity: 0.92;
+}
+
+body.app-shell .conversation-composer .composer-footer {
+  gap: 6px 10px;
+}
+
+body.app-shell .prompt-chip {
+  min-height: 26px;
+  font-size: 0.73rem;
+}
+
+body.app-shell .findings-overview-grid {
+  grid-template-columns: minmax(0, 1.2fr) minmax(420px, 1fr);
+  gap: 18px;
+  padding: 22px 24px 22px;
+  border: 1px solid rgba(19, 33, 45, 0.07);
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(238, 245, 249, 0.92) 0%, rgba(255, 255, 255, 0.99) 100%);
+  align-items: start;
+}
+
+body.app-shell .findings-overview-main {
+  gap: 16px;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+body.app-shell .findings-primary-panel {
+  max-width: 58ch;
+}
+
+body.app-shell .findings-focus-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+body.app-shell .findings-focus-card,
+body.app-shell .findings-focus-card + .findings-focus-card {
+  padding: 18px 20px;
+  min-height: 0;
+}
+
+body.app-shell .finding-visual-card {
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding: 0 0 0 18px;
+  border: 0;
+  border-left: 1px solid rgba(19, 33, 45, 0.08);
+  border-radius: 0;
+  background: transparent;
+}
+
+body.app-shell #findings-confidence-note,
+body.app-shell #findings-benchmark-note {
+  margin: 0;
+}
+
+body.app-shell .finding-visual-snapshot {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(220px, 0.9fr);
+  gap: 12px 14px;
+  align-items: start;
+}
+
+body.app-shell .finding-meter-stack {
+  grid-column: auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 12px;
+}
+
+body.app-shell .finding-signal-notes {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  padding: 12px 14px;
+  border: 1px solid rgba(19, 33, 45, 0.06);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.68);
+}
+
+body.app-shell .finding-pattern-block {
+  display: grid;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(19, 33, 45, 0.08);
+}
+
+body.app-shell .pattern-flow {
+  grid-column: auto;
+  gap: 10px 12px;
+}
+
+body.app-shell .recommended-next-step {
+  gap: 14px;
+  padding: 24px 30px 18px;
+}
+
+body.app-shell .recommended-next-step-grid {
+  grid-template-columns: minmax(0, 1.14fr) minmax(360px, 0.86fr);
+  gap: 18px;
+  padding: 22px 24px 20px;
+  border: 1px solid rgba(19, 33, 45, 0.07);
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(246, 249, 252, 0.92) 0%, rgba(255, 255, 255, 0.98) 100%);
+  align-items: stretch;
+}
+
+body.app-shell .recommended-package-panel {
+  gap: 14px;
+  padding: 0 22px 0 0;
+  border: 0;
+  border-right: 1px solid rgba(19, 33, 45, 0.08);
+  border-radius: 0;
+  background: transparent;
+}
+
+body.app-shell .recommended-directive-block {
+  gap: 12px;
+  padding-bottom: 14px;
+}
+
+body.app-shell .recommended-detail-grid {
+  grid-template-columns: minmax(0, 0.96fr) minmax(0, 1.04fr);
+  gap: 14px 18px;
+  padding: 16px 0 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+body.app-shell .recommended-why-block {
+  padding: 0 16px 0 0;
+  border-right: 1px solid rgba(19, 33, 45, 0.08);
+  border-bottom: 0;
+}
+
+body.app-shell .recommended-meta-shell {
+  gap: 12px;
+  padding-left: 0;
+  border-left: 0;
+}
+
+body.app-shell .recommended-meta-grid {
+  gap: 12px 18px;
+}
+
+body.app-shell .recommended-deliverables-panel {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  padding: 10px 12px 12px;
+  border: 1px solid rgba(19, 33, 45, 0.06);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.48);
+}
+
+body.app-shell .recommended-support-shell {
+  display: grid;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+}
+
+body.app-shell .recommended-support-block {
+  gap: 10px;
+}
+
+body.app-shell .recommended-support-block + .recommended-support-block {
+  padding-top: 10px;
+  border-top: 1px solid rgba(19, 33, 45, 0.06);
+}
+
+body.app-shell .recommended-action-stack {
+  gap: 6px;
+  align-self: start;
+  margin-top: 0;
+  padding-top: 6px;
+  border-top: 1px solid rgba(19, 33, 45, 0.05);
+}
+
+body.app-shell .offer-card.selected {
+  border-color: rgba(20, 59, 83, 0.14);
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: none;
+}
+
+body.app-shell .offer-card.selected::before {
+  background: linear-gradient(90deg, rgba(20, 59, 83, 0.28) 0%, rgba(29, 86, 116, 0.24) 100%);
+}
+
+body.app-shell .offer-selected-badge {
+  border-color: rgba(20, 59, 83, 0.1);
+  background: rgba(20, 59, 83, 0.05);
+}
+
+body.app-shell .contact-grid {
+  grid-template-columns: minmax(300px, 0.82fr) minmax(0, 1.18fr);
+  gap: 16px;
+  align-items: start;
+  padding: 16px 20px 14px;
+}
+
+body.app-shell .steps-card {
+  gap: 10px;
+  padding: 4px 16px 2px 0;
+}
+
+body.app-shell .contact-shell {
+  gap: 6px;
+  padding: 14px 16px;
+}
+
+body.app-shell .contact-shell-head {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px 16px;
+  align-items: end;
+  padding-bottom: 10px;
+}
+
+body.app-shell .contact-shell-intro {
+  max-width: 58ch;
+}
+
+body.app-shell .contact-shell-head .btn {
+  justify-self: end;
+  min-width: 220px;
+  min-height: 48px;
+}
+
+body.app-shell .contact-form-head {
+  gap: 2px;
+  grid-column: 1 / -1;
+  padding-bottom: 2px;
+}
+
+body.app-shell .contact-form {
+  grid-template-columns: minmax(0, 1.04fr) minmax(260px, 0.96fr);
+  gap: 8px 12px;
+  align-items: start;
+}
+
+body.app-shell .form-block {
+  gap: 8px;
+}
+
+body.app-shell .form-block + .form-block {
+  padding-top: 8px;
+}
+
+body.app-shell .field-grid {
+  gap: 8px 12px;
+}
+
+body.app-shell .field textarea {
+  min-height: 60px;
+}
+
+body.app-shell .selected-package-panel {
+  padding: 12px 14px;
+}
+
+body.app-shell #contact-form > .selected-package-panel {
+  grid-column: 1 / -1;
+}
+
+body.app-shell #contact-form > .form-block:nth-child(3) {
+  grid-column: 1;
+  grid-row: 3 / span 3;
+}
+
+body.app-shell #contact-form > .form-block:nth-child(4) {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+body.app-shell #contact-form > .form-block:nth-child(5) {
+  grid-column: 2;
+  grid-row: 4;
+}
+
+body.app-shell .contact-actions {
+  grid-template-columns: 1fr;
+  align-items: start;
+  gap: 6px;
+  grid-column: 2;
+  grid-row: 5;
+  padding-top: 0;
+}
+
+body.app-shell .contact-actions .btn {
+  justify-self: stretch;
+  order: -1;
+  min-width: 0;
+  min-height: 52px;
+}
+
+body.app-shell .contact-actions .small-text {
+  max-width: none;
+}
+
+@media (max-width: 1180px) {
+  body.app-shell .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  body.app-shell .steps-card {
+    padding: 0 0 16px;
+  }
+}
+
+@media (max-width: 960px) {
+  body.app-shell .conversation-card {
+    grid-template-rows: auto minmax(560px, 1fr) auto;
+    height: min(980px, calc(100dvh - 76px));
+    min-height: 840px;
+    row-gap: 12px;
+  }
+
+  body.app-shell.has-findings .conversation-card {
+    height: min(920px, calc(100dvh - 92px));
+    min-height: 780px;
+  }
+
+  body.app-shell .transcript-viewport {
+    min-height: 560px;
+    padding: 16px 14px 12px;
+  }
+
+  body.app-shell.has-findings .transcript-viewport {
+    min-height: 520px;
+  }
+
+  body.app-shell .conversation-composer textarea {
+    min-height: 136px;
+    max-height: 196px;
+  }
+
+  body.app-shell .findings-overview-grid,
+  body.app-shell .recommended-next-step-grid,
+  body.app-shell .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.app-shell .findings-overview-grid,
+  body.app-shell .recommended-next-step-grid {
+    padding: 20px 22px;
+  }
+
+  body.app-shell .finding-visual-card {
+    padding: 18px 0 0;
+    border-left: 0;
+    border-top: 1px solid rgba(19, 33, 45, 0.08);
+  }
+
+  body.app-shell .finding-visual-snapshot {
+    grid-template-columns: 1fr;
+  }
+
+  body.app-shell .finding-meter-stack {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body.app-shell .pattern-flow {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  body.app-shell #findings-confidence-note {
+    grid-column: 1 / 2;
+  }
+
+  body.app-shell #findings-benchmark-note {
+    grid-column: 2 / 3;
+  }
+
+  body.app-shell .recommended-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.app-shell .recommended-package-panel {
+    padding: 0 0 18px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(19, 33, 45, 0.08);
+  }
+
+  body.app-shell .recommended-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.app-shell .recommended-why-block {
+    padding: 0 0 12px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(19, 33, 45, 0.08);
+  }
+
+  body.app-shell .recommended-deliverables-panel {
+    padding: 0;
+  }
+
+  body.app-shell .contact-form,
+  body.app-shell .contact-shell-head,
+  body.app-shell .contact-actions {
+    grid-template-columns: 1fr;
+  }
+
+  body.app-shell #contact-form > .selected-package-panel,
+  body.app-shell #contact-form > .form-block:nth-child(3),
+  body.app-shell #contact-form > .form-block:nth-child(4),
+  body.app-shell #contact-form > .form-block:nth-child(5),
+  body.app-shell .contact-actions {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  body.app-shell .contact-shell-head .btn,
+  body.app-shell .contact-actions .btn {
+    width: 100%;
+    min-width: 0;
+    justify-self: stretch;
+  }
+}
+
+@media (max-width: 768px) {
+  body.app-shell .conversation-card {
+    grid-template-rows: auto minmax(420px, 1fr) auto;
+    height: min(840px, calc(100dvh - 68px));
+    min-height: 720px;
+    padding: 16px;
+  }
+
+  body.app-shell.has-findings .conversation-card {
+    height: min(780px, calc(100dvh - 86px));
+    min-height: 660px;
+  }
+
+  body.app-shell .transcript-viewport {
+    min-height: 440px;
+    padding: 14px 12px 12px;
+  }
+
+  body.app-shell.has-findings .transcript-viewport {
+    min-height: 400px;
+  }
+
+  body.app-shell .conversation-composer textarea {
+    min-height: 120px;
+  }
+
+  body.app-shell .composer-send {
+    min-width: 104px;
+  }
+
+  body.app-shell .finding-visual-card,
+  body.app-shell .pattern-flow {
+    grid-template-columns: 1fr;
+  }
+
+  body.app-shell .finding-meter-stack {
+    grid-template-columns: 1fr;
+  }
+
+  body.app-shell .findings-overview-grid,
+  body.app-shell .recommended-next-step-grid,
+  body.app-shell .contact-grid {
+    padding: 18px;
+  }
+
+  body.app-shell .conversation-composer {
+    padding: 12px;
+  }
+}
+
+/* Split-page workspace routing */
+body.app-shell .workspace-pages {
+  display: grid;
+  gap: 18px;
+}
+
+body.app-shell .workspace-view-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+body.app-shell .workspace-view-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid rgba(19, 33, 45, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.74);
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+body.app-shell .workspace-view-link[aria-current="page"] {
+  border-color: rgba(29, 86, 116, 0.16);
+  background: rgba(237, 244, 248, 0.92);
+  color: var(--accent-strong);
+}
+
+body.app-shell .workspace-view-link.is-disabled {
+  opacity: 0.56;
+  pointer-events: none;
+}
+
+body.app-shell .workspace-page {
+  min-width: 0;
+}
+
+body.app-shell .chat-page-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 18px;
+  align-items: start;
+}
+
+body.app-shell .chat-page-shell > .conversation-stage {
+  min-width: 0;
+}
+
+body.app-shell .chat-insight-rail {
+  min-width: 0;
+}
+
+body.app-shell .findings-page-shell {
+  display: grid;
+  gap: 18px;
+  width: min(100%, 1260px);
+  margin: 0 auto;
+}
+
+body.app-shell .findings-page-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px 24px;
+  align-items: end;
+  padding: 24px 28px;
+}
+
+body.app-shell .findings-page-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+body.app-shell .findings-page-actions .btn {
+  min-width: 180px;
+}
+
+body.app-shell[data-workspace-view="chat"] .conversation-card {
+  height: min(1120px, calc(100dvh - 170px));
+  min-height: 860px;
+}
+
+body.app-shell[data-workspace-view="chat"].has-findings .conversation-card {
+  height: min(1080px, calc(100dvh - 170px));
+  min-height: 840px;
+}
+
+body.app-shell[data-workspace-view="chat"] .transcript-viewport {
+  min-height: 680px;
+}
+
+body.app-shell[data-workspace-view="chat"].has-findings .transcript-viewport {
+  min-height: 640px;
+}
+
+body.app-shell[data-workspace-view="chat"] .conversation-ready-banner {
+  margin-top: 2px;
+}
+
+body.app-shell[data-workspace-view="findings"] .mobile-session-summary {
+  margin-top: 0;
+}
+
+@media (max-width: 1180px) {
+  body.app-shell .chat-page-shell {
+    grid-template-columns: 1fr;
+  }
+
+  body.app-shell .findings-page-hero {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  body.app-shell .findings-page-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 960px) {
+  body.app-shell .workspace-pages {
+    gap: 16px;
+  }
+
+  body.app-shell .conversation-card,
+  body.app-shell[data-workspace-view="chat"] .conversation-card,
+  body.app-shell[data-workspace-view="chat"].has-findings .conversation-card {
+    height: min(940px, calc(100dvh - 150px));
+    min-height: 760px;
+  }
+
+  body.app-shell .transcript-viewport,
+  body.app-shell[data-workspace-view="chat"] .transcript-viewport,
+  body.app-shell[data-workspace-view="chat"].has-findings .transcript-viewport {
+    min-height: 520px;
+  }
+
+  body.app-shell .findings-page-shell {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  body.app-shell .workspace-view-nav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  body.app-shell .workspace-view-link {
+    flex: 0 0 auto;
+  }
+
+  body.app-shell .findings-page-hero {
+    padding: 18px;
+  }
+
+  body.app-shell .findings-page-actions {
+    width: 100%;
+  }
+
+  body.app-shell .findings-page-actions .btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  body.app-shell .conversation-card,
+  body.app-shell[data-workspace-view="chat"] .conversation-card,
+  body.app-shell[data-workspace-view="chat"].has-findings .conversation-card {
+    height: min(820px, calc(100dvh - 138px));
+    min-height: 680px;
+  }
+
+  body.app-shell .transcript-viewport,
+  body.app-shell[data-workspace-view="chat"] .transcript-viewport,
+  body.app-shell[data-workspace-view="chat"].has-findings .transcript-viewport {
+    min-height: 420px;
+  }
+}
+
+/* Final chat-page UX correction: make chat the product surface */
+body.app-shell[data-workspace-view="chat"] .topbar {
+  margin: 12px 0 14px;
+  padding: 14px 18px;
+  gap: 14px 18px;
+}
+
+body.app-shell[data-workspace-view="chat"] .topbar-authority {
+  gap: 4px;
+}
+
+body.app-shell[data-workspace-view="chat"] .topbar-statement {
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+body.app-shell[data-workspace-view="chat"] .workspace-pages {
+  gap: 14px;
+}
+
+body.app-shell[data-workspace-view="chat"] .workspace-view-nav {
+  gap: 6px;
+}
+
+body.app-shell[data-workspace-view="chat"] .workspace-view-link {
+  min-height: 36px;
+  padding: 0 14px;
+  font-size: 0.82rem;
+}
+
+body.app-shell[data-workspace-view="chat"] .chat-page-shell {
+  grid-template-columns: minmax(0, 1fr) 228px;
+  gap: 14px;
+  align-items: stretch;
+}
+
+body.app-shell[data-workspace-view="chat"] .chat-insight-rail .dashboard-card {
+  padding: 14px 14px 16px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(246, 249, 252, 0.94) 0%, rgba(255, 255, 255, 0.98) 100%);
+}
+
+body.app-shell[data-workspace-view="chat"] .chat-insight-rail .insight-header {
+  margin-bottom: 8px;
+  padding-bottom: 10px;
+}
+
+body.app-shell[data-workspace-view="chat"] .chat-insight-rail .insight-header .header-copy {
+  display: none;
+}
+
+body.app-shell[data-workspace-view="chat"] .chat-insight-rail .dashboard-grid {
+  gap: 0;
+}
+
+body.app-shell[data-workspace-view="chat"] .chat-insight-rail .dashboard-grid > .panel:not(.rail-status-panel):not(.internal-panel) {
+  display: none !important;
+}
+
+body.app-shell[data-workspace-view="chat"] .chat-insight-rail .rail-status-panel {
+  padding: 14px;
+  border: 0;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+body.app-shell[data-workspace-view="chat"] .chat-insight-rail .signal-meta {
+  gap: 6px;
+}
+
+body.app-shell[data-workspace-view="chat"] .chat-insight-rail .panel-copy,
+body.app-shell[data-workspace-view="chat"] .chat-insight-rail .signal-support {
+  font-size: 0.79rem;
+  line-height: 1.55;
+}
+
+body.app-shell[data-workspace-view="chat"] .conversation-card,
+body.app-shell[data-workspace-view="chat"].has-findings .conversation-card {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: min(1220px, calc(100dvh - 124px));
+  min-height: 920px;
+  padding: 12px 16px 14px;
+  row-gap: 6px;
+}
+
+body.app-shell[data-workspace-view="chat"] .conversation-shell-head {
+  gap: 5px;
+}
+
+body.app-shell[data-workspace-view="chat"] .conversation-head > div {
+  gap: 3px;
+}
+
+body.app-shell[data-workspace-view="chat"] .transcript-head h2 {
+  font-size: clamp(1.34rem, 2vw, 1.64rem);
+  line-height: 1.06;
+}
+
+body.app-shell[data-workspace-view="chat"] .transcript-head .header-copy {
+  max-width: 54ch;
+  font-size: 0.78rem;
+  line-height: 1.38;
+}
+
+body.app-shell[data-workspace-view="chat"] .transcript-viewport,
+body.app-shell[data-workspace-view="chat"].has-findings .transcript-viewport {
+  gap: 10px;
+  min-height: 0;
+  padding: 12px 12px 10px;
+  scroll-padding-bottom: 12px;
+}
+
+body.app-shell[data-workspace-view="chat"] .transcript-empty-state {
+  padding: 14px 16px;
+}
+
+body.app-shell[data-workspace-view="chat"] .conversation-card .message-list {
+  gap: 12px;
+}
+
+body.app-shell[data-workspace-view="chat"] .conversation-ready-message {
+  justify-self: start;
+  width: auto;
+  max-width: min(88%, 720px);
+  padding: 14px 16px;
+  border-color: rgba(29, 86, 116, 0.12);
+  background: linear-gradient(180deg, rgba(239, 245, 249, 0.98) 0%, rgba(255, 255, 255, 0.99) 100%);
+}
+
+body.app-shell[data-workspace-view="chat"] .conversation-ready-message .message-meta {
+  color: rgba(29, 86, 116, 0.8);
+}
+
+body.app-shell[data-workspace-view="chat"] .conversation-ready-message .conversation-ready-copy {
+  margin: 0;
+  font-size: 0.94rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+body.app-shell[data-workspace-view="chat"] .conversation-ready-message .conversation-ready-actions {
+  margin-top: 10px;
+  gap: 10px;
+}
+
+body.app-shell[data-workspace-view="chat"] .typing-row {
+  padding: 14px 16px;
+}
+
+body.app-shell[data-workspace-view="chat"] .conversation-composer {
+  gap: 4px;
+  padding: 12px 14px 14px;
+  border-top: 1px solid rgba(19, 33, 45, 0.08);
+  box-shadow: 0 -12px 24px rgba(12, 23, 34, 0.03);
+}
+
+body.app-shell[data-workspace-view="chat"] .conversation-composer .composer-intro {
+  gap: 2px;
+}
+
+body.app-shell[data-workspace-view="chat"] .conversation-composer .command-helper {
+  max-width: 58ch;
+  font-size: 0.75rem;
+  line-height: 1.42;
+}
+
+body.app-shell[data-workspace-view="chat"] .conversation-composer .composer-shell {
+  gap: 6px;
+}
+
+body.app-shell[data-workspace-view="chat"] .composer-input-row {
+  gap: 10px;
+  padding: 12px 12px 12px 14px;
+  border-color: rgba(19, 33, 45, 0.12);
+  background: linear-gradient(180deg, rgba(252, 253, 255, 0.98) 0%, rgba(247, 250, 252, 0.98) 100%);
+}
+
+body.app-shell[data-workspace-view="chat"] .conversation-composer textarea {
+  min-height: 136px;
+  max-height: 220px;
+  padding: 12px 4px 12px 0;
+  line-height: 1.58;
+}
+
+body.app-shell[data-workspace-view="chat"] .composer-send {
+  min-width: 76px;
+  min-height: 42px;
+  padding: 0 12px;
+  font-size: 0.78rem;
+  opacity: 0.9;
+}
+
+body.app-shell[data-workspace-view="chat"] .conversation-composer .composer-footer {
+  gap: 6px 10px;
+}
+
+body.app-shell[data-workspace-view="chat"] .prompt-chip {
+  min-height: 26px;
+  font-size: 0.72rem;
+  background: rgba(247, 250, 252, 0.72);
+}
+
+@media (max-width: 1180px) {
+  body.app-shell[data-workspace-view="chat"] .chat-page-shell {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 960px) {
+  body.app-shell[data-workspace-view="chat"] .conversation-card,
+  body.app-shell[data-workspace-view="chat"].has-findings .conversation-card {
+    height: min(1020px, calc(100dvh - 128px));
+    min-height: 820px;
+    padding: 12px 14px 14px;
+  }
+
+  body.app-shell[data-workspace-view="chat"] .transcript-viewport,
+  body.app-shell[data-workspace-view="chat"].has-findings .transcript-viewport {
+    padding: 12px 10px 8px;
+  }
+
+  body.app-shell[data-workspace-view="chat"] .conversation-composer textarea {
+    min-height: 128px;
+  }
+}
+
+@media (max-width: 768px) {
+  body.app-shell[data-workspace-view="chat"] .topbar {
+    margin: 10px 0 12px;
+    padding: 12px 14px;
+  }
+
+  body.app-shell[data-workspace-view="chat"] .workspace-pages {
+    gap: 12px;
+  }
+
+  body.app-shell[data-workspace-view="chat"] .conversation-card,
+  body.app-shell[data-workspace-view="chat"].has-findings .conversation-card {
+    height: min(860px, calc(100dvh - 114px));
+    min-height: 720px;
+  }
+
+  body.app-shell[data-workspace-view="chat"] .transcript-viewport,
+  body.app-shell[data-workspace-view="chat"].has-findings .transcript-viewport {
+    padding: 10px 8px 8px;
+  }
+
+  body.app-shell[data-workspace-view="chat"] .conversation-composer {
+    padding: 10px 10px 12px;
+  }
+
+  body.app-shell[data-workspace-view="chat"] .conversation-composer textarea {
+    min-height: 120px;
+  }
+}
