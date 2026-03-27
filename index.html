@@ -531,17 +531,6 @@
                 <div id="offer-grid" class="offer-grid"></div>
 
                 <div class="contact-grid">
-                  <div class="steps-card">
-                    <p class="muted-label">What happens after you submit</p>
-                    <ol class="steps-list">
-                      <li>We review the diagnostic, signal pattern, and package you selected.</li>
-                      <li>We confirm whether the issue is clear enough for review, sprint, or ongoing advisory.</li>
-                      <li>We reply with the best starting package, scope note, and next-step discussion path.</li>
-                      <li>If there is a fit, we schedule the review call or kickoff that matches the package.</li>
-                    </ol>
-                    <p class="finding-note">This request is for fit, scope, and starting-package confirmation. It is not a promise of outcomes or a generic sales callback.</p>
-                  </div>
-
                   <div class="contact-shell">
                     <div class="contact-shell-head">
                       <div class="contact-shell-intro">
@@ -552,6 +541,17 @@
                       </div>
 
                       <button id="contact-toggle" type="button" class="btn btn-primary">Open request form</button>
+                    </div>
+
+                    <div id="request-journey-panel" class="request-journey-panel is-hidden">
+                      <p class="muted-label">What happens after you submit</p>
+                      <ol class="steps-list">
+                        <li>We review the diagnostic, signal pattern, and package you selected.</li>
+                        <li>We confirm whether the issue is clear enough for review, sprint, or ongoing advisory.</li>
+                        <li>We reply with the best starting package, scope note, and next-step discussion path.</li>
+                        <li>If there is a fit, we schedule the review call or kickoff that matches the package.</li>
+                      </ol>
+                      <p class="finding-note">This request is for fit, scope, and starting-package confirmation. It is not a promise of outcomes or a generic sales callback.</p>
                     </div>
 
                     <form id="contact-form" class="contact-form is-hidden" novalidate>
@@ -860,6 +860,7 @@ function captureDom() {
   el.offerGrid = document.getElementById("offer-grid");
   el.contactShellCopy = document.getElementById("contact-shell-copy");
   el.contactShellNote = document.getElementById("contact-shell-note");
+  el.requestJourneyPanel = document.getElementById("request-journey-panel");
   el.contactToggle = document.getElementById("contact-toggle");
   el.contactForm = document.getElementById("contact-form");
   el.contactMessage = document.getElementById("contact-message");
@@ -3410,14 +3411,20 @@ function renderContact() {
     el.pricingBannerCopy.textContent = "Start with a Diagnostic Review and move into a Sprint or Advisory within 14 days, and the review fee is applied to that starting package.";
   }
   if (el.contactShellCopy) {
-    el.contactShellCopy.textContent = recommendation
-      ? `Open the request form when you want us to review this diagnostic, confirm whether ${recommendation.basePackage} is the right starting package, and reply with the next-step discussion or kickoff path.`
-      : "Open the request form if you want a human review of the diagnostic and the right starting package.";
+    el.contactShellCopy.textContent = state.contactSubmitted
+      ? "Your request is in. The next-step sequence below shows what happens from here."
+      : state.selectedPackageName
+        ? `Confirm ${state.selectedPackageName}, review what happens next below, and send the request when you are ready.`
+        : recommendation
+          ? `Choose a package above to open the request form for ${recommendation.basePackage} and continue into the next-step review.`
+          : "Choose a package above to open the request form and continue into the next-step review.";
   }
   if (el.contactShellNote) {
-    el.contactShellNote.textContent = recommendation
-      ? "After submission, we review the diagnostic, confirm fit and scope, recommend the right starting package, and only then move into the next conversation or kickoff path."
-      : "We confirm fit, scope, and starting package first.";
+    el.contactShellNote.textContent = "Operational Clarity provides AI-assisted diagnostic guidance. If you request next-step help, your review may also be assessed by a human advisor from EHI Studio.";
+  }
+  if (el.requestJourneyPanel) {
+    const showJourneyPanel = Boolean(state.selectedPackageName || state.contactOpen || state.contactSubmitted);
+    el.requestJourneyPanel.classList.toggle("is-hidden", !showJourneyPanel);
   }
   if (el.leadPackage) {
     el.leadPackage.value = state.selectedPackageValue || "";

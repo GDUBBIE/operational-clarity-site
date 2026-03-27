@@ -8848,3 +8848,36 @@ body.app-shell[data-workspace-view="chat"] .prompt-chip {
     min-height: 120px;
   }
 }
+
+/* Contact flow relocation: move process guidance into the active request state */
+body.app-shell .contact-grid {
+  grid-template-columns: 1fr;
+}
+
+body.app-shell .contact-shell {
+  gap: 12px;
+  max-width: none;
+}
+
+body.app-shell .request-journey-panel {
+  display: grid;
+  gap: 10px;
+  padding: 16px 18px;
+  border: 1px solid rgba(19, 33, 45, 0.07);
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(246, 249, 252, 0.94) 0%, rgba(255, 255, 255, 0.99) 100%);
+}
+
+body.app-shell .request-journey-panel .steps-list {
+  margin: 0;
+}
+
+body.app-shell .request-journey-panel .finding-note {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  body.app-shell .request-journey-panel {
+    padding: 14px 16px;
+  }
+}
